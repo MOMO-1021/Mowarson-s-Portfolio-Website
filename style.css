@@ -665,17 +665,17 @@ footer a:hover {
 
 .bg-light {
     background-color: #f8fafc;
-    padding: 48px 0;
+    padding: 32px 0;
 }
 
 .section-padding {
-    padding: 48px 0;
+    padding: 32px 0;
 }
 
 .service-hero {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: #ffffff;
-    padding: 72px 0;
+    padding: 48px 0;
     text-align: center;
     border-radius: 0 0 40px 40px;
     margin-bottom: 0;
@@ -717,6 +717,7 @@ footer a:hover {
     background: #eef2ff;
     width: 40px;
     height: 40px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
