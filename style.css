@@ -1,0 +1,660 @@
+/* style.css - Modern Professional Design */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  background: #f8fafc;
+  color: #0f172a;
+  line-height: 1.6;
+}
+
+/* Basic responsive media defaults (prevents overflow on smaller screens) */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Global link styles – force consistent color regardless of visited state */
+a {
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:visited {
+  color: #2563eb;  /* Same as unvisited – removes purple */
+}
+a:hover {
+  color: #1d4ed8;  /* Darker blue on hover */
+}
+a:active {
+  color: #1e40af;  /* Even darker when clicked */
+}
+
+/* Buttons – override link styles */
+.btn, .btn-outline, .btn-small, .btn:visited, .btn-outline:visited, .btn-small:visited {
+  color: white; /* default button text is white */
+}
+.btn-outline, .btn-outline:visited {
+  color: #2563eb; /* outline button text blue */
+}
+.btn-outline:hover {
+  color: white; /* hover becomes white text on blue bg */
+}
+.btn-small, .btn-small:visited {
+  color: #2563eb; /* small button text blue */
+}
+.btn-small:hover {
+  color: white; /* hover becomes white */
+}
+
+/* Header */
+header {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #eef2f6;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+
+.logo span {
+  background: none;
+  -webkit-text-fill-color: #1e293b;
+  font-weight: 400;
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #334155;
+  font-weight: 500;
+  transition: color 0.2s;
+  font-size: 1rem;
+}
+.nav a:visited {
+  color: #334155; /* keep nav links same color */
+}
+.nav a:hover {
+  color: #2563eb;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: white;
+  min-width: 260px;
+  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 8px 0;
+  z-index: 1000;
+  top: 35px;
+  left: -20px;
+  border: 1px solid #eef2f6;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px 20px;
+  color: #1e293b;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.dropdown-content a:visited {
+  color: #1e293b; /* keep dropdown links consistent */
+}
+.dropdown-content a:hover {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+
+/* When the dropdown is open, we'll control via JS adding class */
+.dropdown.open .dropdown-content {
+  display: block;
+}
+
+/* Keep dropdown visible while hovering the trigger OR the dropdown content.
+   This prevents flicker/closing when moving the pointer into the absolute-positioned menu. */
+@media (hover: hover) and (min-width: 769px) {
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+}
+
+/* Main */
+main {
+  min-height: 70vh;
+  padding: 80px 0;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 48px 0 24px;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  color: #334155;
+}
+
+p {
+  margin-bottom: 20px;
+  color: #475569;
+  font-size: 1.1rem;
+}
+
+.btn {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  padding: 14px 36px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 16px -4px rgba(37, 99, 235, 0.2);
+}
+.btn:visited {
+  color: white;
+}
+.btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -8px rgba(37, 99, 235, 0.3);
+  color: white;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  box-shadow: none;
+  padding: 12px 32px;
+}
+.btn-outline:visited {
+  color: #2563eb;
+}
+.btn-outline:hover {
+  background: #2563eb;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f6 100%);
+  padding: 80px 0;
+  border-radius: 0 0 40px 40px;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  max-width: 800px;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  color: #475569;
+}
+
+/* Cards Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+  margin: 48px 0;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s;
+  border: 1px solid #eef2f6;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.15);
+  border-color: #d9e2ef;
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+}
+.card h3 a {
+  color: #0f172a; /* card titles dark, not blue */
+}
+.card h3 a:visited {
+  color: #0f172a;
+}
+.card h3 a:hover {
+  color: #2563eb;
+}
+
+.card p {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.card .btn-small {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+}
+
+/* Footer */
+footer {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 48px 0;
+  text-align: center;
+  border-top: 1px solid #1e293b;
+}
+
+footer a {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+footer a:visited {
+  color: #cbd5e1;
+}
+footer a:hover {
+  color: #2563eb;
+}
+
+/* WhatsApp Button */
+.whatsapp-float {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #25d366;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow);
+  z-index: 999;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+/* .whatsapp-float:visited {
+  color: white;
+} */
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+.whatsapp-float img{
+  width: 35px;
+  height: 35px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  .dropdown-content {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  h1 {
+    font-size: 2.5rem;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  /* Some pages use inline `columns: 2` on <ul>; force single column on mobile */
+  ul[style*="columns: 2"] {
+    columns: 1 !important;
+  }
+}
+.project-card {
+  transition: transform 0.2s;
+}
+.project-card:hover {
+  transform: translateY(-6px);
+}
+.btn-small {
+  display: inline-block;
+  background: transparent;
+  color: #2563eb;
+  padding: 8px 16px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  border: 1px solid #2563eb;
+  transition: all 0.2s;
+}
+.btn-small:visited {
+  color: #2563eb;
+}
+.btn-small:hover {
+  background: #2563eb;
+  color: white;
+}
+/* Tech stack list */
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+  margin-top: 40px;
+}
+.tech-stack span {
+  background: white;
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+/* Project cards – image flush, text padded */
+.project-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.project-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  border-radius: 24px 24px 0 0;
+  margin: 0;
+}
+
+.project-card .card-content {
+  padding: 32px;
+}
+
+.project-card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.project-card p {
+  margin-bottom: 24px;
+}
+/* Hamburger button */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 110;
+}
+.hamburger span {
+  width: 100%;
+  height: 3px;
+  background: #334155;
+  border-radius: 10px;
+  transition: all 0.3s linear;
+}
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile nav */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+    margin-bottom: 1rem;
+  }
+  .nav {
+    position: fixed;
+    top: 80px; /* adjust based on header height */
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 100;
+    gap: 20px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+  .nav.active {
+    transform: translateX(0);
+  }
+  .dropdown {
+    width: 100%;
+  }
+  .dropdown-content {
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: #f8fafc;
+    padding: 8px 0 8px 16px;
+    margin-top: 8px;
+    display: none;
+  }
+  .dropdown.open .dropdown-content {
+    display: block;
+  }
+  .dropdown-content a {
+    padding: 8px 16px;
+  }
+  .dropbtn {
+    width: 100%;
+    display: block;
+  }
+  main{
+    /* Keep enough spacing under the sticky header on small screens */
+    padding: 80px 0;
+  }
+}
+/* Extra small devices (phones under 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* "What You Get" / package sections use inline `grid-template-columns: 1fr 1fr`.
+     Force them to single-column on small phones to prevent cramped/cut-off text. */
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Improve readability inside those single-column blocks */
+  div[style*="grid-template-columns: 1fr 1fr"] h3 {
+    font-size: 1.2rem;
+    margin: 18px 0 10px;
+  }
+  div[style*="grid-template-columns: 1fr 1fr"] p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .card {
+    padding: 20px; /* unified padding for all cards */
+  }
+  /* Project card specific */
+  .project-card {
+    padding: 0; /* keep no padding for project cards */
+    overflow: visible; /* ensure no clipping */
+  }
+  .project-card .card-content {
+    padding: 20px;
+  }
+  .project-card img {
+    height: 120px;
+  }
+  .project-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+  .project-card p {
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+  .project-card .btn-small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  /* Headings */
+  h1 {
+    font-size: 2rem;
+  }
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .hero p {
+    font-size: 1.1rem;
+  }
+  /* Tech stack */
+  .tech-stack {
+    gap: 8px;
+  }
+  .tech-stack span {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+  /* Ensure all cards take full width and height auto */
+  .card, .project-card {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+  /* Word break for safety */
+  p, h1, h2, h3, a, span {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto; /* optional: adds hyphenation */
+  }
+  .container h2{
+    line-height: 34px;
+  }
+  .hero{
+    padding: 60px 0;
+  }
+  .btn{
+    margin-right: 0;
+    margin-bottom: 1rem;
+    /* Make stacked CTAs consistent on very small screens */
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+  }
+
+  /* Fix mobile "bulge" on Blog callout:
+     The first button has inline `margin-right: 16px;` which shifts the centered line-box. */
+  a.btn[style*="margin-right: 16px"] {
+    margin-right: 0 !important;
+  }
+
+  /* Ensure outline buttons match filled button sizing */
+  .btn-outline {
+    padding: 14px 24px;
+  }
+}
+
+/* Force cards to never have a fixed height */
+.card, .project-card {
+  height: auto !important;
+  min-height: 0;
+}
+/* Medium screens: 769px to 1207px */
+@media (min-width: 769px) and (max-width: 1208px) {
+  .header-inner {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .nav {
+    gap: 20px; /* reduce gap to prevent wrapping */
+  }
+  .nav a {
+    font-size: 0.95rem; /* slightly smaller text */
+  }
+}

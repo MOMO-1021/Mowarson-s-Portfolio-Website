@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Mowarson Developer – Expert in SEO & Marketing Websites</title>
+  <meta name="description" content="Learn about Mowarson Developer: a freelance web designer focused on building SEO-friendly marketing websites that boost visibility and leads for business owners.">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="canonical" href="https://www.mowarsondeveloper.netlify.app/about.html">
+  <link rel="icon" href="assets/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <style>
+    /* About page modern UI – image top aligned */
+    .about-hero {
+      padding: 40px 0 80px;
+    }
+
+    .about-grid {
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 48px;
+      padding: 48px;
+      box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(37, 99, 235, 0.1);
+    }
+
+    .about-image {
+      flex: 1;
+      position: relative;
+      min-width: 0;
+    }
+
+    .about-image .image-wrapper {
+      position: relative;
+      z-index: 2;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 30px;
+      box-shadow: 0 25px 40px -20px rgba(0, 0, 0, 0.3);
+      display: block;
+      transition: transform 0.3s ease;
+      border: 4px solid white;
+    }
+
+    .about-image img:hover {
+      transform: scale(1.02);
+    }
+
+    /* Decorative background shape */
+    .about-image::before {
+      content: '';
+      position: absolute;
+      width: 80%;
+      height: 80%;
+      background: linear-gradient(135deg, #2563eb20, #1e40af20);
+      border-radius: 60% 40% 30% 70% / 40% 50% 50% 60%;
+      top: 10%;
+      left: 10%;
+      z-index: 1;
+      filter: blur(40px);
+    }
+
+    .about-content {
+      flex: 1;
+    }
+
+    .about-content .greeting {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2563eb;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .about-content h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0 0 16px;
+      background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .about-content .role {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 24px;
+    }
+
+    .about-content p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #334155;
+      margin-bottom: 20px;
+    }
+
+    .about-content p:last-of-type {
+      margin-bottom: 32px;
+    }
+
+    /* Stats section */
+    .stats {
+      display: flex;
+      gap: 30px;
+      margin: 32px 0 40px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: left;
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2563eb;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .about-content .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #2563eb;
+      color: white;
+      padding: 16px 40px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      box-shadow: 0 15px 25px -8px rgba(37, 99, 235, 0.3);
+      text-decoration: none;
+    }
+
+    .about-content .btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-3px);
+      box-shadow: 0 20px 30px -8px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-arrow::after {
+      content: '→';
+      margin-left: 8px;
+      transition: transform 0.2s;
+    }
+    .about-content .btn:hover .btn-arrow::after {
+      transform: translateX(4px);
+    }
+
+    /* NEW: Full-width services section */
+    .services-showcase {
+      background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%);
+      border-radius: 48px;
+      padding: 48px;
+      margin-top: 48px;
+      border: 1px solid #eef2f6;
+    }
+    .services-showcase h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: #0f172a;
+      text-align: center;
+    }
+    .services-showcase .section-subhead {
+      text-align: center;
+      color: #475569;
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 48px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 32px;
+    }
+    .service-card {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      text-align: center;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      border: 1px solid #eef2f6;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
+      border-color: #d9e2ef;
+    }
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .service-card h3 {
+      font-size: 1.5rem;
+      margin: 0 0 12px;
+    }
+    .service-card h3 a {
+      color: #0f172a;
+      text-decoration: none;
+      line-height: 8px;
+    }
+    .service-card h3 a:hover {
+      color: #2563eb;
+    }
+    .service-card p {
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+    .service-link {
+      margin-top: 16px;
+      display: inline-block;
+      font-weight: 500;
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .service-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .about-grid {
+        gap: 40px;
+        padding: 40px;
+      }
+      .about-content h1 {
+        font-size: 2.5rem;
+      }
+      .services-showcase {
+        padding: 32px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .about-grid {
+        flex-direction: column;
+        padding: 32px;
+        gap: 32px;
+        align-items: flex-start;
+      }
+      .about-image {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .about-content h1 {
+        font-size: 2.2rem;
+      }
+      .stats {
+        gap: 20px;
+        justify-content: space-between;
+      }
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .services-showcase {
+        margin-top: 32px;
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-grid {
+        padding: 24px;
+        border-radius: 32px;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .stat-item {
+        text-align: center;
+      }
+      .services-showcase {
+        border-radius: 32px;
+      }
+      .service-card {
+        padding: 24px;
+      }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Mowarson Developer",
+    "description": "I'm a freelance web developer dedicated to helping business owners gain online visibility and generate leads through custom, SEO-optimized websites.",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Mowarson",
+      "jobTitle": "Freelance Web Developer",
+      "knowsAbout": ["SEO", "Web Design", "Digital Marketing", "Lead Generation"]
+    }
+  }
+  </script>
+</head>
+<body>
+  <header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">Mowarson<span>Developer</span></a>
+    
+    <!-- Hamburger button (visible on mobile) -->
+    <button class="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <div class="dropdown">
+        <a href="#" class="dropbtn">Services</a>
+        <div class="dropdown-content">
+          <a href="small-business-web-design.html">Small Business Web Design</a>
+          <a href="responsive-web-design-services.html">Responsive Web Design Services</a>
+          <a href="seo-website-design.html">SEO Website Design</a>
+          <a href="affordable-web-design-services.html">Affordable Web Design Services</a>
+          <a href="web-design-consultant.html">Web Design Consultant</a>
+          <a href="local-business-website-design.html">Local Business Website Design</a>
+          <a href="lead-generation-website-design.html">Lead Generation Website Design</a>
+          <a href="web-design-and-marketing.html">Web Design and Marketing</a>
+          <a href="restaurant-web-design.html">Restaurant Web Design</a>
+        </div>
+      </div>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+  <main class="about-hero">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Content column -->
+        <div class="about-content">
+          <span class="greeting">👋 Hello, I'm</span>
+          <h1>Mowarson Developer</h1>
+          <div class="role">Freelance Web Developer & SEO Specialist</div>
+          
+          <p>Hi, I'm Mowarson – a freelance web developer with a passion for helping business owners stand out online. I know how frustrating it is when your business doesn't get the visibility it deserves. That's why I build websites that are not only beautiful but also engineered to rank high on Google and convert visitors into customers.</p>
+          
+          <p>My approach combines technical SEO, user experience, and conversion optimization. I don't just build websites; I build growth engines. Every line of code is written with your business goals in mind.</p>
+          
+          <p>I started Mowarson Developer to provide affordable, high-quality web solutions for small and local businesses. My clients range from startups to established brands, all united by one goal: more visibility, more leads, more revenue.</p>
+          
+          <p>Let's work together to make your business impossible to ignore.</p>
+
+          <!-- Stats for credibility -->
+          <div class="stats">
+            <div class="stat-item">
+              <div class="stat-number">1+</div>
+              <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">10+</div>
+              <div class="stat-label">Projects Completed</div>
+            </div>
+          </div>
+
+          <a href="contact.html" class="btn">
+            Let's Talk <span class="btn-arrow"></span>
+          </a>
+        </div>
+        <!-- Image column -->
+        <div class="about-image">
+          <div class="image-wrapper">
+            <img 
+              src="My-Image.jpeg" 
+              alt="Mowarson coding at his workspace"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Full-width Services Showcase -->
+      <div class="services-showcase">
+        <h2>What I Can Do For You</h2>
+        <p class="section-subhead">I offer a range of services to help your business grow online.</p>
+        <div class="services-grid">
+          <div class="service-card">
+            <h3><a href="small-business-web-design.html">Small Business Web Design</a></h3>
+            <p>Tailored websites that help you establish a strong online presence and compete with larger players.</p>
+            <a href="small-business-web-design.html" class="service-link">Learn more →</a>
+          </div>
+          <div class="service-card">
+            <h3><a href="seo-website-design.html">SEO Website Design</a></h3>
+            <p>Websites engineered for search engines from day one—better rankings, more traffic.</p>
+            <a href="seo-website-design.html" class="service-link">Learn more →</a>
+          </div>
+          <div class="service-card">
+            <h3><a href="lead-generation-website-design.html">Lead Generation Websites</a></h3>
+            <p>Conversion-focused designs that turn visitors into leads and sales.</p>
+            <a href="lead-generation-website-design.html" class="service-link">Learn more →</a>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+          <a href="services.html" class="btn-outline" style="display: inline-block;">Explore All Services →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>
+      <p>
+        <a href="sitemap.xml">Sitemap</a> |
+        <a href="contact.html">Contact</a> |
+        <a href="https://www.fiverr.com/mowarson" target="_blank">Fiverr</a> |
+        <a href="https://www.instagram.com/mowarson_developer/">Instagram</a> |
+        <a href="https://www.linkedin.com/in/mowarson-developer-298404302/">Linkedin</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Button -->
+    <a
+      href="https://wa.me/916009825938"
+      class="whatsapp-float"
+      target="_blank"
+    >
+      <img src="Whatsapp.svg" alt="WhatsApp" />
+    </a>
+  <script src="script.js"></script>
+</body>
+</html>
