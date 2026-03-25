@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.mowarsondeveloper.netlify.app/sitemap.xml
+Sitemap: https://mowarsondeveloper.netlify.app/sitemap.xml
