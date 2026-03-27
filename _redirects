@@ -1,12 +1,27 @@
-/small-business-web-design.html /services/small-business-web-design.html 301
-/responsive-web-design-services.html /services/responsive-web-design-services.html 301
-/seo-website-design.html /services/seo-website-design.html 301
-/affordable-web-design-services.html /services/affordable-web-design-services.html 301
-/web-design-consultant.html /services/web-design-consultant.html 301
-/local-business-website-design.html /services/local-business-website-design.html 301
-/lead-generation-website-design.html /services/lead-generation-website-design.html 301
-/web-design-and-marketing.html /services/web-design-and-marketing.html 301
-/restaurant-web-design.html /services/restaurant-web-design.html 301
-/seo-friendly-website-design-tips.html /blog/seo-friendly-website-design-tips.html 301
-/lead-generation-strategies.html /blog/lead-generation-strategies.html 301
-/web-design-consultant-tips.html /blog/web-design-consultant-tips.html 301
+# Redirects WITHOUT .html extension (Netlify pretty URLs — primary)
+/small-business-web-design              /services/small-business-web-design              301
+/responsive-web-design-services         /services/responsive-web-design-services         301
+/seo-website-design                     /services/seo-website-design                     301
+/affordable-web-design-services         /services/affordable-web-design-services         301
+/web-design-consultant                  /services/web-design-consultant                  301
+/local-business-website-design          /services/local-business-website-design          301
+/lead-generation-website-design         /services/lead-generation-website-design         301
+/web-design-and-marketing               /services/web-design-and-marketing               301
+/restaurant-web-design                  /services/restaurant-web-design                  301
+/seo-friendly-website-design-tips       /blog/seo-friendly-website-design-tips           301
+/lead-generation-strategies             /blog/lead-generation-strategies                 301
+/web-design-consultant-tips             /blog/web-design-consultant-tips                 301
+
+# Redirects WITH .html extension (for old bookmarks, external links, or Google's index)
+/small-business-web-design.html         /services/small-business-web-design              301
+/responsive-web-design-services.html    /services/responsive-web-design-services         301
+/seo-website-design.html                /services/seo-website-design                     301
+/affordable-web-design-services.html    /services/affordable-web-design-services         301
+/web-design-consultant.html             /services/web-design-consultant                  301
+/local-business-website-design.html     /services/local-business-website-design          301
+/lead-generation-website-design.html    /services/lead-generation-website-design         301
+/web-design-and-marketing.html          /services/web-design-and-marketing               301
+/restaurant-web-design.html             /services/restaurant-web-design                  301
+/seo-friendly-website-design-tips.html  /blog/seo-friendly-website-design-tips           301
+/lead-generation-strategies.html        /blog/lead-generation-strategies                 301
+/web-design-consultant-tips.html        /blog/web-design-consultant-tips                 301
