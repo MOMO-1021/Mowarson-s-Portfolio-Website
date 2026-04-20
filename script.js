@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const runId = 'buttons-pre-fix';
 
       // Buttons appear on service pages like "small-business-web-design.html"
-      const fiverrBtn = document.querySelector('a.btn[href^="https://www.fiverr.com/mowarson"]');
+      const fiverrBtn = document.querySelector('a.btn[href^="https://www.fiverr.com/bca5434/build-seo-friendly-marketing-websites-for-small-business"]');
       const waBtn = document.querySelector('a.btn.btn-outline[href^="https://wa.me/6009825938"]');
       if (!fiverrBtn || !waBtn) return;
 
