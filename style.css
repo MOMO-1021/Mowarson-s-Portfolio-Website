@@ -366,8 +366,8 @@ footer a:hover {
     gap: 20px;
   }
   .dropdown-content {
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    transform: none;
   }
   h1 {
     font-size: 2.5rem;
@@ -614,7 +614,7 @@ footer a:hover {
     hyphens: auto; /* optional: adds hyphenation */
   }
   .container h2{
-    line-height: 34px;
+    line-height: 1.4;
   }
   .hero{
     padding: 60px 0;
@@ -637,6 +637,28 @@ footer a:hover {
   /* Ensure outline buttons match filled button sizing */
   .btn-outline {
     padding: 14px 24px;
+  }
+
+  .btn-small {
+    display: block;
+    width: 100%;
+    margin-bottom: 12px;
+    margin-right: 0 !important;
+    text-align: center;
+  }
+
+  .cta-section h2 {
+    line-height: 1.4;
+  }
+
+  .blog-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+  .blog-row-link {
+    padding-left: 0;
   }
 }
 
