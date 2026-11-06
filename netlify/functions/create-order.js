@@ -27,6 +27,8 @@ exports.handler = async (event) => {
     const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
     const key_secret = rawKeySecret.trim().replace(/^["']|["']$/g, "");
 
+    console.log("Creating Razorpay order. Key prefix:", key_id.substring(0, 8), "Secret length:", key_secret.length);
+
     if (!key_id || !key_secret) {
       return {
         statusCode: 401,
