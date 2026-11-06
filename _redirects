@@ -1,3 +1,7 @@
+# Razorpay API Endpoints (Netlify Functions)
+/api/create-order                             /.netlify/functions/create-order                 200
+/api/verify-payment                           /.netlify/functions/verify-payment               200
+
 # New Primary Education Services Pretty URLs
 /pay                                         /pay.html                                        200
 /coaching-institute-marketing              /services/coaching-institute-marketing.html       301

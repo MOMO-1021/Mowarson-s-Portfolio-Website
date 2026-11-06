@@ -362,9 +362,9 @@
   <script>
     /**
      * CONFIGURATION:
-     * Your live/test Razorpay Key ID
+     * Razorpay Key ID (Public key for checkout modal fallback)
      */
-    const RAZORPAY_KEY_ID = "rzp_test_TwuqTag4KP4wYe";
+    const RAZORPAY_KEY_ID = "rzp_test_TwuqTaG4KP4wYe";
 
     // Pricing definitions
     const PRICING = {
@@ -488,26 +488,52 @@
         return;
       }
 
+      // Convert amount to paise (1 INR = 100 paise; minimum 100 paise required)
+      const amountInPaise = Math.round(amount * 100);
+
+      const submitBtn = document.getElementById('submit-pay-btn');
+      const originalBtnHtml = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>⏳ Preparing Secure Payment...</span>';
+
+      const resetSubmitBtn = () => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnHtml;
+      };
+
       try {
-        // 1. Call Netlify Serverless Function to create secure order ID
+        // STEP 1: Call Backend to Create Order
         const orderResponse = await fetch('/api/create-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount, currency: currentCurrency })
+          body: JSON.stringify({
+            amount: amountInPaise,
+            currency: currentCurrency,
+            receipt: 'rcpt_' + Date.now(),
+            notes: {
+              service: serviceTitle,
+              institute: institute || "Individual / Educator",
+              client_notes: notes || "None"
+            }
+          })
         });
 
-        const order = await orderResponse.json();
-        if (!order.id) throw new Error(order.error || 'Failed to create order ID on server.');
+        const orderData = await orderResponse.json();
+        const orderId = orderData.order_id || orderData.id;
 
-        // 2. Configure Razorpay Checkout Modal
+        if (!orderResponse.ok || !orderId) {
+          throw new Error(orderData.error || 'Failed to create order on server.');
+        }
+
+        // STEP 2: Configure Razorpay Checkout Modal
         const options = {
-          key: RAZORPAY_KEY_ID,
-          amount: order.amount,
-          currency: order.currency,
+          key: orderData.key_id || RAZORPAY_KEY_ID,
+          amount: orderData.amount,
+          currency: orderData.currency,
           name: "Mowarson Developer",
           description: serviceTitle,
           image: "assets/favicon.png",
-          order_id: order.id, // Secure order ID from backend
+          order_id: orderId,
           prefill: {
             name: name,
             email: email,
@@ -522,8 +548,9 @@
             color: "#2563eb"
           },
           handler: async function (response) {
+            submitBtn.innerHTML = '<span>🔒 Verifying Payment...</span>';
             try {
-              // 3. Verify payment signature securely on backend
+              // STEP 3: Verify payment signature on backend
               const verifyResponse = await fetch('/api/verify-payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -534,32 +561,37 @@
                 })
               });
 
-              const result = await verifyResponse.json();
-              if (result.status === 'success') {
+              const verifyResult = await verifyResponse.json();
+              if (verifyResponse.ok && (verifyResult.success || verifyResult.status === 'success')) {
                 showSuccessConfirmation(response.razorpay_payment_id, serviceTitle, `${cfg.symbol}${amount}`);
               } else {
-                alert('Payment verification failed: ' + result.message);
+                alert('Payment verification failed: ' + (verifyResult.error || verifyResult.message || 'Signature mismatch'));
               }
             } catch (err) {
               console.error('Verification error:', err);
-              alert('Error verifying payment signature.');
+              alert('Error verifying payment signature. Please contact support with Payment ID: ' + response.razorpay_payment_id);
+            } finally {
+              resetSubmitBtn();
             }
           },
           modal: {
             ondismiss: function() {
               console.log('Payment checkout popup closed by user');
+              resetSubmitBtn();
             }
           }
         };
 
         const rzp = new Razorpay(options);
         rzp.on('payment.failed', function (response) {
-          alert("Payment failed: " + response.error.description + " (" + response.error.reason + ")");
+          alert("Payment failed: " + (response.error.description || response.error.reason || "Payment declined"));
+          resetSubmitBtn();
         });
         rzp.open();
 
       } catch (err) {
         console.error("Payment initialization error: ", err);
+        resetSubmitBtn();
         alert("Something went wrong: " + err.message);
       }
     }
