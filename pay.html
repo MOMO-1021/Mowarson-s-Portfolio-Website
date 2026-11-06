@@ -364,7 +364,7 @@
      * CONFIGURATION:
      * Razorpay Key ID (Public key for checkout modal fallback)
      */
-    const RAZORPAY_KEY_ID = "rzp_test_TwyBxxBZdobJx3";
+    const RAZORPAY_KEY_ID = "rzp_test_Twyafh8OLDTeBL";
 
     // Pricing definitions
     const PRICING = {
@@ -488,6 +488,10 @@
         return;
       }
 
+      // Ensure valid 10-digit contact for Razorpay
+      const phoneDigits = phone.replace(/\D/g, '');
+      const validPhone = phoneDigits.length >= 10 ? phoneDigits.slice(-10) : phone;
+
       // Convert amount to paise (1 INR = 100 paise; minimum 100 paise required)
       const amountInPaise = Math.round(amount * 100);
 
@@ -551,11 +555,11 @@
           currency: currentCurrency,
           name: "Mowarson Developer",
           description: serviceTitle,
-          image: "assets/favicon.png",
+          image: window.location.origin + "/assets/favicon.png",
           prefill: {
             name: name,
             email: email,
-            contact: phone
+            contact: validPhone
           },
           notes: {
             service: serviceTitle,
