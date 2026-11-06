@@ -506,60 +506,50 @@
       };
 
       try {
-        let orderId = null;
-        let checkoutKey = RAZORPAY_KEY_ID;
+        // STEP 1: Call Backend to Create Order (with generous 15s timeout for mobile/cold start)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-        // STEP 1: Attempt to create secure server-side order (with 4-second timeout)
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 4000);
-
-          const orderResponse = await fetch('/api/create-order', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            signal: controller.signal,
-            body: JSON.stringify({
-              amount: amountInPaise,
-              currency: currentCurrency,
-              receipt: 'rcpt_' + Date.now(),
-              notes: {
-                service: serviceTitle,
-                institute: institute || "Individual / Educator",
-                client_notes: notes || "None"
-              }
-            })
-          });
-
-          clearTimeout(timeoutId);
-
-          if (orderResponse.ok) {
-            const orderData = await orderResponse.json();
-            if (orderData.order_id || orderData.id) {
-              orderId = orderData.order_id || orderData.id;
-              if (orderData.key_id) {
-                checkoutKey = orderData.key_id;
-              }
+        const orderResponse = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            amount: amountInPaise,
+            currency: currentCurrency,
+            receipt: 'rcpt_' + Date.now(),
+            notes: {
+              service: serviceTitle,
+              institute: institute || "Individual / Educator",
+              client_notes: notes || "None"
             }
-          } else {
-            console.warn("Backend order creation returned status " + orderResponse.status + ". Proceeding with direct standard checkout.");
-          }
-        } catch (serverErr) {
-          console.warn("Order creation fallback:", serverErr.message);
-          // Continues to direct Razorpay Standard Checkout
+          })
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!orderResponse.ok) {
+          const errData = await orderResponse.json().catch(() => ({}));
+          throw new Error(errData.error || ("Server error status: " + orderResponse.status));
+        }
+
+        const orderData = await orderResponse.json();
+        const orderId = orderData.order_id || orderData.id;
+        const checkoutKey = orderData.key_id || RAZORPAY_KEY_ID;
+
+        if (!orderId || !checkoutKey) {
+          throw new Error("Unable to retrieve order details from payment gateway. Please try again.");
         }
 
         // STEP 2: Configure Razorpay Checkout Modal
-        if (!checkoutKey) {
-          throw new Error("Unable to initialize secure payment. Please contact Mowarson on WhatsApp.");
-        }
-
         const options = {
           key: checkoutKey,
-          amount: amountInPaise,
-          currency: currentCurrency,
+          amount: orderData.amount || amountInPaise,
+          currency: orderData.currency || currentCurrency,
           name: "Mowarson Developer",
           description: serviceTitle,
           image: window.location.origin + "/assets/favicon.png",
+          order_id: orderId,
           prefill: {
             name: name,
             email: email,
@@ -670,6 +660,15 @@
 
     // Auto-detect URL query parameters (?service=marketing or ?service=website or ?amount=...)
     document.addEventListener('DOMContentLoaded', function() {
+      // Pre-warm serverless function and pre-fetch public key
+      fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: 100, currency: 'INR' })
+      }).then(r => r.json()).then(data => {
+        if (data && data.key_id) RAZORPAY_KEY_ID = data.key_id;
+      }).catch(() => {});
+
       const urlParams = new URLSearchParams(window.location.search);
       const serviceParam = urlParams.get('service');
       const amountParam = urlParams.get('amount');
