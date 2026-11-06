@@ -21,8 +21,11 @@ exports.handler = async (event) => {
   }
 
   try {
-    const key_id = process.env.RAZORPAY_KEY_ID;
-    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+    const rawKeyId = process.env.RAZORPAY_KEY_ID || "";
+    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
+
+    const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
+    const key_secret = rawKeySecret.trim().replace(/^["']|["']$/g, "");
 
     if (!key_id || !key_secret) {
       return {
@@ -86,7 +89,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         error: isAuthError 
-          ? "Razorpay authentication failed. Please verify RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in your settings."
+          ? "Razorpay authentication failed. Razorpay rejected the Key ID or Secret as invalid or expired. Please generate a fresh Key ID & Secret in your Razorpay Dashboard."
           : (err.error?.description || err.message || "Failed to create order")
       })
     };

@@ -21,7 +21,9 @@ exports.handler = async (event) => {
   }
 
   try {
-    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
+    const key_secret = rawKeySecret.trim().replace(/^["']|["']$/g, "");
+
     if (!key_secret) {
       return {
         statusCode: 500,
