@@ -91,7 +91,7 @@ exports.handler = async (event) => {
       headers,
       body: JSON.stringify({
         error: isAuthError 
-          ? "Razorpay authentication failed. Razorpay rejected the Key ID or Secret as invalid or expired. Please generate a fresh Key ID & Secret in your Razorpay Dashboard."
+          ? `Razorpay authentication failed. (Active key in Netlify starts with: "${key_id.slice(0, 8)}...", length: ${key_id.length}, secret length: ${key_secret.length}). Please ensure "Same value for all deploy contexts" is selected in Netlify.`
           : (err.error?.description || err.message || "Failed to create order")
       })
     };
