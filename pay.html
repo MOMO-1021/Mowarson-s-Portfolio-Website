@@ -332,7 +332,7 @@
   </div>
 
   <!-- Footer -->
-    <footer>
+  <footer>
     <div class="container">
       <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>
       <p>
@@ -362,11 +362,9 @@
   <script>
     /**
      * CONFIGURATION:
-     * Replace this key with your free live Razorpay Key ID from your Razorpay Dashboard:
-     * Razorpay Dashboard -> Account & Settings -> API Keys -> Key ID
-     * Example: 'rzp_live_ABC123456789' or 'rzp_test_ABC123456789'
+     * Your live/test Razorpay Key ID
      */
-    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE";
+    const RAZORPAY_KEY_ID = "rzp_test_TwuqTag4KP4wYe";
 
     // Pricing definitions
     const PRICING = {
@@ -459,8 +457,8 @@
       document.getElementById('btn-amount-preview').innerText = formattedTotal;
     }
 
-    // Handle form submission and initiate Razorpay Checkout
-    function handleProceedToPay(event) {
+    // Handle form submission and initiate Server-Side Order & Razorpay Checkout
+    async function handleProceedToPay(event) {
       event.preventDefault();
 
       const name = document.getElementById('client-name').value.trim();
@@ -490,67 +488,79 @@
         return;
       }
 
-      // Check if Razorpay Key is configured
-      if (!RAZORPAY_KEY_ID || RAZORPAY_KEY_ID === "rzp_test_YOUR_KEY_HERE") {
-        // Show friendly preview guidance and simulate success
-        const proceedDemo = confirm(
-          "ℹ️ Razorpay Integration Ready!\n\n" +
-          "To accept live real payments directly on your website:\n" +
-          "1. Open Razorpay Dashboard (free, no setup fee, no monthly fee)\n" +
-          "2. Copy your Key ID and paste it in pay.html (Line 382).\n\n" +
-          "Click OK to simulate the instant success & confirmation flow right now!"
-        );
-
-        if (proceedDemo) {
-          showSuccessConfirmation("pay_demo_" + Math.random().toString(36).substring(2, 10).toUpperCase(), serviceTitle, `${cfg.symbol}${amount}`);
-        }
-        return;
-      }
-
-      // Razorpay Checkout Options
-      // Amount in smallest currency subunit (Paise for INR, Cents for USD)
-      const amountInSubunits = Math.round(amount * 100);
-
-      const options = {
-        key: RAZORPAY_KEY_ID,
-        amount: amountInSubunits,
-        currency: currentCurrency,
-        name: "Mowarson Developer",
-        description: serviceTitle,
-        image: "assets/favicon.png",
-        prefill: {
-          name: name,
-          email: email,
-          contact: phone
-        },
-        notes: {
-          service: serviceTitle,
-          institute: institute || "Individual / Educator",
-          client_notes: notes || "None"
-        },
-        theme: {
-          color: "#2563eb"
-        },
-        handler: function (response) {
-          // Triggered on successful transaction
-          showSuccessConfirmation(response.razorpay_payment_id, serviceTitle, `${cfg.symbol}${amount}`);
-        },
-        modal: {
-          ondismiss: function() {
-            console.log('Payment checkout popup closed by user');
-          }
-        }
-      };
-
       try {
+        // 1. Call Netlify Serverless Function to create secure order ID
+        const orderResponse = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount, currency: currentCurrency })
+        });
+
+        const order = await orderResponse.json();
+        if (!order.id) throw new Error(order.error || 'Failed to create order ID on server.');
+
+        // 2. Configure Razorpay Checkout Modal
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: order.amount,
+          currency: order.currency,
+          name: "Mowarson Developer",
+          description: serviceTitle,
+          image: "assets/favicon.png",
+          order_id: order.id, // Secure order ID from backend
+          prefill: {
+            name: name,
+            email: email,
+            contact: phone
+          },
+          notes: {
+            service: serviceTitle,
+            institute: institute || "Individual / Educator",
+            client_notes: notes || "None"
+          },
+          theme: {
+            color: "#2563eb"
+          },
+          handler: async function (response) {
+            try {
+              // 3. Verify payment signature securely on backend
+              const verifyResponse = await fetch('/api/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              });
+
+              const result = await verifyResponse.json();
+              if (result.status === 'success') {
+                showSuccessConfirmation(response.razorpay_payment_id, serviceTitle, `${cfg.symbol}${amount}`);
+              } else {
+                alert('Payment verification failed: ' + result.message);
+              }
+            } catch (err) {
+              console.error('Verification error:', err);
+              alert('Error verifying payment signature.');
+            }
+          },
+          modal: {
+            ondismiss: function() {
+              console.log('Payment checkout popup closed by user');
+            }
+          }
+        };
+
         const rzp = new Razorpay(options);
         rzp.on('payment.failed', function (response) {
           alert("Payment failed: " + response.error.description + " (" + response.error.reason + ")");
         });
         rzp.open();
+
       } catch (err) {
-        console.error("Razorpay error: ", err);
-        alert("Payment initialization error. Please check your internet connection or contact Mowarson on WhatsApp.");
+        console.error("Payment initialization error: ", err);
+        alert("Something went wrong: " + err.message);
       }
     }
 

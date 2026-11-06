@@ -43,3 +43,5 @@
 /seo-friendly-website-design-tips.html    /blog/seo-friendly-website-design-tips.html      301
 /lead-generation-strategies.html          /blog/lead-generation-strategies.html            301
 /web-design-consultant-tips.html          /blog/web-design-consultant-tips.html            301
+/api/create-order    /.netlify/functions/create-order    200
+/api/verify-payment  /.netlify/functions/verify-payment  200
