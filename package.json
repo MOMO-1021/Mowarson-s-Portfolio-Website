@@ -1,0 +1,25 @@
+{
+  "name": "mowarson-portfolio-publish",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MOMO-1021/Mowarson-s-Portfolio-Website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MOMO-1021/Mowarson-s-Portfolio-Website/issues"
+  },
+  "homepage": "https://github.com/MOMO-1021/Mowarson-s-Portfolio-Website#readme",
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "razorpay": "^2.9.8"
+  }
+}
