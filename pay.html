@@ -361,10 +361,10 @@
   <script src="script.js"></script>
   <script>
     /**
-     * CONFIGURATION:
-     * Razorpay Key ID (Public key for checkout modal fallback)
+     * Razorpay Key ID is loaded dynamically from the secure backend /api/create-order
+     * to avoid exposing keys in client-side code and to pass Netlify secrets scanning.
      */
-    const RAZORPAY_KEY_ID = "rzp_live_Twz0rAzsc72mNh";
+    let RAZORPAY_KEY_ID = "";
 
     // Pricing definitions
     const PRICING = {
@@ -549,6 +549,10 @@
         }
 
         // STEP 2: Configure Razorpay Checkout Modal
+        if (!checkoutKey) {
+          throw new Error("Unable to initialize secure payment. Please contact Mowarson on WhatsApp.");
+        }
+
         const options = {
           key: checkoutKey,
           amount: amountInPaise,
