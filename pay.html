@@ -364,7 +364,7 @@
      * CONFIGURATION:
      * Razorpay Key ID (Public key for checkout modal fallback)
      */
-    const RAZORPAY_KEY_ID = "rzp_test_TwxR3247t1aC29";
+    const RAZORPAY_KEY_ID = "rzp_test_Twxt7Fzp6Jqr6o";
 
     // Pricing definitions
     const PRICING = {
@@ -584,7 +584,23 @@
 
         const rzp = new Razorpay(options);
         rzp.on('payment.failed', function (response) {
-          alert("Payment failed: " + (response.error.description || response.error.reason || "Payment declined"));
+          const err = response.error || {};
+          console.error("Razorpay Payment Failed:", err);
+          let reasonText = err.description || err.reason || "Payment was declined by the bank.";
+
+          if (reasonText.toLowerCase().includes("authentication failed")) {
+            alert(
+              "⚠️ Payment Authentication Failed:\n\n" +
+              "• Testing with Test Keys (rzp_test_...):\n" +
+              "  Real UPI apps and real bank cards cannot process test payments. Use Razorpay test credentials:\n" +
+              "  - Card: 4111 1111 1111 1111, Expiry: 12/30, CVV: 123 -> Click green 'Success' button.\n" +
+              "  - UPI: success@razorpay\n\n" +
+              "• Ready for Real Customer Payments:\n" +
+              "  Switch to LIVE MODE in Razorpay Dashboard and update your 'rzp_live_...' Key ID and Secret."
+            );
+          } else {
+            alert("Payment failed: " + reasonText);
+          }
           resetSubmitBtn();
         });
         rzp.open();
