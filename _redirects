@@ -3,50 +3,20 @@
 /api/create-order                             /.netlify/functions/create-order                 200
 /api/verify-payment                           /.netlify/functions/verify-payment               200
 
-# New Primary Education Services Pretty URLs
-/pay                                         /pay.html                                        200
-/coaching-institute-marketing              /services/coaching-institute-marketing.html       301
-/education-website-design                 /services/education-website-design.html          301
-/services/coaching-institute-marketing    /services/coaching-institute-marketing.html       200
-/services/education-website-design        /services/education-website-design.html          200
-/pricing                                  /services.html#pricing                           301
+# Pretty URLs
+/pay                                          /pay.html                                        200
+/pricing                                      /services.html                                   301
 
-# Redirect Old Generic Services to Education Niche
-/services/restaurant-web-design           /services/education-website-design.html          301
-/services/restaurant-web-design.html      /services/education-website-design.html          301
-/services/small-business-web-design       /services/education-website-design.html          301
-/services/small-business-web-design.html  /services/education-website-design.html          301
-/services/local-business-website-design   /services/coaching-institute-marketing.html      301
-/services/local-business-website-design.html /services/coaching-institute-marketing.html   301
-/services/web-design-and-marketing        /services/coaching-institute-marketing.html      301
-/services/web-design-and-marketing.html   /services/coaching-institute-marketing.html      301
-/services/affordable-web-design-services  /services/education-website-design.html          301
-/services/affordable-web-design-services.html /services/education-website-design.html      301
-/services/lead-generation-website-design  /services/coaching-institute-marketing.html      301
-/services/lead-generation-website-design.html /services/coaching-institute-marketing.html 301
-/services/responsive-web-design-services  /services/education-website-design.html          301
-/services/responsive-web-design-services.html /services/education-website-design.html      301
-/services/web-design-consultant           /services/education-website-design.html          301
-/services/web-design-consultant.html      /services/education-website-design.html          301
-/services/seo-website-design              /services/education-website-design.html          301
-/services/seo-website-design.html         /services/education-website-design.html          301
+# Legacy Service Redirects to Services Hub
+/services/*                                   /services.html                                   301
+/coaching-institute-marketing                 /services.html                                   301
+/education-website-design                     /services.html                                   301
+/restaurant-web-design                        /services.html                                   301
+/small-business-web-design                    /services.html                                   301
+/local-business-website-design                /services.html                                   301
+/web-design-and-marketing                     /services.html                                   301
 
-# Legacy Root Redirects
-/restaurant-web-design                    /services/education-website-design.html          301
-/restaurant-web-design.html               /services/education-website-design.html          301
-/small-business-web-design                /services/education-website-design.html          301
-/small-business-web-design.html           /services/education-website-design.html          301
-/local-business-website-design            /services/coaching-institute-marketing.html      301
-/local-business-website-design.html       /services/coaching-institute-marketing.html      301
-/web-design-and-marketing                 /services/coaching-institute-marketing.html      301
-/web-design-and-marketing.html            /services/coaching-institute-marketing.html      301
-
-# Blog Redirects
-/seo-friendly-website-design-tips         /blog/seo-friendly-website-design-tips.html      301
-/lead-generation-strategies               /blog/lead-generation-strategies.html            301
-/web-design-consultant-tips               /blog/web-design-consultant-tips.html            301
-/seo-friendly-website-design-tips.html    /blog/seo-friendly-website-design-tips.html      301
-/lead-generation-strategies.html          /blog/lead-generation-strategies.html            301
-/web-design-consultant-tips.html          /blog/web-design-consultant-tips.html            301
-/api/create-order    /.netlify/functions/create-order    200
-/api/verify-payment  /.netlify/functions/verify-payment  200
+# Blog Pretty URLs
+/seo-friendly-website-design-tips             /blog/seo-friendly-website-design-tips.html      301
+/lead-generation-strategies                   /blog/lead-generation-strategies.html            301
+/web-design-consultant-tips                   /blog/web-design-consultant-tips.html            301

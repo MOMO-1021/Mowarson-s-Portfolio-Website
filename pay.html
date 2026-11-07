@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pay Online – Mowarson Developer | Secure UPI & Worldwide Checkout</title>
   <meta name="description" content="Securely pay Mowarson Developer directly on the website. Supports Google Pay, PhonePe, Paytm UPI, RuPay, Net Banking in India, and global credit/debit cards worldwide.">
-  <meta name="keywords" content="Pay Mowarson Developer, education web design payment, coaching marketing payment, UPI payment, Google Pay, Razorpay, worldwide card payment">
+  <meta name="keywords" content="Pay Mowarson Developer, brand positioning payment, web design payment, marketing payment, UPI payment, Google Pay, Razorpay, worldwide card payment">
   <link rel="stylesheet" href="style.css">
   
   <!-- Google Fonts -->
@@ -53,13 +53,7 @@
 
       <nav class="nav">
         <a href="about.html">About</a>
-        <div class="dropdown">
-          <a href="services.html" class="dropbtn">Services</a>
-          <div class="dropdown-content">
-            <a href="services/coaching-institute-marketing.html">Marketing for Coaching Institutes</a>
-            <a href="services/education-website-design.html">Education Website Design</a>
-          </div>
-        </div>
+        <a href="services.html">Services</a>
         <a href="blog.html">Blog</a>
         <a href="contact.html">Contact</a>
         <a href="pay.html" class="btn btn-small" style="background: #2563eb; color: #ffffff; padding: 6px 16px; border-radius: 8px;">Pay Online</a>
@@ -130,8 +124,8 @@
                 <div class="service-card-choice">
                   <div class="service-card-header">
                     <div>
-                      <div class="service-card-name">Education Website Design</div>
-                      <div class="service-card-desc">Complete mobile-friendly, SEO-optimized custom website for schools, coaching centers, or tutors.</div>
+                      <div class="service-card-name">Conversion Website Design</div>
+                      <div class="service-card-desc">Complete mobile-friendly, SEO-optimized custom website engineered for high conversion and brand credibility.</div>
                     </div>
                     <div class="service-card-price" id="price-display-website">₹4,000</div>
                   </div>
@@ -145,8 +139,8 @@
                   <span class="choice-tag">Best Value • Save ₹4,000</span>
                   <div class="service-card-header">
                     <div>
-                      <div class="service-card-name">Marketing for Coaching Institutes + FREE Website</div>
-                      <div class="service-card-desc">Targeted local student admission marketing & Google Maps SEO, with the custom website included at ₹0!</div>
+                      <div class="service-card-name">Brand Positioning &amp; Marketing Bundle + FREE Website</div>
+                      <div class="service-card-desc">Strategic brand positioning, messaging architecture &amp; search optimization, with the custom website included at ₹0!</div>
                     </div>
                     <div class="service-card-price" id="price-display-marketing">₹5,000</div>
                   </div>
@@ -192,8 +186,8 @@
               </div>
 
               <div class="pay-form-group">
-                <label class="pay-label" for="institute-name">Coaching Institute / School / Business Name</label>
-                <input type="text" id="institute-name" class="pay-input" placeholder="e.g. Apex IIT Academy or Freelance Project">
+                <label class="pay-label" for="company-name">Company / Business / Brand Name</label>
+                <input type="text" id="company-name" class="pay-input" placeholder="e.g. Acme Studio or Freelance Project">
               </div>
 
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -209,7 +203,7 @@
 
               <div class="pay-form-group">
                 <label class="pay-label" for="client-notes">Project Notes / Instructions (Optional)</label>
-                <textarea id="client-notes" class="pay-input" rows="2" placeholder="e.g. 50% advance for Class 10 Foundation Coaching Website"></textarea>
+                <textarea id="client-notes" class="pay-input" rows="2" placeholder="e.g. 50% advance for Brand Positioning &amp; Website project"></textarea>
               </div>
 
               <button type="submit" class="btn-pay-submit" id="submit-pay-btn">
@@ -235,7 +229,7 @@
 
             <div class="summary-table">
               <div class="summary-row">
-                <span id="summary-service-name">Education Website Design</span>
+                <span id="summary-service-name">Conversion Website Design</span>
                 <span id="summary-service-price">₹4,000</span>
               </div>
               <div class="summary-row">
@@ -316,7 +310,7 @@
       </div>
 
       <div style="background: #f8fafc; border-radius: 12px; padding: 14px; margin-bottom: 24px; text-align: left; font-size: 0.9rem; color: #334155; border: 1px solid #e2e8f0;">
-        <div><strong>Package:</strong> <span id="confirmed-service-name">Education Website Design</span></div>
+        <div><strong>Package:</strong> <span id="confirmed-service-name">Conversion Website Design</span></div>
         <div style="margin-top: 4px;"><strong>Amount Paid:</strong> <span id="confirmed-amount" style="font-weight: 700; color: #10b981;">₹4,000</span></div>
       </div>
 
@@ -439,10 +433,10 @@
 
       if (selectedPlan === 'website') {
         amount = cfg.website;
-        serviceTitle = 'Education Website Design';
+        serviceTitle = 'Conversion Website Design';
       } else if (selectedPlan === 'marketing') {
         amount = cfg.marketing;
-        serviceTitle = 'Marketing for Coaching + Free Website';
+        serviceTitle = 'Brand Positioning & Marketing + Free Website';
       } else {
         const customVal = parseFloat(document.getElementById('custom-amount-input').value) || 0;
         amount = customVal;
@@ -464,7 +458,7 @@
       const name = document.getElementById('client-name').value.trim();
       const email = document.getElementById('client-email').value.trim();
       const phone = document.getElementById('client-phone').value.trim();
-      const institute = document.getElementById('institute-name').value.trim();
+      const company = document.getElementById('company-name').value.trim();
       const notes = document.getElementById('client-notes').value.trim();
 
       const selectedPlan = document.querySelector('input[name="service_plan"]:checked').value;
@@ -474,10 +468,10 @@
 
       if (selectedPlan === 'website') {
         amount = cfg.website;
-        serviceTitle = 'Education Website Design';
+        serviceTitle = 'Conversion Website Design';
       } else if (selectedPlan === 'marketing') {
         amount = cfg.marketing;
-        serviceTitle = 'Marketing for Coaching Institutes + Free Website';
+        serviceTitle = 'Brand Positioning & Marketing Bundle + Free Website';
       } else {
         amount = parseFloat(document.getElementById('custom-amount-input').value) || 0;
         serviceTitle = 'Custom Project Advance';
@@ -520,7 +514,7 @@
             receipt: 'rcpt_' + Date.now(),
             notes: {
               service: serviceTitle,
-              institute: institute || "Individual / Educator",
+              company: company || "Individual / Business",
               client_notes: notes || "None"
             }
           })
@@ -557,7 +551,7 @@
           },
           notes: {
             service: serviceTitle,
-            institute: institute || "Individual / Educator",
+            company: company || "Individual / Business",
             client_notes: notes || "None"
           },
           theme: {
@@ -643,11 +637,11 @@
       document.getElementById('confirmed-amount').innerText = amountStr;
 
       const clientName = document.getElementById('client-name').value.trim() || 'Client';
-      const institute = document.getElementById('institute-name').value.trim();
+      const company = document.getElementById('company-name').value.trim();
 
       const waText = encodeURIComponent(
         `Hi Mowarson, I just completed a payment on your website!\n\n` +
-        `• Name: ${clientName} ${institute ? '(' + institute + ')' : ''}\n` +
+        `• Name: ${clientName} ${company ? '(' + company + ')' : ''}\n` +
         `• Service: ${serviceName}\n` +
         `• Amount: ${amountStr}\n` +
         `• Payment ID: ${paymentId}\n\n` +
