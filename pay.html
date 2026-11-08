@@ -496,12 +496,13 @@
       let RAZORPAY_KEY_ID = "";
 
       // Pricing definitions
+      const INR_TO_USD_RATE = 0.010648;
+
       const PRICING = {
         INR: {
           symbol: "₹",
           website: 4000,
           marketing: 5000,
-          customDefault: 2500,
           websiteLabel: "₹4,000",
           marketingLabel: "₹5,000",
         },
@@ -509,7 +510,6 @@
           symbol: "$",
           website: 50,
           marketing: 65,
-          customDefault: 35,
           websiteLabel: "$50",
           marketingLabel: "$65",
         },
@@ -519,6 +519,19 @@
 
       // Switch Currency
       function setCurrency(currency) {
+        const customAmountInput = document.getElementById(
+          "custom-amount-input",
+        );
+        if (currency !== currentCurrency && customAmountInput.value) {
+          const currentAmount = parseFloat(customAmountInput.value);
+          if (!Number.isNaN(currentAmount)) {
+            customAmountInput.value =
+              currency === "USD"
+                ? (currentAmount * INR_TO_USD_RATE).toFixed(2)
+                : Math.round(currentAmount / INR_TO_USD_RATE);
+          }
+        }
+
         currentCurrency = currency;
 
         const tabInr = document.getElementById("tab-inr");
@@ -527,10 +540,14 @@
           tabInr.classList.add("active");
           tabUsd.classList.remove("active");
           document.getElementById("custom-currency-symbol").innerText = "₹";
+          customAmountInput.min = "100";
+          customAmountInput.step = "50";
         } else {
           tabInr.classList.remove("active");
           tabUsd.classList.add("active");
           document.getElementById("custom-currency-symbol").innerText = "$";
+          customAmountInput.min = "1";
+          customAmountInput.step = "0.01";
         }
 
         // Update plan prices
@@ -581,7 +598,14 @@
           serviceTitle = "Custom Milestone / Advance Payment";
         }
 
-        const formattedTotal = `${cfg.symbol}${amount.toLocaleString()}`;
+        const formattedAmount =
+          selectedPlan === "custom" && currentCurrency === "USD"
+            ? amount.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+            : amount.toLocaleString();
+        const formattedTotal = `${cfg.symbol}${formattedAmount}`;
 
         document.getElementById("summary-service-name").innerText =
           serviceTitle;
