@@ -1,4 +1,5 @@
 const Razorpay = require("razorpay");
+const { verifyQuoteToken } = require("../../payment-pricing");
 
 exports.handler = async (event) => {
   const headers = {
@@ -27,8 +28,6 @@ exports.handler = async (event) => {
     const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
     const key_secret = rawKeySecret.trim().replace(/^["']|["']$/g, "");
 
-    console.log("Creating Razorpay order. Key prefix:", key_id.substring(0, 8), "Secret length:", key_secret.length);
-
     if (!key_id || !key_secret) {
       return {
         statusCode: 401,
@@ -40,16 +39,14 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body || "{}");
-    const { amount, currency = "INR", receipt, notes } = data;
-    const numAmount = Number(amount);
-
-    if (!numAmount || isNaN(numAmount) || numAmount < 100) {
+    let quote;
+    try {
+      quote = verifyQuoteToken(data.quote_token, key_secret);
+    } catch (error) {
       return {
-        statusCode: 400,
+        statusCode: error.message.includes("expired") ? 409 : 400,
         headers,
-        body: JSON.stringify({
-          error: "Invalid amount. Minimum amount is 100 paise."
-        })
+        body: JSON.stringify({ error: error.message }),
       };
     }
 
@@ -59,16 +56,19 @@ exports.handler = async (event) => {
     });
 
     const orderOptions = {
-      amount: Math.round(numAmount),
-      currency: currency.toUpperCase(),
-      receipt: receipt || `rcpt_${Date.now()}`
+      amount: quote.amount,
+      currency: quote.currency,
+      receipt: `rcpt_${Date.now()}`,
     };
 
-    if (notes) {
-      orderOptions.notes = notes;
+    if (data.notes && typeof data.notes === "object") {
+      orderOptions.notes = data.notes;
     }
 
     const order = await razorpay.orders.create(orderOptions);
+    if (order.amount !== quote.amount || order.currency !== quote.currency) {
+      throw new Error("Razorpay order amount or currency did not match the approved quote.");
+    }
 
     return {
       statusCode: 200,
@@ -82,17 +82,21 @@ exports.handler = async (event) => {
     };
   } catch (err) {
     console.error("Netlify Function create-order error:", err);
-    const isAuthError = err.statusCode === 401 || err.status === 401 || 
-      (err.error && err.error.code === "BAD_REQUEST_ERROR" && err.error.description === "Authentication failed");
-    const statusCode = isAuthError ? 401 : 500;
-    
+    const isAuthError =
+      err.statusCode === 401 ||
+      err.status === 401 ||
+      (err.error &&
+        err.error.code === "BAD_REQUEST_ERROR" &&
+        err.error.description === "Authentication failed");
+    const statusCode = isAuthError ? 401 : err.statusCode >= 400 && err.statusCode < 500 ? err.statusCode : 500;
+
     return {
       statusCode: statusCode,
       headers,
       body: JSON.stringify({
-        error: isAuthError 
-          ? `Razorpay authentication failed. (Active key in Netlify starts with: "${key_id.slice(0, 8)}...", length: ${key_id.length}, secret length: ${key_secret.length}). Please ensure "Same value for all deploy contexts" is selected in Netlify.`
-          : (err.error?.description || err.message || "Failed to create order")
+        error: isAuthError
+          ? "Razorpay authentication failed. Check the Key ID and Secret configured in Netlify."
+          : err.error?.description || err.message || "Failed to create order",
       })
     };
   }

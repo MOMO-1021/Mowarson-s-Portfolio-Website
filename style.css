@@ -2187,28 +2187,24 @@ footer a:hover {
 }
 
 .payment-page .currency-selector-box {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  display: block;
   padding: 0;
-  margin-bottom: 22px;
+  margin-bottom: 8px;
   background: transparent;
 }
 
-.payment-page .currency-tab {
+.payment-page .currency-select {
   min-height: 44px;
-  padding: 10px 12px;
+  margin: 0;
   border: 1px solid #d5dde7;
   border-radius: 6px;
   background: #ffffff;
   font-size: 0.92rem;
 }
 
-.payment-page .currency-tab.active {
-  border-color: #2563eb;
-  background: #eff6ff;
-  color: #1d4ed8;
-  box-shadow: none;
+.payment-page .currency-price-note {
+  margin-bottom: 22px;
+  font-size: 0.82rem;
 }
 
 .payment-page .service-options {

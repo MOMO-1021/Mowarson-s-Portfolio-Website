@@ -131,25 +131,37 @@
                 Select the service and currency for this payment.
               </p>
 
-              <!-- Currency Switcher -->
-              <div class="currency-selector-box" role="tablist">
-                <button
-                  type="button"
-                  class="currency-tab active"
-                  id="tab-inr"
-                  onclick="setCurrency('INR')"
+              <div class="currency-selector-box">
+                <label class="pay-label" for="currency-select"
+                  >Payment currency</label
                 >
-                  INR (₹)
-                </button>
-                <button
-                  type="button"
-                  class="currency-tab"
-                  id="tab-usd"
-                  onclick="setCurrency('USD')"
+                <select
+                  id="currency-select"
+                  class="pay-input currency-select"
+                  onchange="setCurrency(this.value)"
                 >
-                  USD ($)
-                </button>
+                  <option value="INR">INR - Indian Rupee</option>
+                  <option value="USD">USD - US Dollar</option>
+                  <option value="EUR">EUR - Euro</option>
+                  <option value="GBP">GBP - British Pound</option>
+                  <option value="CAD">CAD - Canadian Dollar</option>
+                  <option value="AUD">AUD - Australian Dollar</option>
+                  <option value="AED">AED - UAE Dirham</option>
+                  <option value="QAR">QAR - Qatari Riyal</option>
+                  <option value="SGD">SGD - Singapore Dollar</option>
+                  <option value="CNY">CNY - Chinese Yuan</option>
+                  <option value="HKD">HKD - Hong Kong Dollar</option>
+                </select>
               </div>
+              <p
+                class="pay-card-subtitle currency-price-note"
+                id="currency-price-note"
+                role="status"
+              >
+                International prices use the latest available USD exchange
+                rates. Razorpay must have international payments enabled for
+                the selected currency.
+              </p>
 
               <!-- Service Selection -->
               <div class="service-options">
@@ -204,7 +216,7 @@
                         <div class="service-card-desc">
                           Strategic brand positioning, messaging architecture
                           &amp; search optimization, with the custom website
-                          included at ₹0!
+                          included at no extra charge!
                         </div>
                       </div>
                       <div
@@ -256,8 +268,8 @@
                           type="number"
                           id="custom-amount-input"
                           class="pay-input"
-                          min="100"
-                          step="50"
+                          min="1"
+                          step="0.01"
                           placeholder="e.g. 2500"
                           value="2500"
                           oninput="updateSummary()"
@@ -489,74 +501,102 @@
     <!-- Core JavaScript & Razorpay Integration Logic -->
     <script src="script.js"></script>
     <script>
-      /**
-       * Razorpay Key ID is loaded dynamically from the secure backend /api/create-order
-       * to avoid exposing keys in client-side code and to pass Netlify secrets scanning.
-       */
-      let RAZORPAY_KEY_ID = "";
-
-      // Pricing definitions
-      const INR_TO_USD_RATE = 0.010648;
-
-      const PRICING = {
-        INR: {
-          symbol: "₹",
-          website: 4000,
-          marketing: 5000,
-          websiteLabel: "₹4,000",
-          marketingLabel: "₹5,000",
-        },
-        USD: {
-          symbol: "$",
-          website: 50,
-          marketing: 65,
-          websiteLabel: "$50",
-          marketingLabel: "$65",
-        },
-      };
-
       let currentCurrency = "INR";
+      let activeQuotes = {};
+      let currencyRates = {};
 
-      // Switch Currency
-      function setCurrency(currency) {
-        const customAmountInput = document.getElementById(
-          "custom-amount-input",
-        );
-        if (currency !== currentCurrency && customAmountInput.value) {
-          const currentAmount = parseFloat(customAmountInput.value);
-          if (!Number.isNaN(currentAmount)) {
-            customAmountInput.value =
-              currency === "USD"
-                ? (currentAmount * INR_TO_USD_RATE).toFixed(2)
-                : Math.round(currentAmount / INR_TO_USD_RATE);
-          }
+      function formatAmount(amountInMinorUnits, currency) {
+        return new Intl.NumberFormat(undefined, {
+          style: "currency",
+          currency,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(amountInMinorUnits / 100);
+      }
+
+      async function requestQuote(data) {
+        const response = await fetch("/api/quote", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const result = await response.json();
+        if (!response.ok) {
+          throw new Error(result.error || "Unable to prepare a price quote.");
         }
+        return result;
+      }
 
+      async function setCurrency(currency) {
+        const previousCurrency = currentCurrency;
+        const currencySelect = document.getElementById("currency-select");
+        const customAmountInput = document.getElementById("custom-amount-input");
+        const note = document.getElementById("currency-price-note");
         currentCurrency = currency;
+        currencySelect.value = currency;
+        currencySelect.disabled = true;
+        document.getElementById("custom-currency-symbol").innerText = currency;
+        activeQuotes = {};
+        document.getElementById("price-display-website").innerText = "Loading…";
+        document.getElementById("price-display-marketing").innerText = "Loading…";
+        note.textContent = "Loading current exchange rates and prices…";
 
-        const tabInr = document.getElementById("tab-inr");
-        const tabUsd = document.getElementById("tab-usd");
-        if (currency === "INR") {
-          tabInr.classList.add("active");
-          tabUsd.classList.remove("active");
-          document.getElementById("custom-currency-symbol").innerText = "₹";
-          customAmountInput.min = "100";
-          customAmountInput.step = "50";
-        } else {
-          tabInr.classList.remove("active");
-          tabUsd.classList.add("active");
-          document.getElementById("custom-currency-symbol").innerText = "$";
-          customAmountInput.min = "1";
-          customAmountInput.step = "0.01";
+        try {
+          const quotes = await requestQuote({ currency });
+          activeQuotes = {
+            website: quotes.website,
+            marketing: quotes.marketing,
+          };
+          if (quotes.usdRate > 0) {
+            currencyRates[currency] = quotes.usdRate;
+          }
+          if (quotes.inrRate > 0) {
+            currencyRates.INR = quotes.inrRate;
+          }
+
+          const customAmount = Number(customAmountInput.value);
+          const previousRate = currencyRates[previousCurrency];
+          const currentRate = currencyRates[currency];
+          let customAmountNeedsEntry = false;
+          if (
+            previousCurrency !== currency &&
+            Number.isFinite(customAmount) &&
+            customAmount > 0 &&
+            previousRate > 0 &&
+            currentRate > 0
+          ) {
+            customAmountInput.value = (
+              (customAmount * currentRate) /
+              previousRate
+            ).toFixed(2);
+          } else if (previousCurrency !== currency && customAmount > 0) {
+            customAmountInput.value = "";
+            customAmountNeedsEntry = true;
+          }
+
+          document.getElementById("custom-currency-symbol").innerText =
+            currency;
+          document.getElementById("price-display-website").innerText =
+            formatAmount(quotes.website.amount, currency);
+          document.getElementById("price-display-marketing").innerText =
+            formatAmount(quotes.marketing.amount, currency);
+          note.textContent =
+            "International service prices use the latest available USD exchange rates, updated daily. Razorpay charges the exact amount shown in the selected currency; your bank may apply its own fees.";
+          if (customAmountNeedsEntry) {
+            note.textContent +=
+              " Re-enter your custom amount in the selected currency.";
+          }
+          updateSummary();
+        } catch (error) {
+          document.getElementById("price-display-website").innerText =
+            "Unavailable";
+          document.getElementById("price-display-marketing").innerText =
+            "Unavailable";
+          note.textContent = `Unable to load prices: ${error.message}`;
+          updateSummary();
+        } finally {
+          currencySelect.disabled = false;
         }
-
-        // Update plan prices
-        document.getElementById("price-display-website").innerText =
-          PRICING[currency].websiteLabel;
-        document.getElementById("price-display-marketing").innerText =
-          PRICING[currency].marketingLabel;
-
-        updateSummary();
       }
 
       // Toggle custom amount field and update UI
@@ -580,41 +620,44 @@
         const selectedPlan = document.querySelector(
           'input[name="service_plan"]:checked',
         ).value;
-        const cfg = PRICING[currentCurrency];
-        let amount = 0;
+        let amountLabel = "Loading price…";
         let serviceTitle = "";
 
         if (selectedPlan === "website") {
-          amount = cfg.website;
           serviceTitle = "Conversion Website Design";
+          if (activeQuotes.website) {
+            amountLabel = formatAmount(
+              activeQuotes.website.amount,
+              currentCurrency,
+            );
+          }
         } else if (selectedPlan === "marketing") {
-          amount = cfg.marketing;
           serviceTitle = "Brand Positioning & Marketing + Free Website";
+          if (activeQuotes.marketing) {
+            amountLabel = formatAmount(
+              activeQuotes.marketing.amount,
+              currentCurrency,
+            );
+          }
         } else {
-          const customVal =
-            parseFloat(document.getElementById("custom-amount-input").value) ||
-            0;
-          amount = customVal;
+          const customAmount = Number(
+            document.getElementById("custom-amount-input").value,
+          );
+          amountLabel =
+            Number.isFinite(customAmount) && customAmount > 0
+              ? formatAmount(Math.round(customAmount * 100), currentCurrency)
+              : "Enter an amount";
           serviceTitle = "Custom Milestone / Advance Payment";
         }
-
-        const formattedAmount =
-          selectedPlan === "custom" && currentCurrency === "USD"
-            ? amount.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
-            : amount.toLocaleString();
-        const formattedTotal = `${cfg.symbol}${formattedAmount}`;
 
         document.getElementById("summary-service-name").innerText =
           serviceTitle;
         document.getElementById("summary-service-price").innerText =
-          formattedTotal;
+          amountLabel;
         document.getElementById("summary-total-amount").innerText =
-          formattedTotal;
+          amountLabel;
         document.getElementById("btn-amount-preview").innerText =
-          formattedTotal;
+          amountLabel;
       }
 
       // Handle form submission and initiate Server-Side Order & Razorpay Checkout
@@ -630,35 +673,17 @@
         const selectedPlan = document.querySelector(
           'input[name="service_plan"]:checked',
         ).value;
-        const cfg = PRICING[currentCurrency];
-        let amount = 0;
         let serviceTitle = "";
 
         if (selectedPlan === "website") {
-          amount = cfg.website;
           serviceTitle = "Conversion Website Design";
         } else if (selectedPlan === "marketing") {
-          amount = cfg.marketing;
           serviceTitle = "Brand Positioning & Marketing Bundle + Free Website";
         } else {
-          amount =
-            parseFloat(document.getElementById("custom-amount-input").value) ||
-            0;
           serviceTitle = "Custom Project Advance";
         }
 
-        if (amount <= 0) {
-          alert("Please enter a valid payment amount.");
-          return;
-        }
-
-        // Ensure valid 10-digit contact for Razorpay
-        const phoneDigits = phone.replace(/\D/g, "");
-        const validPhone =
-          phoneDigits.length >= 10 ? phoneDigits.slice(-10) : phone;
-
-        // Convert amount to paise (1 INR = 100 paise; minimum 100 paise required)
-        const amountInPaise = Math.round(amount * 100);
+        const phoneForCheckout = phone.replace(/[^\d+]/g, "");
 
         const submitBtn = document.getElementById("submit-pay-btn");
         const submitLabel = submitBtn.querySelector(".submit-pay-label");
@@ -672,30 +697,57 @@
         };
 
         try {
+          let quote;
+          if (selectedPlan === "custom") {
+            const customAmount = Number(
+              document.getElementById("custom-amount-input").value,
+            );
+            if (!Number.isFinite(customAmount) || customAmount < 1) {
+              throw new Error("Enter a valid payment amount of at least 1.00.");
+            }
+            quote = await requestQuote({
+              plan: "custom",
+              currency: currentCurrency,
+              customAmount,
+            });
+          } else {
+            quote = activeQuotes[selectedPlan];
+            if (!quote || !quote.token) {
+              throw new Error("The selected currency price is not available yet.");
+            }
+          }
+
           // STEP 1: Call Backend to Create Order (with generous 15s timeout for mobile/cold start)
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-          const orderResponse = await fetch("/api/create-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            signal: controller.signal,
-            body: JSON.stringify({
-              amount: amountInPaise,
-              currency: currentCurrency,
-              receipt: "rcpt_" + Date.now(),
-              notes: {
-                service: serviceTitle,
-                company: company || "Individual / Business",
-                client_notes: notes || "None",
-              },
-            }),
-          });
-
-          clearTimeout(timeoutId);
+          let orderResponse;
+          try {
+            orderResponse = await fetch("/api/create-order", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              signal: controller.signal,
+              body: JSON.stringify({
+                quote_token: quote.token,
+                notes: {
+                  service: serviceTitle,
+                  company: company || "Individual / Business",
+                  client_notes: notes || "None",
+                },
+              }),
+            });
+          } finally {
+            clearTimeout(timeoutId);
+          }
 
           if (!orderResponse.ok) {
             const errData = await orderResponse.json().catch(() => ({}));
+            if (orderResponse.status === 409) {
+              await setCurrency(currentCurrency);
+              throw new Error(
+                "The displayed price quote expired. The latest price is now shown; review it and continue again.",
+              );
+            }
             throw new Error(
               errData.error || "Server error status: " + orderResponse.status,
             );
@@ -703,26 +755,31 @@
 
           const orderData = await orderResponse.json();
           const orderId = orderData.order_id || orderData.id;
-          const checkoutKey = orderData.key_id || RAZORPAY_KEY_ID;
+          const checkoutKey = orderData.key_id;
 
-          if (!orderId || !checkoutKey) {
+          if (
+            !orderId ||
+            !checkoutKey ||
+            orderData.amount !== quote.amount ||
+            orderData.currency !== quote.currency
+          ) {
             throw new Error(
-              "Unable to retrieve order details from payment gateway. Please try again.",
+              "The Razorpay order did not match the approved price. No payment was started; please try again.",
             );
           }
 
           // STEP 2: Configure Razorpay Checkout Modal
           const options = {
             key: checkoutKey,
-            amount: orderData.amount || amountInPaise,
-            currency: orderData.currency || currentCurrency,
+            amount: orderData.amount,
+            currency: orderData.currency,
             name: "Mowarson Developer",
             description: serviceTitle,
             order_id: orderId,
             prefill: {
               name: name,
               email: email,
-              contact: validPhone,
+              contact: phoneForCheckout,
             },
             notes: {
               service: serviceTitle,
@@ -735,36 +792,45 @@
             handler: async function (response) {
               submitLabel.textContent = "Confirming payment...";
               try {
-                // If an order_id was created, verify signature on backend
-                if (response.razorpay_order_id && response.razorpay_signature) {
-                  const verifyResponse = await fetch("/api/verify-payment", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      razorpay_order_id: response.razorpay_order_id,
-                      razorpay_payment_id: response.razorpay_payment_id,
-                      razorpay_signature: response.razorpay_signature,
-                    }),
-                  });
-
-                  const verifyResult = await verifyResponse.json();
-                  if (!verifyResponse.ok || !verifyResult.success) {
-                    console.warn("Signature verification note:", verifyResult);
-                  }
+                if (
+                  !response.razorpay_order_id ||
+                  !response.razorpay_payment_id ||
+                  !response.razorpay_signature ||
+                  response.razorpay_order_id !== orderId
+                ) {
+                  throw new Error("Razorpay did not return the required verification details.");
                 }
 
-                // Confirm and display successful transaction modal
+                const verifyResponse = await fetch("/api/verify-payment", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                  }),
+                });
+                const verifyResult = await verifyResponse.json();
+                if (
+                  !verifyResponse.ok ||
+                  !verifyResult.success ||
+                  verifyResult.amount !== orderData.amount ||
+                  verifyResult.currency !== orderData.currency
+                ) {
+                  throw new Error(
+                    verifyResult.error || "Payment could not be verified.",
+                  );
+                }
+
                 showSuccessConfirmation(
                   response.razorpay_payment_id,
                   serviceTitle,
-                  `${cfg.symbol}${amount}`,
+                  formatAmount(verifyResult.amount, verifyResult.currency),
                 );
               } catch (err) {
                 console.error("Confirmation error:", err);
-                showSuccessConfirmation(
-                  response.razorpay_payment_id,
-                  serviceTitle,
-                  `${cfg.symbol}${amount}`,
+                alert(
+                  `Payment was not confirmed: ${err.message} If your account was charged, contact support with payment ID ${response.razorpay_payment_id || "shown in Razorpay Checkout"}.`,
                 );
               } finally {
                 resetSubmitBtn();
@@ -836,25 +902,21 @@
 
       // Auto-detect URL query parameters (?service=marketing or ?service=website or ?amount=...)
       document.addEventListener("DOMContentLoaded", function () {
-        // Pre-warm serverless function and pre-fetch public key
-        fetch("/api/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: 100, currency: "INR" }),
-        })
-          .then((r) => r.json())
-          .then((data) => {
-            if (data && data.key_id) RAZORPAY_KEY_ID = data.key_id;
-          })
-          .catch(() => {});
-
         const urlParams = new URLSearchParams(window.location.search);
         const serviceParam = urlParams.get("service");
         const amountParam = urlParams.get("amount");
         const currencyParam = urlParams.get("currency");
+        const currencySelect = document.getElementById("currency-select");
 
-        if (currencyParam && currencyParam.toUpperCase() === "USD") {
-          setCurrency("USD");
+        if (
+          currencyParam &&
+          [...currencySelect.options].some(
+            (option) => option.value === currencyParam.toUpperCase(),
+          )
+        ) {
+          setCurrency(currencyParam.toUpperCase());
+        } else {
+          setCurrency("INR");
         }
 
         if (serviceParam === "marketing") {

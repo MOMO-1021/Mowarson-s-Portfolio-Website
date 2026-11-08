@@ -1,5 +1,6 @@
 # Razorpay API Endpoints (Netlify Functions)
 /api/config                                   /.netlify/functions/config                       200
+/api/quote                                    /.netlify/functions/quote                        200
 /api/create-order                             /.netlify/functions/create-order                 200
 /api/verify-payment                           /.netlify/functions/verify-payment               200
 
