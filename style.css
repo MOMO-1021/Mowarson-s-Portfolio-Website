@@ -2145,7 +2145,7 @@ footer a:hover {
 }
 
 .payment-page .pay-header {
-  max-width: 760px;
+  max-width: 1080px;
   margin: 0 auto 28px;
 }
 
@@ -2321,6 +2321,47 @@ footer a:hover {
 
 .payment-page .pay-input:focus {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.payment-page .currency-input-prefix {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.payment-page .currency-input-prefix:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.payment-page .currency-symbol-tag {
+  position: static;
+  display: block;
+  padding-left: 12px;
+  color: #475569;
+  font-family: "Segoe UI Symbol", "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: left;
+}
+
+.payment-page .currency-input-prefix .pay-input {
+  min-width: 0;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.payment-page .currency-input-prefix .pay-input:focus {
+  border: 0;
+  box-shadow: none;
 }
 
 .payment-page .order-summary-card {
