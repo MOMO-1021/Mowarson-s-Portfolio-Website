@@ -16,16 +16,14 @@
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Pay Online – Mowarson Developer | Secure UPI & Worldwide Checkout
-    </title>
+    <title>Pay Online | Mowarson Developer</title>
     <meta
       name="description"
-      content="Securely pay Mowarson Developer directly on the website. Supports Google Pay, PhonePe, Paytm UPI, RuPay, Net Banking in India, and global credit/debit cards worldwide."
+      content="Pay for Mowarson Developer services through Razorpay Checkout."
     />
     <meta
       name="keywords"
-      content="Pay Mowarson Developer, brand positioning payment, web design payment, marketing payment, UPI payment, Google Pay, Razorpay, worldwide card payment"
+      content="Pay Mowarson Developer for brand positioning, web design, or marketing services."
     />
     <link rel="stylesheet" href="style.css" />
 
@@ -68,7 +66,7 @@
     />
     <meta
       property="og:description"
-      content="Pay directly on the website via UPI (Google Pay, PhonePe, Paytm) or international credit/debit cards. 100% secure with instant receipts."
+      content="Pay for Mowarson Developer services through Razorpay Checkout."
     />
     <meta
       property="og:url"
@@ -78,17 +76,19 @@
     <!-- Razorpay Official Checkout SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </head>
-  <body>
+  <body class="payment-page">
     <!-- Header -->
     <header>
       <div class="container header-inner">
         <a href="index.html" class="logo">Mowarson<span>Developer</span></a>
 
         <!-- Hamburger button (visible on mobile) -->
-        <button class="hamburger" aria-label="Menu">
-          <span></span>
-          <span></span>
-          <span></span>
+        <button
+          type="button"
+          class="hamburger payment-menu-button"
+          aria-label="Toggle navigation"
+        >
+          Menu
         </button>
 
         <nav class="nav">
@@ -113,25 +113,11 @@
 
     <main class="pay-page-wrapper">
       <div class="container">
-        <!-- Trust Badges & Header -->
         <div class="pay-header">
-          <div class="pay-badge-group">
-            <span class="pay-badge green"
-              >🔒 256-Bit SSL Encrypted Checkout</span
-            >
-            <span class="pay-badge"
-              >⚡ Instant UPI & Global Card Settlement</span
-            >
-            <span class="pay-badge">🧾 Automatic GST / Tax Receipt</span>
-          </div>
-          <h1>Secure Payment Portal</h1>
+          <h1>Complete your payment</h1>
           <p>
-            Pay directly on the website with
-            <strong>zero extra transaction fees</strong>. Indian clients can pay
-            instantly with
-            <strong>Google Pay, PhonePe, Paytm, or UPI QR</strong>, and
-            international clients can pay with any major credit or debit card
-            worldwide.
+            Choose a service and enter your contact details. Payment is
+            completed through Razorpay Checkout.
           </p>
         </div>
 
@@ -140,12 +126,9 @@
           <!-- Left Column: Service & Customer Form -->
           <div class="pay-form-section">
             <div class="pay-card">
-              <div class="pay-card-title">
-                <span>1. Select Currency & Service</span>
-              </div>
+              <h2 class="pay-card-title">Service and currency</h2>
               <p class="pay-card-subtitle">
-                Choose whether you are paying in Indian Rupees (INR) or US
-                Dollars (USD).
+                Select the service and currency for this payment.
               </p>
 
               <!-- Currency Switcher -->
@@ -156,7 +139,7 @@
                   id="tab-inr"
                   onclick="setCurrency('INR')"
                 >
-                  🇮🇳 INR (₹) — India (UPI / GPay / Cards)
+                  INR (₹)
                 </button>
                 <button
                   type="button"
@@ -164,29 +147,8 @@
                   id="tab-usd"
                   onclick="setCurrency('USD')"
                 >
-                  🌍 USD ($) — International (Global Cards)
+                  USD ($)
                 </button>
-              </div>
-
-              <!-- UPI Spotlight Box (Visible when INR is active) -->
-              <div class="upi-promo-box" id="upi-banner">
-                <div class="upi-promo-icon">📱</div>
-                <div class="upi-promo-text">
-                  <h4>Instant UPI Payments Supported!</h4>
-                  <p>
-                    Use <strong>Google Pay</strong>, <strong>PhonePe</strong>,
-                    <strong>Paytm</strong>, or scan a dynamic
-                    <strong>UPI QR Code</strong> on the next step. No cash or
-                    manual transfers required.
-                  </p>
-                  <div class="methods-badge-list">
-                    <span class="method-chip">🟢 Google Pay</span>
-                    <span class="method-chip">🟣 PhonePe</span>
-                    <span class="method-chip">🔵 Paytm</span>
-                    <span class="method-chip">⚡ BHIM UPI</span>
-                    <span class="method-chip">💳 RuPay & Visa</span>
-                  </div>
-                </div>
               </div>
 
               <!-- Service Selection -->
@@ -232,7 +194,7 @@
                     onchange="updateSelectedPlan()"
                   />
                   <div class="service-card-choice">
-                    <span class="choice-tag">Best Value • Save ₹4,000</span>
+                    <span class="choice-tag">Bundle</span>
                     <div class="service-card-header">
                       <div>
                         <div class="service-card-name">
@@ -306,28 +268,17 @@
                 </label>
               </div>
 
-              <hr
-                style="
-                  border: none;
-                  border-top: 1px solid #e2e8f0;
-                  margin: 28px 0 24px;
-                "
-              />
+              <hr class="pay-divider" />
 
               <!-- Client Contact Details -->
-              <div class="pay-card-title">
-                <span>2. Your Contact & Invoice Details</span>
-              </div>
+              <h2 class="pay-card-title">Contact details</h2>
               <p class="pay-card-subtitle">
-                Your instant payment receipt and confirmation will be sent to
-                this email.
+                Enter the details to associate with this payment.
               </p>
 
               <form id="payment-form" onsubmit="handleProceedToPay(event)">
                 <div class="pay-form-group">
-                  <label class="pay-label" for="client-name"
-                    >Your Full Name / Contact Person *</label
-                  >
+                  <label class="pay-label" for="client-name">Full name *</label>
                   <input
                     type="text"
                     id="client-name"
@@ -349,13 +300,7 @@
                   />
                 </div>
 
-                <div
-                  style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 16px;
-                  "
-                >
+                <div class="pay-contact-grid">
                   <div class="pay-form-group">
                     <label class="pay-label" for="client-email"
                       >Email Address *</label
@@ -370,7 +315,7 @@
                   </div>
                   <div class="pay-form-group">
                     <label class="pay-label" for="client-phone"
-                      >Phone / WhatsApp Number *</label
+                      >Phone number *</label
                     >
                     <input
                       type="tel"
@@ -384,7 +329,7 @@
 
                 <div class="pay-form-group">
                   <label class="pay-label" for="client-notes"
-                    >Project Notes / Instructions (Optional)</label
+                    >Project notes (optional)</label
                   >
                   <textarea
                     id="client-notes"
@@ -399,7 +344,7 @@
                   class="btn-pay-submit"
                   id="submit-pay-btn"
                 >
-                  <span>🔒 Proceed to Pay</span>
+                  <span class="submit-pay-label">Continue to payment</span>
                   <span id="btn-amount-preview">₹4,000</span>
                 </button>
 
@@ -434,12 +379,10 @@
             </div>
           </div>
 
-          <!-- Right Column: Order Summary & Trust Guarantee -->
+          <!-- Order Summary -->
           <div class="order-summary-section">
             <div class="pay-card order-summary-card">
-              <div class="pay-card-title">
-                <span>🧾 Order Summary</span>
-              </div>
+              <h2 class="pay-card-title">Order summary</h2>
 
               <div class="summary-table">
                 <div class="summary-row">
@@ -448,112 +391,27 @@
                   >
                   <span id="summary-service-price">₹4,000</span>
                 </div>
-                <div class="summary-row">
-                  <span>Platform Convenience Fee</span>
-                  <span class="summary-badge-free">₹0 (FREE)</span>
-                </div>
-                <div class="summary-row">
-                  <span>Direct On-Site Processing</span>
-                  <span style="color: #10b981; font-weight: 600"
-                    >✓ Encrypted</span
-                  >
-                </div>
                 <div class="summary-row total">
-                  <span>Total Payable:</span>
+                  <span>Total</span>
                   <span class="total-amount" id="summary-total-amount"
                     >₹4,000</span
                   >
                 </div>
               </div>
 
-              <!-- Accepted Payment Methods Icons -->
-              <div
-                style="
-                  background: #f8fafc;
-                  border-radius: 14px;
-                  padding: 14px;
-                  border: 1px solid #e2e8f0;
-                  margin-bottom: 20px;
-                "
-              >
-                <div
-                  style="
-                    font-size: 0.8rem;
-                    font-weight: 700;
-                    color: #475569;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                    margin-bottom: 8px;
-                  "
+              <p class="pay-method-note">
+                Payment options available for this transaction are shown in
+                Razorpay Checkout.
+              </p>
+              <p class="pay-support">
+                Need help?
+                <a
+                  href="https://wa.me/916009825938?text=Hi%20Mowarson,%20I%20have%20a%20question%20before%20paying%20on%20your%20website."
+                  target="_blank"
+                  rel="noopener"
+                  >Contact me on WhatsApp</a
                 >
-                  Accepted Payment Methods
-                </div>
-                <div class="methods-badge-list">
-                  <span class="method-chip">🟢 Google Pay</span>
-                  <span class="method-chip">🟣 PhonePe</span>
-                  <span class="method-chip">🔵 Paytm</span>
-                  <span class="method-chip">💳 Visa / Mastercard</span>
-                  <span class="method-chip">🇮🇳 RuPay / UPI QR</span>
-                  <span class="method-chip">🏦 Net Banking</span>
-                  <span class="method-chip">🌐 International Cards</span>
-                </div>
-              </div>
-
-              <!-- Trust & Assurance Items -->
-              <div class="pay-security-notes">
-                <div class="pay-security-item">
-                  <span class="pay-security-icon">✓</span>
-                  <div>
-                    <strong>100% Direct Verification:</strong> Payments are
-                    processed via licensed gateway directly to Mowarson
-                    Developer's verified bank account.
-                  </div>
-                </div>
-                <div class="pay-security-item">
-                  <span class="pay-security-icon">✓</span>
-                  <div>
-                    <strong>Direct Founder Accountability:</strong> You get
-                    direct 1-on-1 access to Mowarson on WhatsApp for project
-                    kick-off.
-                  </div>
-                </div>
-                <div class="pay-security-item">
-                  <span class="pay-security-icon">✓</span>
-                  <div>
-                    <strong>Secure & Verified:</strong> Payments are processed
-                    directly through Razorpay with 256-bit SSL encryption. We
-                    accept UPI (Google Pay, PhonePe, Paytm), RuPay, Net Banking,
-                    and international credit/debit cards with instant
-                    confirmation.
-                  </div>
-                </div>
-              </div>
-
-              <!-- Quick WhatsApp Assistance Box -->
-              <div
-                style="
-                  background: #eef2ff;
-                  border-radius: 14px;
-                  padding: 14px;
-                  margin-top: 18px;
-                  border: 1px solid #c7d2fe;
-                  display: flex;
-                  align-items: center;
-                  gap: 10px;
-                "
-              >
-                <span style="font-size: 1.4rem">💬</span>
-                <div style="font-size: 0.88rem; color: #1e293b">
-                  Need help or a custom quote first? <br />
-                  <a
-                    href="https://wa.me/916009825938?text=Hi%20Mowarson,%20I%20have%20a%20question%20before%20paying%20on%20your%20website."
-                    target="_blank"
-                    rel="noopener"
-                    style="font-weight: 700"
-                    >Chat on WhatsApp (+91 6009825938) →</a
-                  >
-                </div>
-              </div>
+              </p>
             </div>
           </div>
         </div>
@@ -563,62 +421,40 @@
     <!-- Payment Success Confirmation Modal -->
     <div class="pay-modal-overlay" id="success-modal">
       <div class="pay-modal-content">
-        <div class="modal-success-icon">✓</div>
-        <h2 style="font-size: 1.8rem; color: #0f172a; margin-bottom: 12px">
-          Payment Successful!
-        </h2>
-        <p style="color: #475569; font-size: 1rem; line-height: 1.5">
-          Thank you for your payment. Your transaction has been completed
-          securely and an official receipt has been emailed to you.
+        <h2 class="pay-card-title">Payment complete</h2>
+        <p class="payment-confirmation-copy">
+          Your payment response has been received.
         </p>
 
         <div class="modal-payment-id">
-          <strong>Transaction ID:</strong> <br />
+          <strong>Payment ID</strong>
           <span id="confirmed-payment-id">rzp_pay_sample_123456789</span>
         </div>
 
-        <div
-          style="
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 24px;
-            text-align: left;
-            font-size: 0.9rem;
-            color: #334155;
-            border: 1px solid #e2e8f0;
-          "
-        >
+        <div class="payment-confirmation-details">
           <div>
-            <strong>Package:</strong>
-            <span id="confirmed-service-name">Conversion Website Design</span>
-          </div>
-          <div style="margin-top: 4px">
-            <strong>Amount Paid:</strong>
-            <span id="confirmed-amount" style="font-weight: 700; color: #10b981"
-              >₹4,000</span
+            <span>Service</span>
+            <strong id="confirmed-service-name"
+              >Conversion Website Design</strong
             >
+          </div>
+          <div>
+            <span>Amount</span>
+            <strong id="confirmed-amount">₹4,000</strong>
           </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 10px">
+        <div class="payment-confirmation-actions">
           <a
             id="whatsapp-notify-btn"
             href="#"
             target="_blank"
             rel="noopener"
-            class="btn"
-            style="text-align: center; background: #25d366; color: white"
+            class="btn-pay-submit"
           >
-            📲 Notify Mowarson on WhatsApp
+            Notify Mowarson on WhatsApp
           </a>
-          <a
-            href="index.html"
-            class="btn btn-outline"
-            style="text-align: center"
-          >
-            Return to Homepage
-          </a>
+          <a href="index.html" class="btn btn-outline"> Return to Homepage </a>
         </div>
       </div>
     </div>
@@ -649,23 +485,6 @@
         </p>
       </div>
     </footer>
-
-    <!-- WhatsApp Floating Button -->
-    <a
-      href="https://wa.me/916009825938"
-      class="whatsapp-float"
-      target="_blank"
-      rel="noopener"
-      aria-label="Chat with Mowarson on WhatsApp"
-    >
-      <img
-        src="Whatsapp.svg"
-        alt="WhatsApp"
-        width="60"
-        height="60"
-        loading="lazy"
-      />
-    </a>
 
     <!-- Core JavaScript & Razorpay Integration Logic -->
     <script src="script.js"></script>
@@ -704,19 +523,14 @@
 
         const tabInr = document.getElementById("tab-inr");
         const tabUsd = document.getElementById("tab-usd");
-        const upiBanner = document.getElementById("upi-banner");
-        const customPrefix = document.getElementById("custom-currency-symbol");
-
         if (currency === "INR") {
           tabInr.classList.add("active");
           tabUsd.classList.remove("active");
-          upiBanner.style.display = "flex";
-          customPrefix.innerText = "₹";
+          document.getElementById("custom-currency-symbol").innerText = "₹";
         } else {
           tabInr.classList.remove("active");
           tabUsd.classList.add("active");
-          upiBanner.style.display = "none";
-          customPrefix.innerText = "$";
+          document.getElementById("custom-currency-symbol").innerText = "$";
         }
 
         // Update plan prices
@@ -823,13 +637,14 @@
         const amountInPaise = Math.round(amount * 100);
 
         const submitBtn = document.getElementById("submit-pay-btn");
-        const originalBtnHtml = submitBtn.innerHTML;
+        const submitLabel = submitBtn.querySelector(".submit-pay-label");
+        const originalLabel = submitLabel.textContent;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = "<span>⏳ Preparing Secure Payment...</span>";
+        submitLabel.textContent = "Preparing checkout...";
 
         const resetSubmitBtn = () => {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnHtml;
+          submitLabel.textContent = originalLabel;
         };
 
         try {
@@ -879,7 +694,6 @@
             currency: orderData.currency || currentCurrency,
             name: "Mowarson Developer",
             description: serviceTitle,
-            image: window.location.origin + "/assets/favicon.png",
             order_id: orderId,
             prefill: {
               name: name,
@@ -895,7 +709,7 @@
               color: "#2563eb",
             },
             handler: async function (response) {
-              submitBtn.innerHTML = "<span>🔒 Confirming Payment...</span>";
+              submitLabel.textContent = "Confirming payment...";
               try {
                 // If an order_id was created, verify signature on backend
                 if (response.razorpay_order_id && response.razorpay_signature) {
@@ -955,13 +769,7 @@
 
             if (reasonText.toLowerCase().includes("authentication failed")) {
               alert(
-                "⚠️ Payment Authentication Failed:\n\n" +
-                  "• Testing with Test Keys (rzp_test_...):\n" +
-                  "  Real UPI apps and real bank cards cannot process test payments. Use Razorpay test credentials:\n" +
-                  "  - Card: 4111 1111 1111 1111, Expiry: 12/30, CVV: 123 -> Click green 'Success' button.\n" +
-                  "  - UPI: success@razorpay\n\n" +
-                  "• Ready for Real Customer Payments:\n" +
-                  "  Switch to LIVE MODE in Razorpay Dashboard and update your 'rzp_live_...' Key ID and Secret.",
+                "Payment could not be completed. Please try again or contact support.",
               );
             } else {
               alert("Payment failed: " + reasonText);
