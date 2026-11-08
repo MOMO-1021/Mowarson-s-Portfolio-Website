@@ -213,7 +213,7 @@ h1 {
 h2 {
   font-size: 2rem;
   font-weight: 600;
-  margin: 48px 0 24px;
+  margin: 48px 0 12px;
   color: #1e293b;
   letter-spacing: -0.01em;
 }
@@ -1026,7 +1026,7 @@ footer a:hover {
 .cta-section h2 {
   color: #ffffff;
   font-size: 2.5rem;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
   margin-top: 0;
 }
 .cta-section p {
@@ -2187,7 +2187,8 @@ footer a:hover {
   font-size: 2.3rem;
   font-weight: 800;
   color: #0f172a;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  margin-top: 20px;
   line-height: 1.25;
 }
 

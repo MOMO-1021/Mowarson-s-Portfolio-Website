@@ -1,695 +1,1049 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7P05N251P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-S7P05N251P');
-  </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pay Online – Mowarson Developer | Secure UPI & Worldwide Checkout</title>
-  <meta name="description" content="Securely pay Mowarson Developer directly on the website. Supports Google Pay, PhonePe, Paytm UPI, RuPay, Net Banking in India, and global credit/debit cards worldwide.">
-  <meta name="keywords" content="Pay Mowarson Developer, brand positioning payment, web design payment, marketing payment, UPI payment, Google Pay, Razorpay, worldwide card payment">
-  <link rel="stylesheet" href="style.css">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="canonical" href="https://mowarsondeveloper.netlify.app/pay.html">
-  <link rel="icon" href="assets/favicon.png" type="image/png" />
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  
-  <!-- Hreflang Tags -->
-  <link rel="alternate" hreflang="en-IN" href="https://mowarsondeveloper.netlify.app/pay.html">
-  <link rel="alternate" hreflang="en" href="https://mowarsondeveloper.netlify.app/pay.html">
-  <link rel="alternate" hreflang="x-default" href="https://mowarsondeveloper.netlify.app/pay.html">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-S7P05N251P"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-S7P05N251P");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Pay Online – Mowarson Developer | Secure UPI & Worldwide Checkout
+    </title>
+    <meta
+      name="description"
+      content="Securely pay Mowarson Developer directly on the website. Supports Google Pay, PhonePe, Paytm UPI, RuPay, Net Banking in India, and global credit/debit cards worldwide."
+    />
+    <meta
+      name="keywords"
+      content="Pay Mowarson Developer, brand positioning payment, web design payment, marketing payment, UPI payment, Google Pay, Razorpay, worldwide card payment"
+    />
+    <link rel="stylesheet" href="style.css" />
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Secure Online Payment – Mowarson Developer">
-  <meta property="og:description" content="Pay directly on the website via UPI (Google Pay, PhonePe, Paytm) or international credit/debit cards. 100% secure with instant receipts.">
-  <meta property="og:url" content="https://mowarsondeveloper.netlify.app/pay.html">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="canonical"
+      href="https://mowarsondeveloper.netlify.app/pay.html"
+    />
+    <link rel="icon" href="assets/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
-  <!-- Razorpay Official Checkout SDK -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-</head>
-<body>
-  <!-- Header -->
-  <header>
-    <div class="container header-inner">
-      <a href="index.html" class="logo">Mowarson<span>Developer</span></a>
-      
-      <!-- Hamburger button (visible on mobile) -->
-      <button class="hamburger" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+    <!-- Hreflang Tags -->
+    <link
+      rel="alternate"
+      hreflang="en-IN"
+      href="https://mowarsondeveloper.netlify.app/pay.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href="https://mowarsondeveloper.netlify.app/pay.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://mowarsondeveloper.netlify.app/pay.html"
+    />
 
-      <nav class="nav">
-        <a href="about.html">About</a>
-        <a href="services.html">Services</a>
-        <a href="blog.html">Blog</a>
-        <a href="contact.html">Contact</a>
-        <a href="pay.html" class="btn btn-small" style="background: #2563eb; color: #ffffff; padding: 6px 16px; border-radius: 8px;">Pay Online</a>
-      </nav>
-    </div>
-  </header>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Secure Online Payment – Mowarson Developer"
+    />
+    <meta
+      property="og:description"
+      content="Pay directly on the website via UPI (Google Pay, PhonePe, Paytm) or international credit/debit cards. 100% secure with instant receipts."
+    />
+    <meta
+      property="og:url"
+      content="https://mowarsondeveloper.netlify.app/pay.html"
+    />
 
-  <main class="pay-page-wrapper">
-    <div class="container">
-      
-      <!-- Trust Badges & Header -->
-      <div class="pay-header">
-        <div class="pay-badge-group">
-          <span class="pay-badge green">🔒 256-Bit SSL Encrypted Checkout</span>
-          <span class="pay-badge">⚡ Instant UPI & Global Card Settlement</span>
-          <span class="pay-badge">🧾 Automatic GST / Tax Receipt</span>
-        </div>
-        <h1>Secure Payment Portal</h1>
-        <p>
-          Pay directly on the website with <strong>zero extra transaction fees</strong>. Indian clients can pay instantly with <strong>Google Pay, PhonePe, Paytm, or UPI QR</strong>, and international clients can pay with any major credit or debit card worldwide.
-        </p>
+    <!-- Razorpay Official Checkout SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="container header-inner">
+        <a href="index.html" class="logo">Mowarson<span>Developer</span></a>
+
+        <!-- Hamburger button (visible on mobile) -->
+        <button class="hamburger" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav class="nav">
+          <a href="about.html">About</a>
+          <a href="services.html">Services</a>
+          <a href="blog.html">Blog</a>
+          <a href="contact.html">Contact</a>
+          <a
+            href="pay.html"
+            class="btn btn-small"
+            style="
+              background: #2563eb;
+              color: #ffffff;
+              padding: 6px 16px;
+              border-radius: 8px;
+            "
+            >Pay Online</a
+          >
+        </nav>
       </div>
+    </header>
 
-      <!-- Main Payment Grid -->
-      <div class="pay-grid">
-        
-        <!-- Left Column: Service & Customer Form -->
-        <div class="pay-form-section">
-          <div class="pay-card">
-            
-            <div class="pay-card-title">
-              <span>1. Select Currency & Service</span>
+    <main class="pay-page-wrapper">
+      <div class="container">
+        <!-- Trust Badges & Header -->
+        <div class="pay-header">
+          <div class="pay-badge-group">
+            <span class="pay-badge green"
+              >🔒 256-Bit SSL Encrypted Checkout</span
+            >
+            <span class="pay-badge"
+              >⚡ Instant UPI & Global Card Settlement</span
+            >
+            <span class="pay-badge">🧾 Automatic GST / Tax Receipt</span>
+          </div>
+          <h1>Secure Payment Portal</h1>
+          <p>
+            Pay directly on the website with
+            <strong>zero extra transaction fees</strong>. Indian clients can pay
+            instantly with
+            <strong>Google Pay, PhonePe, Paytm, or UPI QR</strong>, and
+            international clients can pay with any major credit or debit card
+            worldwide.
+          </p>
+        </div>
+
+        <!-- Main Payment Grid -->
+        <div class="pay-grid">
+          <!-- Left Column: Service & Customer Form -->
+          <div class="pay-form-section">
+            <div class="pay-card">
+              <div class="pay-card-title">
+                <span>1. Select Currency & Service</span>
+              </div>
+              <p class="pay-card-subtitle">
+                Choose whether you are paying in Indian Rupees (INR) or US
+                Dollars (USD).
+              </p>
+
+              <!-- Currency Switcher -->
+              <div class="currency-selector-box" role="tablist">
+                <button
+                  type="button"
+                  class="currency-tab active"
+                  id="tab-inr"
+                  onclick="setCurrency('INR')"
+                >
+                  🇮🇳 INR (₹) — India (UPI / GPay / Cards)
+                </button>
+                <button
+                  type="button"
+                  class="currency-tab"
+                  id="tab-usd"
+                  onclick="setCurrency('USD')"
+                >
+                  🌍 USD ($) — International (Global Cards)
+                </button>
+              </div>
+
+              <!-- UPI Spotlight Box (Visible when INR is active) -->
+              <div class="upi-promo-box" id="upi-banner">
+                <div class="upi-promo-icon">📱</div>
+                <div class="upi-promo-text">
+                  <h4>Instant UPI Payments Supported!</h4>
+                  <p>
+                    Use <strong>Google Pay</strong>, <strong>PhonePe</strong>,
+                    <strong>Paytm</strong>, or scan a dynamic
+                    <strong>UPI QR Code</strong> on the next step. No cash or
+                    manual transfers required.
+                  </p>
+                  <div class="methods-badge-list">
+                    <span class="method-chip">🟢 Google Pay</span>
+                    <span class="method-chip">🟣 PhonePe</span>
+                    <span class="method-chip">🔵 Paytm</span>
+                    <span class="method-chip">⚡ BHIM UPI</span>
+                    <span class="method-chip">💳 RuPay & Visa</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Service Selection -->
+              <div class="service-options">
+                <!-- Option 1: Website Only -->
+                <label class="service-option-label" for="plan-website">
+                  <input
+                    type="radio"
+                    name="service_plan"
+                    id="plan-website"
+                    value="website"
+                    checked
+                    onchange="updateSelectedPlan()"
+                  />
+                  <div class="service-card-choice">
+                    <div class="service-card-header">
+                      <div>
+                        <div class="service-card-name">
+                          Conversion Website Design
+                        </div>
+                        <div class="service-card-desc">
+                          Complete mobile-friendly, SEO-optimized custom website
+                          engineered for high conversion and brand credibility.
+                        </div>
+                      </div>
+                      <div
+                        class="service-card-price"
+                        id="price-display-website"
+                      >
+                        ₹4,000
+                      </div>
+                    </div>
+                  </div>
+                </label>
+
+                <!-- Option 2: Marketing + Free Website (Featured) -->
+                <label class="service-option-label" for="plan-marketing">
+                  <input
+                    type="radio"
+                    name="service_plan"
+                    id="plan-marketing"
+                    value="marketing"
+                    onchange="updateSelectedPlan()"
+                  />
+                  <div class="service-card-choice">
+                    <span class="choice-tag">Best Value • Save ₹4,000</span>
+                    <div class="service-card-header">
+                      <div>
+                        <div class="service-card-name">
+                          Brand Positioning &amp; Marketing Bundle + FREE
+                          Website
+                        </div>
+                        <div class="service-card-desc">
+                          Strategic brand positioning, messaging architecture
+                          &amp; search optimization, with the custom website
+                          included at ₹0!
+                        </div>
+                      </div>
+                      <div
+                        class="service-card-price"
+                        id="price-display-marketing"
+                      >
+                        ₹5,000
+                      </div>
+                    </div>
+                  </div>
+                </label>
+
+                <!-- Option 3: Custom Amount / Advance -->
+                <label class="service-option-label" for="plan-custom">
+                  <input
+                    type="radio"
+                    name="service_plan"
+                    id="plan-custom"
+                    value="custom"
+                    onchange="updateSelectedPlan()"
+                  />
+                  <div class="service-card-choice">
+                    <div class="service-card-header">
+                      <div>
+                        <div class="service-card-name">
+                          Custom Milestone / Advance Payment
+                        </div>
+                        <div class="service-card-desc">
+                          Pay an agreed project deposit, custom milestone, or
+                          retainer balance.
+                        </div>
+                      </div>
+                      <div class="service-card-price" id="price-display-custom">
+                        Flexible
+                      </div>
+                    </div>
+
+                    <div class="custom-amount-wrapper" id="custom-amount-box">
+                      <label class="pay-label" for="custom-amount-input"
+                        >Enter Amount to Pay:</label
+                      >
+                      <div class="currency-input-prefix">
+                        <span
+                          class="currency-symbol-tag"
+                          id="custom-currency-symbol"
+                          >₹</span
+                        >
+                        <input
+                          type="number"
+                          id="custom-amount-input"
+                          class="pay-input"
+                          min="100"
+                          step="50"
+                          placeholder="e.g. 2500"
+                          value="2500"
+                          oninput="updateSummary()"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              <hr
+                style="
+                  border: none;
+                  border-top: 1px solid #e2e8f0;
+                  margin: 28px 0 24px;
+                "
+              />
+
+              <!-- Client Contact Details -->
+              <div class="pay-card-title">
+                <span>2. Your Contact & Invoice Details</span>
+              </div>
+              <p class="pay-card-subtitle">
+                Your instant payment receipt and confirmation will be sent to
+                this email.
+              </p>
+
+              <form id="payment-form" onsubmit="handleProceedToPay(event)">
+                <div class="pay-form-group">
+                  <label class="pay-label" for="client-name"
+                    >Your Full Name / Contact Person *</label
+                  >
+                  <input
+                    type="text"
+                    id="client-name"
+                    class="pay-input"
+                    placeholder="e.g. Rahul Sharma"
+                    required
+                  />
+                </div>
+
+                <div class="pay-form-group">
+                  <label class="pay-label" for="company-name"
+                    >Company / Business / Brand Name</label
+                  >
+                  <input
+                    type="text"
+                    id="company-name"
+                    class="pay-input"
+                    placeholder="e.g. Acme Studio or Freelance Project"
+                  />
+                </div>
+
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 16px;
+                  "
+                >
+                  <div class="pay-form-group">
+                    <label class="pay-label" for="client-email"
+                      >Email Address *</label
+                    >
+                    <input
+                      type="email"
+                      id="client-email"
+                      class="pay-input"
+                      placeholder="you@example.com"
+                      required
+                    />
+                  </div>
+                  <div class="pay-form-group">
+                    <label class="pay-label" for="client-phone"
+                      >Phone / WhatsApp Number *</label
+                    >
+                    <input
+                      type="tel"
+                      id="client-phone"
+                      class="pay-input"
+                      placeholder="+91 98765 43210"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="pay-form-group">
+                  <label class="pay-label" for="client-notes"
+                    >Project Notes / Instructions (Optional)</label
+                  >
+                  <textarea
+                    id="client-notes"
+                    class="pay-input"
+                    rows="2"
+                    placeholder="e.g. 50% advance for Brand Positioning &amp; Website project"
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  class="btn-pay-submit"
+                  id="submit-pay-btn"
+                >
+                  <span>🔒 Proceed to Pay</span>
+                  <span id="btn-amount-preview">₹4,000</span>
+                </button>
+
+                <p
+                  style="
+                    font-size: 0.82rem;
+                    color: #64748b;
+                    text-align: center;
+                    margin-top: 14px;
+                    margin-bottom: 0;
+                    line-height: 1.5;
+                  "
+                >
+                  By proceeding, you agree to our
+                  <a
+                    href="terms.html"
+                    style="color: #2563eb; text-decoration: underline"
+                    >Terms &amp; Conditions</a
+                  >,
+                  <a
+                    href="privacy.html"
+                    style="color: #2563eb; text-decoration: underline"
+                    >Privacy Policy</a
+                  >, and
+                  <a
+                    href="refund.html"
+                    style="color: #2563eb; text-decoration: underline"
+                    >Refund Policy</a
+                  >.
+                </p>
+              </form>
             </div>
-            <p class="pay-card-subtitle">Choose whether you are paying in Indian Rupees (INR) or US Dollars (USD).</p>
+          </div>
 
-            <!-- Currency Switcher -->
-            <div class="currency-selector-box" role="tablist">
-              <button type="button" class="currency-tab active" id="tab-inr" onclick="setCurrency('INR')">
-                🇮🇳 INR (₹) — India (UPI / GPay / Cards)
-              </button>
-              <button type="button" class="currency-tab" id="tab-usd" onclick="setCurrency('USD')">
-                🌍 USD ($) — International (Global Cards)
-              </button>
-            </div>
+          <!-- Right Column: Order Summary & Trust Guarantee -->
+          <div class="order-summary-section">
+            <div class="pay-card order-summary-card">
+              <div class="pay-card-title">
+                <span>🧾 Order Summary</span>
+              </div>
 
-            <!-- UPI Spotlight Box (Visible when INR is active) -->
-            <div class="upi-promo-box" id="upi-banner">
-              <div class="upi-promo-icon">📱</div>
-              <div class="upi-promo-text">
-                <h4>Instant UPI Payments Supported!</h4>
-                <p>Use <strong>Google Pay</strong>, <strong>PhonePe</strong>, <strong>Paytm</strong>, or scan a dynamic <strong>UPI QR Code</strong> on the next step. No cash or manual transfers required.</p>
+              <div class="summary-table">
+                <div class="summary-row">
+                  <span id="summary-service-name"
+                    >Conversion Website Design</span
+                  >
+                  <span id="summary-service-price">₹4,000</span>
+                </div>
+                <div class="summary-row">
+                  <span>Platform Convenience Fee</span>
+                  <span class="summary-badge-free">₹0 (FREE)</span>
+                </div>
+                <div class="summary-row">
+                  <span>Direct On-Site Processing</span>
+                  <span style="color: #10b981; font-weight: 600"
+                    >✓ Encrypted</span
+                  >
+                </div>
+                <div class="summary-row total">
+                  <span>Total Payable:</span>
+                  <span class="total-amount" id="summary-total-amount"
+                    >₹4,000</span
+                  >
+                </div>
+              </div>
+
+              <!-- Accepted Payment Methods Icons -->
+              <div
+                style="
+                  background: #f8fafc;
+                  border-radius: 14px;
+                  padding: 14px;
+                  border: 1px solid #e2e8f0;
+                  margin-bottom: 20px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    color: #475569;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Accepted Payment Methods
+                </div>
                 <div class="methods-badge-list">
                   <span class="method-chip">🟢 Google Pay</span>
                   <span class="method-chip">🟣 PhonePe</span>
                   <span class="method-chip">🔵 Paytm</span>
-                  <span class="method-chip">⚡ BHIM UPI</span>
-                  <span class="method-chip">💳 RuPay & Visa</span>
+                  <span class="method-chip">💳 Visa / Mastercard</span>
+                  <span class="method-chip">🇮🇳 RuPay / UPI QR</span>
+                  <span class="method-chip">🏦 Net Banking</span>
+                  <span class="method-chip">🌐 International Cards</span>
+                </div>
+              </div>
+
+              <!-- Trust & Assurance Items -->
+              <div class="pay-security-notes">
+                <div class="pay-security-item">
+                  <span class="pay-security-icon">✓</span>
+                  <div>
+                    <strong>100% Direct Verification:</strong> Payments are
+                    processed via licensed gateway directly to Mowarson
+                    Developer's verified bank account.
+                  </div>
+                </div>
+                <div class="pay-security-item">
+                  <span class="pay-security-icon">✓</span>
+                  <div>
+                    <strong>Direct Founder Accountability:</strong> You get
+                    direct 1-on-1 access to Mowarson on WhatsApp for project
+                    kick-off.
+                  </div>
+                </div>
+                <div class="pay-security-item">
+                  <span class="pay-security-icon">✓</span>
+                  <div>
+                    <strong>Secure & Verified:</strong> Payments are processed
+                    directly through Razorpay with 256-bit SSL encryption. We
+                    accept UPI (Google Pay, PhonePe, Paytm), RuPay, Net Banking,
+                    and international credit/debit cards with instant
+                    confirmation.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick WhatsApp Assistance Box -->
+              <div
+                style="
+                  background: #eef2ff;
+                  border-radius: 14px;
+                  padding: 14px;
+                  margin-top: 18px;
+                  border: 1px solid #c7d2fe;
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                "
+              >
+                <span style="font-size: 1.4rem">💬</span>
+                <div style="font-size: 0.88rem; color: #1e293b">
+                  Need help or a custom quote first? <br />
+                  <a
+                    href="https://wa.me/916009825938?text=Hi%20Mowarson,%20I%20have%20a%20question%20before%20paying%20on%20your%20website."
+                    target="_blank"
+                    rel="noopener"
+                    style="font-weight: 700"
+                    >Chat on WhatsApp (+91 6009825938) →</a
+                  >
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-            <!-- Service Selection -->
-            <div class="service-options">
-              
-              <!-- Option 1: Website Only -->
-              <label class="service-option-label" for="plan-website">
-                <input type="radio" name="service_plan" id="plan-website" value="website" checked onchange="updateSelectedPlan()">
-                <div class="service-card-choice">
-                  <div class="service-card-header">
-                    <div>
-                      <div class="service-card-name">Conversion Website Design</div>
-                      <div class="service-card-desc">Complete mobile-friendly, SEO-optimized custom website engineered for high conversion and brand credibility.</div>
-                    </div>
-                    <div class="service-card-price" id="price-display-website">₹4,000</div>
-                  </div>
-                </div>
-              </label>
+    <!-- Payment Success Confirmation Modal -->
+    <div class="pay-modal-overlay" id="success-modal">
+      <div class="pay-modal-content">
+        <div class="modal-success-icon">✓</div>
+        <h2 style="font-size: 1.8rem; color: #0f172a; margin-bottom: 12px">
+          Payment Successful!
+        </h2>
+        <p style="color: #475569; font-size: 1rem; line-height: 1.5">
+          Thank you for your payment. Your transaction has been completed
+          securely and an official receipt has been emailed to you.
+        </p>
 
-              <!-- Option 2: Marketing + Free Website (Featured) -->
-              <label class="service-option-label" for="plan-marketing">
-                <input type="radio" name="service_plan" id="plan-marketing" value="marketing" onchange="updateSelectedPlan()">
-                <div class="service-card-choice">
-                  <span class="choice-tag">Best Value • Save ₹4,000</span>
-                  <div class="service-card-header">
-                    <div>
-                      <div class="service-card-name">Brand Positioning &amp; Marketing Bundle + FREE Website</div>
-                      <div class="service-card-desc">Strategic brand positioning, messaging architecture &amp; search optimization, with the custom website included at ₹0!</div>
-                    </div>
-                    <div class="service-card-price" id="price-display-marketing">₹5,000</div>
-                  </div>
-                </div>
-              </label>
+        <div class="modal-payment-id">
+          <strong>Transaction ID:</strong> <br />
+          <span id="confirmed-payment-id">rzp_pay_sample_123456789</span>
+        </div>
 
-              <!-- Option 3: Custom Amount / Advance -->
-              <label class="service-option-label" for="plan-custom">
-                <input type="radio" name="service_plan" id="plan-custom" value="custom" onchange="updateSelectedPlan()">
-                <div class="service-card-choice">
-                  <div class="service-card-header">
-                    <div>
-                      <div class="service-card-name">Custom Milestone / Advance Payment</div>
-                      <div class="service-card-desc">Pay an agreed project deposit, custom milestone, or retainer balance.</div>
-                    </div>
-                    <div class="service-card-price" id="price-display-custom">Flexible</div>
-                  </div>
-                  
-                  <div class="custom-amount-wrapper" id="custom-amount-box">
-                    <label class="pay-label" for="custom-amount-input">Enter Amount to Pay:</label>
-                    <div class="currency-input-prefix">
-                      <span class="currency-symbol-tag" id="custom-currency-symbol">₹</span>
-                      <input type="number" id="custom-amount-input" class="pay-input" min="100" step="50" placeholder="e.g. 2500" value="2500" oninput="updateSummary()">
-                    </div>
-                  </div>
-                </div>
-              </label>
-
-            </div>
-
-            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 28px 0 24px;">
-
-            <!-- Client Contact Details -->
-            <div class="pay-card-title">
-              <span>2. Your Contact & Invoice Details</span>
-            </div>
-            <p class="pay-card-subtitle">Your instant payment receipt and confirmation will be sent to this email.</p>
-
-            <form id="payment-form" onsubmit="handleProceedToPay(event)">
-              <div class="pay-form-group">
-                <label class="pay-label" for="client-name">Your Full Name / Contact Person *</label>
-                <input type="text" id="client-name" class="pay-input" placeholder="e.g. Rahul Sharma" required>
-              </div>
-
-              <div class="pay-form-group">
-                <label class="pay-label" for="company-name">Company / Business / Brand Name</label>
-                <input type="text" id="company-name" class="pay-input" placeholder="e.g. Acme Studio or Freelance Project">
-              </div>
-
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div class="pay-form-group">
-                  <label class="pay-label" for="client-email">Email Address *</label>
-                  <input type="email" id="client-email" class="pay-input" placeholder="you@example.com" required>
-                </div>
-                <div class="pay-form-group">
-                  <label class="pay-label" for="client-phone">Phone / WhatsApp Number *</label>
-                  <input type="tel" id="client-phone" class="pay-input" placeholder="+91 98765 43210" required>
-                </div>
-              </div>
-
-              <div class="pay-form-group">
-                <label class="pay-label" for="client-notes">Project Notes / Instructions (Optional)</label>
-                <textarea id="client-notes" class="pay-input" rows="2" placeholder="e.g. 50% advance for Brand Positioning &amp; Website project"></textarea>
-              </div>
-
-              <button type="submit" class="btn-pay-submit" id="submit-pay-btn">
-                <span>🔒 Proceed to Pay</span>
-                <span id="btn-amount-preview">₹4,000</span>
-              </button>
-
-              <p style="font-size: 0.82rem; color: #64748b; text-align: center; margin-top: 14px; margin-bottom: 0; line-height: 1.5;">
-                By proceeding, you agree to our <a href="terms.html" style="color: #2563eb; text-decoration: underline;">Terms &amp; Conditions</a>, <a href="privacy.html" style="color: #2563eb; text-decoration: underline;">Privacy Policy</a>, and <a href="refund.html" style="color: #2563eb; text-decoration: underline;">Refund Policy</a>.
-              </p>
-            </form>
-
+        <div
+          style="
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 24px;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+          "
+        >
+          <div>
+            <strong>Package:</strong>
+            <span id="confirmed-service-name">Conversion Website Design</span>
+          </div>
+          <div style="margin-top: 4px">
+            <strong>Amount Paid:</strong>
+            <span id="confirmed-amount" style="font-weight: 700; color: #10b981"
+              >₹4,000</span
+            >
           </div>
         </div>
 
-        <!-- Right Column: Order Summary & Trust Guarantee -->
-        <div class="order-summary-section">
-          <div class="pay-card order-summary-card">
-            
-            <div class="pay-card-title">
-              <span>🧾 Order Summary</span>
-            </div>
-
-            <div class="summary-table">
-              <div class="summary-row">
-                <span id="summary-service-name">Conversion Website Design</span>
-                <span id="summary-service-price">₹4,000</span>
-              </div>
-              <div class="summary-row">
-                <span>Platform Convenience Fee</span>
-                <span class="summary-badge-free">₹0 (FREE)</span>
-              </div>
-              <div class="summary-row">
-                <span>Direct On-Site Processing</span>
-                <span style="color: #10b981; font-weight: 600;">✓ Encrypted</span>
-              </div>
-              <div class="summary-row total">
-                <span>Total Payable:</span>
-                <span class="total-amount" id="summary-total-amount">₹4,000</span>
-              </div>
-            </div>
-
-            <!-- Accepted Payment Methods Icons -->
-            <div style="background: #f8fafc; border-radius: 14px; padding: 14px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-              <div style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
-                Accepted Payment Methods
-              </div>
-              <div class="methods-badge-list">
-                <span class="method-chip">🟢 Google Pay</span>
-                <span class="method-chip">🟣 PhonePe</span>
-                <span class="method-chip">🔵 Paytm</span>
-                <span class="method-chip">💳 Visa / Mastercard</span>
-                <span class="method-chip">🇮🇳 RuPay / UPI QR</span>
-                <span class="method-chip">🏦 Net Banking</span>
-                <span class="method-chip">🌐 International Cards</span>
-              </div>
-            </div>
-
-            <!-- Trust & Assurance Items -->
-            <div class="pay-security-notes">
-              <div class="pay-security-item">
-                <span class="pay-security-icon">✓</span>
-                <div><strong>100% Direct Verification:</strong> Payments are processed via licensed gateway directly to Mowarson Developer's verified bank account.</div>
-              </div>
-              <div class="pay-security-item">
-                <span class="pay-security-icon">✓</span>
-                <div><strong>Direct Founder Accountability:</strong> You get direct 1-on-1 access to Mowarson on WhatsApp for project kick-off.</div>
-              </div>
-              <div class="pay-security-item">
-                <span class="pay-security-icon">✓</span>
-                <div><strong>Secure & Verified:</strong> Payments are processed directly through Razorpay with 256-bit SSL encryption. We accept UPI (Google Pay, PhonePe, Paytm), RuPay, Net Banking, and international credit/debit cards with instant confirmation.</div>
-              </div>
-            </div>
-
-            <!-- Quick WhatsApp Assistance Box -->
-            <div style="background: #eef2ff; border-radius: 14px; padding: 14px; margin-top: 18px; border: 1px solid #c7d2fe; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 1.4rem;">💬</span>
-              <div style="font-size: 0.88rem; color: #1e293b;">
-                Need help or a custom quote first? <br>
-                <a href="https://wa.me/916009825938?text=Hi%20Mowarson,%20I%20have%20a%20question%20before%20paying%20on%20your%20website." target="_blank" rel="noopener" style="font-weight: 700;">Chat on WhatsApp (+91 6009825938) →</a>
-              </div>
-            </div>
-
-          </div>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <a
+            id="whatsapp-notify-btn"
+            href="#"
+            target="_blank"
+            rel="noopener"
+            class="btn"
+            style="text-align: center; background: #25d366; color: white"
+          >
+            📲 Notify Mowarson on WhatsApp
+          </a>
+          <a
+            href="index.html"
+            class="btn btn-outline"
+            style="text-align: center"
+          >
+            Return to Homepage
+          </a>
         </div>
-
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Payment Success Confirmation Modal -->
-  <div class="pay-modal-overlay" id="success-modal">
-    <div class="pay-modal-content">
-      <div class="modal-success-icon">✓</div>
-      <h2 style="font-size: 1.8rem; color: #0f172a; margin-bottom: 8px;">Payment Successful!</h2>
-      <p style="color: #475569; font-size: 1rem; line-height: 1.5;">
-        Thank you for your payment. Your transaction has been completed securely and an official receipt has been emailed to you.
-      </p>
-
-      <div class="modal-payment-id">
-        <strong>Transaction ID:</strong> <br>
-        <span id="confirmed-payment-id">rzp_pay_sample_123456789</span>
-      </div>
-
-      <div style="background: #f8fafc; border-radius: 12px; padding: 14px; margin-bottom: 24px; text-align: left; font-size: 0.9rem; color: #334155; border: 1px solid #e2e8f0;">
-        <div><strong>Package:</strong> <span id="confirmed-service-name">Conversion Website Design</span></div>
-        <div style="margin-top: 4px;"><strong>Amount Paid:</strong> <span id="confirmed-amount" style="font-weight: 700; color: #10b981;">₹4,000</span></div>
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a id="whatsapp-notify-btn" href="#" target="_blank" rel="noopener" class="btn" style="text-align: center; background: #25d366; color: white;">
-          📲 Notify Mowarson on WhatsApp
-        </a>
-        <a href="index.html" class="btn btn-outline" style="text-align: center;">
-          Return to Homepage
-        </a>
       </div>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>
-      <p>
-        <a href="privacy.html">Privacy Policy</a> |
-        <a href="terms.html">Terms &amp; Conditions</a> |
-        <a href="refund.html">Refund Policy</a> |
-        <a href="pay.html">Pay Online</a> |
-        <a href="contact.html">Contact</a> |
-        <a href="https://www.instagram.com/mowarson_developer/" target="_blank" rel="noopener">Instagram</a> |
-        <a href="https://www.linkedin.com/in/mowarson-developer-298404302/" target="_blank" rel="noopener">LinkedIn</a>
-      </p>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>
+        <p>
+          <a href="privacy.html">Privacy Policy</a> |
+          <a href="terms.html">Terms &amp; Conditions</a> |
+          <a href="refund.html">Refund Policy</a> |
+          <a href="pay.html">Pay Online</a> |
+          <a href="contact.html">Contact</a> |
+          <a
+            href="https://www.instagram.com/mowarson_developer/"
+            target="_blank"
+            rel="noopener"
+            >Instagram</a
+          >
+          |
+          <a
+            href="https://www.linkedin.com/in/mowarson-developer-298404302/"
+            target="_blank"
+            rel="noopener"
+            >LinkedIn</a
+          >
+        </p>
+      </div>
+    </footer>
 
-  <!-- WhatsApp Floating Button -->
-  <a
-    href="https://wa.me/916009825938"
-    class="whatsapp-float"
-    target="_blank" rel="noopener"
-    aria-label="Chat with Mowarson on WhatsApp"
-  >
-    <img src="Whatsapp.svg" alt="WhatsApp" width="60" height="60" loading="lazy" />
-  </a>
+    <!-- WhatsApp Floating Button -->
+    <a
+      href="https://wa.me/916009825938"
+      class="whatsapp-float"
+      target="_blank"
+      rel="noopener"
+      aria-label="Chat with Mowarson on WhatsApp"
+    >
+      <img
+        src="Whatsapp.svg"
+        alt="WhatsApp"
+        width="60"
+        height="60"
+        loading="lazy"
+      />
+    </a>
 
-  <!-- Core JavaScript & Razorpay Integration Logic -->
-  <script src="script.js"></script>
-  <script>
-    /**
-     * Razorpay Key ID is loaded dynamically from the secure backend /api/create-order
-     * to avoid exposing keys in client-side code and to pass Netlify secrets scanning.
-     */
-    let RAZORPAY_KEY_ID = "";
+    <!-- Core JavaScript & Razorpay Integration Logic -->
+    <script src="script.js"></script>
+    <script>
+      /**
+       * Razorpay Key ID is loaded dynamically from the secure backend /api/create-order
+       * to avoid exposing keys in client-side code and to pass Netlify secrets scanning.
+       */
+      let RAZORPAY_KEY_ID = "";
 
-    // Pricing definitions
-    const PRICING = {
-      INR: {
-        symbol: '₹',
-        website: 4000,
-        marketing: 5000,
-        customDefault: 2500,
-        websiteLabel: '₹4,000',
-        marketingLabel: '₹5,000'
-      },
-      USD: {
-        symbol: '$',
-        website: 50,
-        marketing: 65,
-        customDefault: 35,
-        websiteLabel: '$50',
-        marketingLabel: '$65'
-      }
-    };
-
-    let currentCurrency = 'INR';
-
-    // Switch Currency
-    function setCurrency(currency) {
-      currentCurrency = currency;
-      
-      const tabInr = document.getElementById('tab-inr');
-      const tabUsd = document.getElementById('tab-usd');
-      const upiBanner = document.getElementById('upi-banner');
-      const customPrefix = document.getElementById('custom-currency-symbol');
-
-      if (currency === 'INR') {
-        tabInr.classList.add('active');
-        tabUsd.classList.remove('active');
-        upiBanner.style.display = 'flex';
-        customPrefix.innerText = '₹';
-      } else {
-        tabInr.classList.remove('active');
-        tabUsd.classList.add('active');
-        upiBanner.style.display = 'none';
-        customPrefix.innerText = '$';
-      }
-
-      // Update plan prices
-      document.getElementById('price-display-website').innerText = PRICING[currency].websiteLabel;
-      document.getElementById('price-display-marketing').innerText = PRICING[currency].marketingLabel;
-
-      updateSummary();
-    }
-
-    // Toggle custom amount field and update UI
-    function updateSelectedPlan() {
-      const selected = document.querySelector('input[name="service_plan"]:checked').value;
-      const customBox = document.getElementById('custom-amount-box');
-      
-      if (selected === 'custom') {
-        customBox.classList.add('show');
-      } else {
-        customBox.classList.remove('show');
-      }
-
-      updateSummary();
-    }
-
-    // Calculate current amount and update summary table & button
-    function updateSummary() {
-      const selectedPlan = document.querySelector('input[name="service_plan"]:checked').value;
-      const cfg = PRICING[currentCurrency];
-      let amount = 0;
-      let serviceTitle = '';
-
-      if (selectedPlan === 'website') {
-        amount = cfg.website;
-        serviceTitle = 'Conversion Website Design';
-      } else if (selectedPlan === 'marketing') {
-        amount = cfg.marketing;
-        serviceTitle = 'Brand Positioning & Marketing + Free Website';
-      } else {
-        const customVal = parseFloat(document.getElementById('custom-amount-input').value) || 0;
-        amount = customVal;
-        serviceTitle = 'Custom Milestone / Advance Payment';
-      }
-
-      const formattedTotal = `${cfg.symbol}${amount.toLocaleString()}`;
-      
-      document.getElementById('summary-service-name').innerText = serviceTitle;
-      document.getElementById('summary-service-price').innerText = formattedTotal;
-      document.getElementById('summary-total-amount').innerText = formattedTotal;
-      document.getElementById('btn-amount-preview').innerText = formattedTotal;
-    }
-
-    // Handle form submission and initiate Server-Side Order & Razorpay Checkout
-    async function handleProceedToPay(event) {
-      event.preventDefault();
-
-      const name = document.getElementById('client-name').value.trim();
-      const email = document.getElementById('client-email').value.trim();
-      const phone = document.getElementById('client-phone').value.trim();
-      const company = document.getElementById('company-name').value.trim();
-      const notes = document.getElementById('client-notes').value.trim();
-
-      const selectedPlan = document.querySelector('input[name="service_plan"]:checked').value;
-      const cfg = PRICING[currentCurrency];
-      let amount = 0;
-      let serviceTitle = '';
-
-      if (selectedPlan === 'website') {
-        amount = cfg.website;
-        serviceTitle = 'Conversion Website Design';
-      } else if (selectedPlan === 'marketing') {
-        amount = cfg.marketing;
-        serviceTitle = 'Brand Positioning & Marketing Bundle + Free Website';
-      } else {
-        amount = parseFloat(document.getElementById('custom-amount-input').value) || 0;
-        serviceTitle = 'Custom Project Advance';
-      }
-
-      if (amount <= 0) {
-        alert('Please enter a valid payment amount.');
-        return;
-      }
-
-      // Ensure valid 10-digit contact for Razorpay
-      const phoneDigits = phone.replace(/\D/g, '');
-      const validPhone = phoneDigits.length >= 10 ? phoneDigits.slice(-10) : phone;
-
-      // Convert amount to paise (1 INR = 100 paise; minimum 100 paise required)
-      const amountInPaise = Math.round(amount * 100);
-
-      const submitBtn = document.getElementById('submit-pay-btn');
-      const originalBtnHtml = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span>⏳ Preparing Secure Payment...</span>';
-
-      const resetSubmitBtn = () => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnHtml;
+      // Pricing definitions
+      const PRICING = {
+        INR: {
+          symbol: "₹",
+          website: 4000,
+          marketing: 5000,
+          customDefault: 2500,
+          websiteLabel: "₹4,000",
+          marketingLabel: "₹5,000",
+        },
+        USD: {
+          symbol: "$",
+          website: 50,
+          marketing: 65,
+          customDefault: 35,
+          websiteLabel: "$50",
+          marketingLabel: "$65",
+        },
       };
 
-      try {
-        // STEP 1: Call Backend to Create Order (with generous 15s timeout for mobile/cold start)
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
+      let currentCurrency = "INR";
 
-        const orderResponse = await fetch('/api/create-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            amount: amountInPaise,
-            currency: currentCurrency,
-            receipt: 'rcpt_' + Date.now(),
+      // Switch Currency
+      function setCurrency(currency) {
+        currentCurrency = currency;
+
+        const tabInr = document.getElementById("tab-inr");
+        const tabUsd = document.getElementById("tab-usd");
+        const upiBanner = document.getElementById("upi-banner");
+        const customPrefix = document.getElementById("custom-currency-symbol");
+
+        if (currency === "INR") {
+          tabInr.classList.add("active");
+          tabUsd.classList.remove("active");
+          upiBanner.style.display = "flex";
+          customPrefix.innerText = "₹";
+        } else {
+          tabInr.classList.remove("active");
+          tabUsd.classList.add("active");
+          upiBanner.style.display = "none";
+          customPrefix.innerText = "$";
+        }
+
+        // Update plan prices
+        document.getElementById("price-display-website").innerText =
+          PRICING[currency].websiteLabel;
+        document.getElementById("price-display-marketing").innerText =
+          PRICING[currency].marketingLabel;
+
+        updateSummary();
+      }
+
+      // Toggle custom amount field and update UI
+      function updateSelectedPlan() {
+        const selected = document.querySelector(
+          'input[name="service_plan"]:checked',
+        ).value;
+        const customBox = document.getElementById("custom-amount-box");
+
+        if (selected === "custom") {
+          customBox.classList.add("show");
+        } else {
+          customBox.classList.remove("show");
+        }
+
+        updateSummary();
+      }
+
+      // Calculate current amount and update summary table & button
+      function updateSummary() {
+        const selectedPlan = document.querySelector(
+          'input[name="service_plan"]:checked',
+        ).value;
+        const cfg = PRICING[currentCurrency];
+        let amount = 0;
+        let serviceTitle = "";
+
+        if (selectedPlan === "website") {
+          amount = cfg.website;
+          serviceTitle = "Conversion Website Design";
+        } else if (selectedPlan === "marketing") {
+          amount = cfg.marketing;
+          serviceTitle = "Brand Positioning & Marketing + Free Website";
+        } else {
+          const customVal =
+            parseFloat(document.getElementById("custom-amount-input").value) ||
+            0;
+          amount = customVal;
+          serviceTitle = "Custom Milestone / Advance Payment";
+        }
+
+        const formattedTotal = `${cfg.symbol}${amount.toLocaleString()}`;
+
+        document.getElementById("summary-service-name").innerText =
+          serviceTitle;
+        document.getElementById("summary-service-price").innerText =
+          formattedTotal;
+        document.getElementById("summary-total-amount").innerText =
+          formattedTotal;
+        document.getElementById("btn-amount-preview").innerText =
+          formattedTotal;
+      }
+
+      // Handle form submission and initiate Server-Side Order & Razorpay Checkout
+      async function handleProceedToPay(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("client-name").value.trim();
+        const email = document.getElementById("client-email").value.trim();
+        const phone = document.getElementById("client-phone").value.trim();
+        const company = document.getElementById("company-name").value.trim();
+        const notes = document.getElementById("client-notes").value.trim();
+
+        const selectedPlan = document.querySelector(
+          'input[name="service_plan"]:checked',
+        ).value;
+        const cfg = PRICING[currentCurrency];
+        let amount = 0;
+        let serviceTitle = "";
+
+        if (selectedPlan === "website") {
+          amount = cfg.website;
+          serviceTitle = "Conversion Website Design";
+        } else if (selectedPlan === "marketing") {
+          amount = cfg.marketing;
+          serviceTitle = "Brand Positioning & Marketing Bundle + Free Website";
+        } else {
+          amount =
+            parseFloat(document.getElementById("custom-amount-input").value) ||
+            0;
+          serviceTitle = "Custom Project Advance";
+        }
+
+        if (amount <= 0) {
+          alert("Please enter a valid payment amount.");
+          return;
+        }
+
+        // Ensure valid 10-digit contact for Razorpay
+        const phoneDigits = phone.replace(/\D/g, "");
+        const validPhone =
+          phoneDigits.length >= 10 ? phoneDigits.slice(-10) : phone;
+
+        // Convert amount to paise (1 INR = 100 paise; minimum 100 paise required)
+        const amountInPaise = Math.round(amount * 100);
+
+        const submitBtn = document.getElementById("submit-pay-btn");
+        const originalBtnHtml = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "<span>⏳ Preparing Secure Payment...</span>";
+
+        const resetSubmitBtn = () => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        };
+
+        try {
+          // STEP 1: Call Backend to Create Order (with generous 15s timeout for mobile/cold start)
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+          const orderResponse = await fetch("/api/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            signal: controller.signal,
+            body: JSON.stringify({
+              amount: amountInPaise,
+              currency: currentCurrency,
+              receipt: "rcpt_" + Date.now(),
+              notes: {
+                service: serviceTitle,
+                company: company || "Individual / Business",
+                client_notes: notes || "None",
+              },
+            }),
+          });
+
+          clearTimeout(timeoutId);
+
+          if (!orderResponse.ok) {
+            const errData = await orderResponse.json().catch(() => ({}));
+            throw new Error(
+              errData.error || "Server error status: " + orderResponse.status,
+            );
+          }
+
+          const orderData = await orderResponse.json();
+          const orderId = orderData.order_id || orderData.id;
+          const checkoutKey = orderData.key_id || RAZORPAY_KEY_ID;
+
+          if (!orderId || !checkoutKey) {
+            throw new Error(
+              "Unable to retrieve order details from payment gateway. Please try again.",
+            );
+          }
+
+          // STEP 2: Configure Razorpay Checkout Modal
+          const options = {
+            key: checkoutKey,
+            amount: orderData.amount || amountInPaise,
+            currency: orderData.currency || currentCurrency,
+            name: "Mowarson Developer",
+            description: serviceTitle,
+            image: window.location.origin + "/assets/favicon.png",
+            order_id: orderId,
+            prefill: {
+              name: name,
+              email: email,
+              contact: validPhone,
+            },
             notes: {
               service: serviceTitle,
               company: company || "Individual / Business",
-              client_notes: notes || "None"
-            }
-          })
-        });
+              client_notes: notes || "None",
+            },
+            theme: {
+              color: "#2563eb",
+            },
+            handler: async function (response) {
+              submitBtn.innerHTML = "<span>🔒 Confirming Payment...</span>";
+              try {
+                // If an order_id was created, verify signature on backend
+                if (response.razorpay_order_id && response.razorpay_signature) {
+                  const verifyResponse = await fetch("/api/verify-payment", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      razorpay_order_id: response.razorpay_order_id,
+                      razorpay_payment_id: response.razorpay_payment_id,
+                      razorpay_signature: response.razorpay_signature,
+                    }),
+                  });
 
-        clearTimeout(timeoutId);
-
-        if (!orderResponse.ok) {
-          const errData = await orderResponse.json().catch(() => ({}));
-          throw new Error(errData.error || ("Server error status: " + orderResponse.status));
-        }
-
-        const orderData = await orderResponse.json();
-        const orderId = orderData.order_id || orderData.id;
-        const checkoutKey = orderData.key_id || RAZORPAY_KEY_ID;
-
-        if (!orderId || !checkoutKey) {
-          throw new Error("Unable to retrieve order details from payment gateway. Please try again.");
-        }
-
-        // STEP 2: Configure Razorpay Checkout Modal
-        const options = {
-          key: checkoutKey,
-          amount: orderData.amount || amountInPaise,
-          currency: orderData.currency || currentCurrency,
-          name: "Mowarson Developer",
-          description: serviceTitle,
-          image: window.location.origin + "/assets/favicon.png",
-          order_id: orderId,
-          prefill: {
-            name: name,
-            email: email,
-            contact: validPhone
-          },
-          notes: {
-            service: serviceTitle,
-            company: company || "Individual / Business",
-            client_notes: notes || "None"
-          },
-          theme: {
-            color: "#2563eb"
-          },
-          handler: async function (response) {
-            submitBtn.innerHTML = '<span>🔒 Confirming Payment...</span>';
-            try {
-              // If an order_id was created, verify signature on backend
-              if (response.razorpay_order_id && response.razorpay_signature) {
-                const verifyResponse = await fetch('/api/verify-payment', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_signature: response.razorpay_signature
-                  })
-                });
-
-                const verifyResult = await verifyResponse.json();
-                if (!verifyResponse.ok || !verifyResult.success) {
-                  console.warn("Signature verification note:", verifyResult);
+                  const verifyResult = await verifyResponse.json();
+                  if (!verifyResponse.ok || !verifyResult.success) {
+                    console.warn("Signature verification note:", verifyResult);
+                  }
                 }
+
+                // Confirm and display successful transaction modal
+                showSuccessConfirmation(
+                  response.razorpay_payment_id,
+                  serviceTitle,
+                  `${cfg.symbol}${amount}`,
+                );
+              } catch (err) {
+                console.error("Confirmation error:", err);
+                showSuccessConfirmation(
+                  response.razorpay_payment_id,
+                  serviceTitle,
+                  `${cfg.symbol}${amount}`,
+                );
+              } finally {
+                resetSubmitBtn();
               }
+            },
+            modal: {
+              ondismiss: function () {
+                console.log("Payment checkout popup closed by user");
+                resetSubmitBtn();
+              },
+            },
+          };
 
-              // Confirm and display successful transaction modal
-              showSuccessConfirmation(response.razorpay_payment_id, serviceTitle, `${cfg.symbol}${amount}`);
-            } catch (err) {
-              console.error('Confirmation error:', err);
-              showSuccessConfirmation(response.razorpay_payment_id, serviceTitle, `${cfg.symbol}${amount}`);
-            } finally {
-              resetSubmitBtn();
-            }
-          },
-          modal: {
-            ondismiss: function() {
-              console.log('Payment checkout popup closed by user');
-              resetSubmitBtn();
-            }
+          if (orderId) {
+            options.order_id = orderId;
           }
-        };
 
-        if (orderId) {
-          options.order_id = orderId;
-        }
+          const rzp = new Razorpay(options);
+          rzp.on("payment.failed", function (response) {
+            const err = response.error || {};
+            console.error("Razorpay Payment Failed:", err);
+            let reasonText =
+              err.description ||
+              err.reason ||
+              "Payment was declined by the bank.";
 
-        const rzp = new Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-          const err = response.error || {};
-          console.error("Razorpay Payment Failed:", err);
-          let reasonText = err.description || err.reason || "Payment was declined by the bank.";
+            if (reasonText.toLowerCase().includes("authentication failed")) {
+              alert(
+                "⚠️ Payment Authentication Failed:\n\n" +
+                  "• Testing with Test Keys (rzp_test_...):\n" +
+                  "  Real UPI apps and real bank cards cannot process test payments. Use Razorpay test credentials:\n" +
+                  "  - Card: 4111 1111 1111 1111, Expiry: 12/30, CVV: 123 -> Click green 'Success' button.\n" +
+                  "  - UPI: success@razorpay\n\n" +
+                  "• Ready for Real Customer Payments:\n" +
+                  "  Switch to LIVE MODE in Razorpay Dashboard and update your 'rzp_live_...' Key ID and Secret.",
+              );
+            } else {
+              alert("Payment failed: " + reasonText);
+            }
+            resetSubmitBtn();
+          });
 
-          if (reasonText.toLowerCase().includes("authentication failed")) {
-            alert(
-              "⚠️ Payment Authentication Failed:\n\n" +
-              "• Testing with Test Keys (rzp_test_...):\n" +
-              "  Real UPI apps and real bank cards cannot process test payments. Use Razorpay test credentials:\n" +
-              "  - Card: 4111 1111 1111 1111, Expiry: 12/30, CVV: 123 -> Click green 'Success' button.\n" +
-              "  - UPI: success@razorpay\n\n" +
-              "• Ready for Real Customer Payments:\n" +
-              "  Switch to LIVE MODE in Razorpay Dashboard and update your 'rzp_live_...' Key ID and Secret."
-            );
-          } else {
-            alert("Payment failed: " + reasonText);
-          }
+          rzp.open();
+        } catch (err) {
+          console.error("Payment initialization error: ", err);
           resetSubmitBtn();
-        });
-
-        rzp.open();
-
-      } catch (err) {
-        console.error("Payment initialization error: ", err);
-        resetSubmitBtn();
-        alert("Something went wrong: " + err.message);
-      }
-    }
-
-    // Display confirmation modal
-    function showSuccessConfirmation(paymentId, serviceName, amountStr) {
-      document.getElementById('confirmed-payment-id').innerText = paymentId;
-      document.getElementById('confirmed-service-name').innerText = serviceName;
-      document.getElementById('confirmed-amount').innerText = amountStr;
-
-      const clientName = document.getElementById('client-name').value.trim() || 'Client';
-      const company = document.getElementById('company-name').value.trim();
-
-      const waText = encodeURIComponent(
-        `Hi Mowarson, I just completed a payment on your website!\n\n` +
-        `• Name: ${clientName} ${company ? '(' + company + ')' : ''}\n` +
-        `• Service: ${serviceName}\n` +
-        `• Amount: ${amountStr}\n` +
-        `• Payment ID: ${paymentId}\n\n` +
-        `Please confirm receipt and let's get started!`
-      );
-
-      document.getElementById('whatsapp-notify-btn').href = `https://wa.me/916009825938?text=${waText}`;
-      document.getElementById('success-modal').classList.add('active');
-    }
-
-    // Auto-detect URL query parameters (?service=marketing or ?service=website or ?amount=...)
-    document.addEventListener('DOMContentLoaded', function() {
-      // Pre-warm serverless function and pre-fetch public key
-      fetch('/api/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: 100, currency: 'INR' })
-      }).then(r => r.json()).then(data => {
-        if (data && data.key_id) RAZORPAY_KEY_ID = data.key_id;
-      }).catch(() => {});
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const serviceParam = urlParams.get('service');
-      const amountParam = urlParams.get('amount');
-      const currencyParam = urlParams.get('currency');
-
-      if (currencyParam && currencyParam.toUpperCase() === 'USD') {
-        setCurrency('USD');
-      }
-
-      if (serviceParam === 'marketing') {
-        const mRadio = document.getElementById('plan-marketing');
-        if (mRadio) mRadio.checked = true;
-      } else if (serviceParam === 'website') {
-        const wRadio = document.getElementById('plan-website');
-        if (wRadio) wRadio.checked = true;
-      } else if (serviceParam === 'custom' || amountParam) {
-        const cRadio = document.getElementById('plan-custom');
-        if (cRadio) {
-          cRadio.checked = true;
-          if (amountParam && !isNaN(amountParam)) {
-            document.getElementById('custom-amount-input').value = amountParam;
-          }
+          alert("Something went wrong: " + err.message);
         }
       }
 
-      updateSelectedPlan();
-    });
-  </script>
-</body>
+      // Display confirmation modal
+      function showSuccessConfirmation(paymentId, serviceName, amountStr) {
+        document.getElementById("confirmed-payment-id").innerText = paymentId;
+        document.getElementById("confirmed-service-name").innerText =
+          serviceName;
+        document.getElementById("confirmed-amount").innerText = amountStr;
+
+        const clientName =
+          document.getElementById("client-name").value.trim() || "Client";
+        const company = document.getElementById("company-name").value.trim();
+
+        const waText = encodeURIComponent(
+          `Hi Mowarson, I just completed a payment on your website!\n\n` +
+            `• Name: ${clientName} ${company ? "(" + company + ")" : ""}\n` +
+            `• Service: ${serviceName}\n` +
+            `• Amount: ${amountStr}\n` +
+            `• Payment ID: ${paymentId}\n\n` +
+            `Please confirm receipt and let's get started!`,
+        );
+
+        document.getElementById("whatsapp-notify-btn").href =
+          `https://wa.me/916009825938?text=${waText}`;
+        document.getElementById("success-modal").classList.add("active");
+      }
+
+      // Auto-detect URL query parameters (?service=marketing or ?service=website or ?amount=...)
+      document.addEventListener("DOMContentLoaded", function () {
+        // Pre-warm serverless function and pre-fetch public key
+        fetch("/api/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: 100, currency: "INR" }),
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data && data.key_id) RAZORPAY_KEY_ID = data.key_id;
+          })
+          .catch(() => {});
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceParam = urlParams.get("service");
+        const amountParam = urlParams.get("amount");
+        const currencyParam = urlParams.get("currency");
+
+        if (currencyParam && currencyParam.toUpperCase() === "USD") {
+          setCurrency("USD");
+        }
+
+        if (serviceParam === "marketing") {
+          const mRadio = document.getElementById("plan-marketing");
+          if (mRadio) mRadio.checked = true;
+        } else if (serviceParam === "website") {
+          const wRadio = document.getElementById("plan-website");
+          if (wRadio) wRadio.checked = true;
+        } else if (serviceParam === "custom" || amountParam) {
+          const cRadio = document.getElementById("plan-custom");
+          if (cRadio) {
+            cRadio.checked = true;
+            if (amountParam && !isNaN(amountParam)) {
+              document.getElementById("custom-amount-input").value =
+                amountParam;
+            }
+          }
+        }
+
+        updateSelectedPlan();
+      });
+    </script>
+  </body>
 </html>
