@@ -97,4 +97,28 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  // Blog Category Filtering (for blog.html)
+  const filterBtns = document.querySelectorAll('.blog-filter-btn');
+  const blogCards = document.querySelectorAll('.blog-card');
+
+  if (filterBtns.length > 0 && blogCards.length > 0) {
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        const filter = this.getAttribute('data-filter');
+
+        blogCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  }
 });
