@@ -168,9 +168,115 @@
     .related-card .read-more:hover {
       text-decoration: underline;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 1024px) {
+      .blog-post {
+        padding: 36px 28px;
+        border-radius: 28px;
+      }
+      .blog-post h1 {
+        font-size: 2.2rem;
+      }
+      .blog-post h2 {
+        font-size: 1.6rem;
+        margin: 36px 0 14px;
+      }
+    }
+    @media (max-width: 768px) {
+      .blog-post {
+        padding: 28px 20px !important;
+        border-radius: 24px !important;
+        box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.08) !important;
+      }
+      .blog-post h1 {
+        font-size: 1.95rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 18px !important;
+      }
+      .blog-post h2 {
+        font-size: 1.45rem !important;
+        line-height: 1.3 !important;
+        margin: 36px 0 12px !important;
+      }
+      .blog-post p,
+      .blog-post li {
+        font-size: 1.02rem !important;
+        line-height: 1.65 !important;
+      }
+      .blog-post ul,
+      .blog-post ol {
+        margin-bottom: 20px !important;
+        padding-left: 20px !important;
+      }
+      .video-wrapper {
+        margin: 28px 0 !important;
+        border-radius: 18px !important;
+      }
+      .blog-post div[style*="background: #2563eb10"],
+      .blog-lead-callout {
+        padding: 20px 18px !important;
+        margin: 32px 0 !important;
+        border-radius: 18px !important;
+      }
       .related-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        margin-top: 36px !important;
+      }
+      .related-card {
+        padding: 20px 18px !important;
+        border-radius: 18px !important;
+      }
+    }
+    @media (max-width: 480px) {
+      .blog-post {
+        padding: 20px 16px !important;
+        border-radius: 20px !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+      }
+      .blog-post h1 {
+        font-size: 1.65rem !important;
+        line-height: 1.24 !important;
+        margin-bottom: 14px !important;
+      }
+      .blog-post h2 {
+        font-size: 1.28rem !important;
+        margin: 28px 0 10px !important;
+      }
+      .blog-post p,
+      .blog-post li {
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+      }
+      .blog-post ul,
+      .blog-post ol {
+        margin-bottom: 16px !important;
+        padding-left: 18px !important;
+      }
+      .video-wrapper {
+        margin: 20px 0 !important;
+        border-radius: 14px !important;
+      }
+      .blog-post div[style*="background: #2563eb10"],
+      .blog-lead-callout {
+        padding: 16px 14px !important;
+        margin: 24px 0 !important;
+        border-radius: 16px !important;
+      }
+      .related-grid {
+        gap: 12px !important;
+        margin-top: 28px !important;
+      }
+      .related-card {
+        padding: 16px 14px !important;
+        border-radius: 14px !important;
+      }
+      .related-card h3 {
+        font-size: 1.15rem !important;
+        margin-bottom: 8px !important;
+      }
+      .related-card p {
+        font-size: 0.9rem !important;
+        margin-bottom: 12px !important;
       }
     }
   </style>
