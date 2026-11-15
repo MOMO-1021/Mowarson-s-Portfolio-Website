@@ -270,17 +270,22 @@
     @media (max-width: 768px) {
       .about-grid {
         flex-direction: column;
-        padding: 32px;
+        padding: 32px 20px;
         gap: 32px;
-        align-items: flex-start;
+        align-items: center;
       }
       .about-image {
+        order: -1;
         width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
+        max-width: 380px;
+        margin: 0 auto 12px;
+      }
+      .about-content {
+        order: 1;
+        width: 100%;
       }
       .about-content h1 {
-        font-size: 2.2rem;
+        font-size: 2.1rem;
       }
       .stats {
         gap: 20px;
@@ -292,14 +297,21 @@
       }
       .services-showcase {
         margin-top: 32px;
-        padding: 24px;
+        padding: 24px 18px;
       }
     }
 
     @media (max-width: 480px) {
       .about-grid {
-        padding: 24px;
-        border-radius: 32px;
+        padding: 24px 16px;
+        border-radius: 28px;
+        gap: 24px;
+      }
+      .about-image {
+        max-width: 320px;
+      }
+      .about-content h1 {
+        font-size: 1.8rem;
       }
       .stats {
         flex-direction: column;
@@ -309,10 +321,10 @@
         text-align: center;
       }
       .services-showcase {
-        border-radius: 32px;
+        border-radius: 28px;
       }
       .service-card {
-        padding: 24px;
+        padding: 20px 16px;
       }
     }
   </style>

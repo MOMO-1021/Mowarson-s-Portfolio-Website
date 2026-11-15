@@ -283,10 +283,50 @@ p {
   max-width: 800px;
 }
 
+.hero-title {
+  font-size: 3.4rem;
+  max-width: 850px;
+  line-height: 1.15;
+}
+
 .hero p {
   font-size: 1.25rem;
   max-width: 600px;
   color: #475569;
+}
+
+.hero-desc {
+  font-size: 1.25rem;
+  max-width: 680px;
+  margin-bottom: 28px;
+  color: #475569;
+}
+
+/* WhatsApp CTA Button with Number displayed downside */
+.btn-whatsapp-cta {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  padding: 12px 28px;
+}
+
+.btn-whatsapp-cta .btn-text-main {
+  font-weight: 600;
+  font-size: 1rem;
+  display: block;
+}
+
+.btn-whatsapp-cta .btn-text-sub {
+  font-size: 0.88rem;
+  font-weight: 500;
+  opacity: 0.95;
+  margin-top: 3px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  display: block;
 }
 
 /* Cards Grid */
@@ -391,7 +431,8 @@ footer a:hover {
 @media (max-width: 768px) {
   .header-inner {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
+    padding: 12px 0 8px;
   }
   .nav {
     flex-wrap: wrap;
@@ -402,11 +443,27 @@ footer a:hover {
     left: 0;
     transform: none;
   }
-  h1 {
-    font-size: 2.5rem;
+  .container {
+    padding: 0 20px;
   }
-  .hero h1 {
-    font-size: 2.5rem;
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  main {
+    padding: 28px 0 48px;
+  }
+  h1 {
+    font-size: 2.2rem;
+  }
+  .hero h1,
+  .hero-title {
+    font-size: 2.2rem !important;
+    line-height: 1.2 !important;
+  }
+  .hero-desc {
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 22px !important;
   }
   /* Some pages use inline `columns: 2` on <ul>; force single column on mobile */
   ul[style*="columns: 2"] {
@@ -514,7 +571,7 @@ footer a:hover {
 @media (max-width: 768px) {
   .hamburger {
     display: flex;
-    margin-bottom: 1rem;
+    margin-bottom: 0.35rem;
   }
   .nav {
     position: fixed;
@@ -559,8 +616,55 @@ footer a:hover {
     display: block;
   }
   main {
-    /* Keep enough spacing under the sticky header on small screens */
-    padding: 80px 0;
+    /* Appropriate spacing under the sticky header on small screens */
+    padding: 28px 0 48px;
+  }
+
+  /* Value Bundle box - flexed vertically on mobile for space & readability */
+  .hero-offer-banner {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    border-radius: 20px !important;
+    padding: 16px 18px !important;
+    margin-bottom: 24px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .hero-offer-pill {
+    align-self: flex-start !important;
+  }
+  .hero-offer-text {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    display: block !important;
+  }
+
+  /* CTA button spacing reduction */
+  .hero-cta-group,
+  .contact-cta-buttons,
+  .contact-hub-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+  .hero-cta-group .btn,
+  .hero-cta-group .btn-outline,
+  .contact-cta-buttons .btn,
+  .contact-cta-buttons .btn-outline,
+  .contact-hub-actions .btn,
+  .contact-hub-actions .btn-outline {
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .btn-whatsapp-cta {
+    width: 100% !important;
+    padding: 12px 20px !important;
   }
 }
 /* Extra small devices (phones under 480px) */
@@ -569,7 +673,10 @@ footer a:hover {
     padding: 0 16px;
   }
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+  }
+  main {
+    padding: 22px 0 36px;
   }
 
   /* "What You Get" / package sections use inline `grid-template-columns: 1fr 1fr`.
@@ -617,13 +724,20 @@ footer a:hover {
   }
   /* Headings */
   h1 {
-    font-size: 2rem;
+    font-size: 1.85rem;
   }
-  .hero h1 {
-    font-size: 2rem;
+  .hero h1,
+  .hero-title {
+    font-size: 1.85rem !important;
+    line-height: 1.22 !important;
+  }
+  .hero-desc {
+    font-size: 1rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 20px !important;
   }
   .hero p {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   /* Tech stack */
   .tech-stack {
@@ -656,11 +770,11 @@ footer a:hover {
     line-height: 1.4;
   }
   .hero {
-    padding: 60px 0;
+    padding: 32px 0 24px;
   }
   .btn {
     margin-right: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 12px;
     /* Make stacked CTAs consistent on very small screens */
     display: block;
     width: 100%;
@@ -2883,15 +2997,29 @@ ul.formkit-alert-error:empty,
   margin-top: 14px !important;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .formkit-form[data-uid="a6e878700e"] .formkit-fields {
     flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .formkit-form[data-uid="a6e878700e"] .formkit-field {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+  }
+  .formkit-form[data-uid="a6e878700e"] .formkit-input {
+    width: 100% !important;
   }
   .formkit-form[data-uid="a6e878700e"] .formkit-submit {
     width: 100% !important;
+    margin: 0 !important;
   }
   .formkit-form[data-uid="a6e878700e"] .formkit-submit > span {
     width: 100% !important;
+    display: block !important;
+    text-align: center !important;
   }
 }
 
@@ -2999,5 +3127,108 @@ ul.formkit-alert-error:empty,
   }
   .contact-trust-card {
     padding: 28px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-hub-card {
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+  .contact-trust-card {
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+}
+
+/* ==========================================================================
+   Featured Work & Project Card Enhancements (Responsive Spacing)
+   ========================================================================== */
+.featured-work-card {
+  background: white;
+  border-radius: 32px;
+  border: 1px solid #e2e8f0;
+  padding: 36px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .featured-work-card {
+    padding: 24px 20px !important;
+    border-radius: 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-work-card {
+    padding: 20px 16px !important;
+    border-radius: 20px !important;
+  }
+}
+
+/* ==========================================================================
+   Blog Callout CTA Box (Clean, Spaced & Fully Responsive)
+   ========================================================================== */
+.blog-cta-box {
+  background: #eef2ff;
+  border-radius: 32px;
+  padding: 44px 36px;
+  text-align: center;
+  margin-top: 48px;
+  border: 1px solid #c7d2fe;
+}
+
+.blog-cta-box h2 {
+  margin-top: 0;
+  font-size: 2.1rem;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.blog-cta-box p {
+  max-width: 650px;
+  margin: 12px auto 28px;
+  color: #334155;
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .blog-cta-box {
+    padding: 30px 20px !important;
+    border-radius: 24px !important;
+    margin-top: 36px !important;
+  }
+  .blog-cta-box h2 {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+  .blog-cta-box p {
+    font-size: 0.98rem !important;
+    line-height: 1.55 !important;
+    margin: 12px 0 24px !important;
+    max-width: 100% !important;
+  }
+  .blog-cta-box .btn,
+  .blog-cta-box .btn-outline {
+    width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 12px !important;
+    display: block !important;
+    text-align: center !important;
+  }
+  .blog-cta-box .btn-outline {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-cta-box {
+    padding: 24px 16px !important;
+    border-radius: 20px !important;
+  }
+  .blog-cta-box h2 {
+    font-size: 1.35rem !important;
   }
 }

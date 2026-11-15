@@ -185,14 +185,13 @@
               Messaging</span
             >
           </div>
-          <h1 style="max-width: 850px; font-size: 3.4rem; line-height: 1.15">
+          <h1 class="hero-title" style="max-width: 850px; line-height: 1.15">
             Position Your Brand to Command Authority &amp; Win Clients
           </h1>
           <p
+            class="hero-desc"
             style="
-              font-size: 1.25rem;
               max-width: 680px;
-              margin-bottom: 28px;
               color: #475569;
             "
           >
@@ -210,7 +209,7 @@
             >
           </div>
 
-          <div style="display: flex; gap: 16px; flex-wrap: wrap">
+          <div class="hero-cta-group" style="display: flex; gap: 16px; flex-wrap: wrap">
             <a href="#pricing" class="btn">View Pricing Plans →</a>
             <a
               href="https://wa.me/916009825938?text=Hi%20Mowarson,%20I%20am%20interested%20in%20your%20Brand%20Positioning%20%26%20Marketing%20services."
@@ -673,7 +672,7 @@
       </section>
 
       <!-- FEATURED PROJECT & RECENT WORK -->
-      <section class="container" style="padding: 60px 0 0">
+      <section class="container" style="padding-top: 60px; padding-bottom: 0;">
         <div class="niche-badge">Featured Work</div>
         <h2>Selected Brand &amp; Digital Projects</h2>
         <p style="max-width: 750px; color: #64748b; margin-bottom: 32px">
@@ -682,16 +681,7 @@
         </p>
 
         <!-- Featured Project: Mindspark Learning -->
-        <div
-          style="
-            background: white;
-            border-radius: 32px;
-            border: 1px solid #e2e8f0;
-            padding: 36px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            margin-bottom: 24px;
-          "
-        >
+        <div class="featured-work-card">
           <div
             style="
               display: flex;
@@ -934,7 +924,7 @@
       </section>
 
       <!-- LATEST INSIGHTS SECTION (Expandable Showcase Drawer) -->
-      <section class="container" style="padding: 24px 0 0">
+      <section class="container" style="padding-top: 24px; padding-bottom: 0;">
         <div class="showcase-drawer" id="insights-drawer">
           <button
             type="button"
@@ -1130,19 +1120,22 @@
             Let's discuss how strategic brand positioning and conversion-focused
             web architecture can grow your business.
           </p>
-          <a
-            href="https://wa.me/916009825938?text=Hi%20Mowarson,%20I%20am%20interested%20in%20your%20Brand%20Positioning%20%26%20Marketing%20services."
-            class="btn"
-            target="_blank"
-            rel="noopener"
-            >Chat on WhatsApp (+91 6009825938)</a
-          >
-          <a
-            href="contact.html"
-            class="btn btn-outline"
-            style="margin-left: 10px"
-            >Send a Message</a
-          >
+          <div class="hero-cta-group" style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; align-items: center;">
+            <a
+              href="https://wa.me/916009825938?text=Hi%20Mowarson,%20I%20am%20interested%20in%20your%20Brand%20Positioning%20%26%20Marketing%20services."
+              class="btn btn-whatsapp-cta"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="btn-text-main">Chat on WhatsApp</span>
+              <span class="btn-text-sub">(+91 6009825938)</span>
+            </a>
+            <a
+              href="contact.html"
+              class="btn btn-outline"
+              >Send a Message</a
+            >
+          </div>
         </div>
       </section>
     </main>
