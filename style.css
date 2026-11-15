@@ -662,9 +662,33 @@ footer a:hover {
     text-align: center !important;
   }
 
+  /* Reduced, sleeker button sizing for mobile across all CTA buttons */
+  .btn,
+  .btn-outline {
+    padding: 11px 22px !important;
+    font-size: 0.94rem !important;
+    border-radius: 30px !important;
+  }
+
   .btn-whatsapp-cta {
     width: 100% !important;
-    padding: 12px 20px !important;
+    padding: 9px 18px !important;
+    border-radius: 30px !important;
+  }
+  .btn-whatsapp-cta .btn-text-main {
+    font-size: 0.92rem !important;
+  }
+  .btn-whatsapp-cta .btn-text-sub {
+    font-size: 0.8rem !important;
+    margin-top: 2px !important;
+  }
+
+  /* Lean Guarantee Box: Icon above text on mobile */
+  .lean-guarantee-box {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    padding: 24px 20px !important;
   }
 }
 /* Extra small devices (phones under 480px) */
@@ -778,7 +802,9 @@ footer a:hover {
     /* Make stacked CTAs consistent on very small screens */
     display: block;
     width: 100%;
-    padding: 14px 24px;
+    padding: 10px 20px !important;
+    font-size: 0.92rem !important;
+    border-radius: 28px !important;
   }
 
   /* Fix mobile "bulge" on Blog callout:
@@ -789,7 +815,24 @@ footer a:hover {
 
   /* Ensure outline buttons match filled button sizing */
   .btn-outline {
-    padding: 14px 24px;
+    padding: 10px 20px !important;
+    font-size: 0.92rem !important;
+    border-radius: 28px !important;
+  }
+
+  .btn-whatsapp-cta {
+    padding: 8px 16px !important;
+  }
+  .btn-whatsapp-cta .btn-text-main {
+    font-size: 0.9rem !important;
+  }
+  .btn-whatsapp-cta .btn-text-sub {
+    font-size: 0.78rem !important;
+  }
+
+  .lean-guarantee-box {
+    padding: 20px 16px !important;
+    gap: 12px !important;
   }
 
   .btn-small {
@@ -1752,7 +1795,12 @@ footer a:hover {
 
 @media (max-width: 768px) {
   .pricing-grid {
-    grid-template-columns: 1fr;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+  .pricing-card.featured {
+    order: -1 !important;
   }
   .pricing-card {
     padding: 36px 24px;
@@ -3214,7 +3262,10 @@ ul.formkit-alert-error:empty,
   .blog-cta-box .btn-outline {
     width: 100% !important;
     margin-right: 0 !important;
-    margin-bottom: 12px !important;
+    margin-bottom: 10px !important;
+    padding: 10px 20px !important;
+    font-size: 0.92rem !important;
+    border-radius: 28px !important;
     display: block !important;
     text-align: center !important;
   }
