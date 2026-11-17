@@ -8,14 +8,14 @@
 /pay                                          /pay.html                                        200
 /pricing                                      /services.html                                   301
 
-# Legacy Service Redirects to Services Hub
-/services/*                                   /services.html                                   301
-/coaching-institute-marketing                 /services.html                                   301
-/education-website-design                     /services.html                                   301
-/restaurant-web-design                        /services.html                                   301
-/small-business-web-design                    /services.html                                   301
-/local-business-website-design                /services.html                                   301
-/web-design-and-marketing                     /services.html                                   301
+# Removed service pages
+/services/*                                   /404.html                                        404
+/coaching-institute-marketing                 /404.html                                        404
+/education-website-design                     /404.html                                        404
+/restaurant-web-design                        /404.html                                        404
+/small-business-web-design                    /404.html                                        404
+/local-business-website-design                /404.html                                        404
+/web-design-and-marketing                     /404.html                                        404
 
 # Blog Pretty URLs
 /seo-friendly-website-design-tips             /blog/seo-friendly-website-design-tips.html      301
