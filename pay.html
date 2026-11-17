@@ -158,9 +158,8 @@
                 id="currency-price-note"
                 role="status"
               >
-                International prices use the latest available USD exchange
-                rates. Razorpay must have international payments enabled for
-                the selected currency.
+                INR payments are processed by Razorpay. International
+                currencies use PayPal in Razorpay Checkout.
               </p>
 
               <!-- Service Selection -->
@@ -411,9 +410,9 @@
                 </div>
               </div>
 
-              <p class="pay-method-note">
-                Payment options available for this transaction are shown in
-                Razorpay Checkout.
+              <p class="pay-method-note" id="payment-method-note">
+                INR payments use Razorpay Checkout. International currencies
+                use PayPal in Razorpay Checkout.
               </p>
               <p class="pay-support">
                 Need help?
@@ -532,6 +531,7 @@
         const currencySelect = document.getElementById("currency-select");
         const customAmountInput = document.getElementById("custom-amount-input");
         const note = document.getElementById("currency-price-note");
+        const paymentMethodNote = document.getElementById("payment-method-note");
         currentCurrency = currency;
         currencySelect.value = currency;
         currencySelect.disabled = true;
@@ -580,8 +580,16 @@
             formatAmount(quotes.website.amount, currency);
           document.getElementById("price-display-marketing").innerText =
             formatAmount(quotes.marketing.amount, currency);
-          note.textContent =
-            "International service prices use the latest available USD exchange rates, updated daily. Razorpay charges the exact amount shown in the selected currency; your bank may apply its own fees.";
+          if (currency === "INR") {
+            note.textContent = "INR payments are processed by Razorpay.";
+            paymentMethodNote.textContent =
+              "Pay with Razorpay Checkout.";
+          } else {
+            note.textContent =
+              "International payments use PayPal in Razorpay Checkout. PayPal cannot accept INR.";
+            paymentMethodNote.textContent =
+              "PayPal is used for international currencies in Razorpay Checkout.";
+          }
           if (customAmountNeedsEntry) {
             note.textContent +=
               " Re-enter your custom amount in the selected currency.";
