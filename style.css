@@ -309,7 +309,7 @@ p {
   align-items: center;
   justify-content: center;
   text-align: center;
-  line-height: 1.25;
+  /* line-height: 1.25; */
   padding: 12px 28px;
 }
 
