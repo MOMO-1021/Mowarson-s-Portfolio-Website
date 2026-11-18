@@ -97,4 +97,43 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  const contactForm = document.querySelector('#contact-form');
+  if (contactForm) {
+    const status = document.querySelector('#contact-form-status');
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+
+    contactForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      if (!contactForm.reportValidity()) return;
+
+      const formData = new FormData(contactForm);
+      const payload = Object.fromEntries(formData.entries());
+      payload.consent = formData.has('consent');
+      status.textContent = 'Sending your inquiry…';
+      status.classList.remove('is-error');
+      submitButton.disabled = true;
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Unable to send your inquiry. Please try again.');
+        }
+
+        contactForm.reset();
+        status.textContent = result.message || 'Thank you! Your inquiry has been received.';
+      } catch (error) {
+        status.textContent = error.message || 'Unable to send your inquiry. Please try again.';
+        status.classList.add('is-error');
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  }
 });

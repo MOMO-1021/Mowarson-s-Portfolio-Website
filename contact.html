@@ -115,6 +115,89 @@
           website, I am here to help with direct founder execution.
         </p>
 
+        <section class="contact-form-card" aria-labelledby="contact-form-title">
+          <h2 id="contact-form-title">Tell Me About Your Project</h2>
+          <p>
+            Share a few details and I’ll get back to you within 24 hours.
+          </p>
+          <form id="contact-form" class="contact-form" novalidate>
+            <div class="contact-form-grid">
+              <div class="contact-form-field">
+                <label for="contact-name">Name</label>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  maxlength="120"
+                  required
+                />
+              </div>
+              <div class="contact-form-field">
+                <label for="contact-email">Email address</label>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  maxlength="254"
+                  required
+                />
+              </div>
+              <div class="contact-form-field">
+                <label for="contact-phone">Phone / WhatsApp <span>(optional)</span></label>
+                <input
+                  id="contact-phone"
+                  name="phone"
+                  type="tel"
+                  autocomplete="tel"
+                  maxlength="30"
+                />
+              </div>
+              <div class="contact-form-field">
+                <label for="contact-service">What do you need help with?</label>
+                <select id="contact-service" name="service">
+                  <option value="">Select a service (optional)</option>
+                  <option value="Brand positioning and marketing">Brand positioning and marketing</option>
+                  <option value="Website design">Website design</option>
+                  <option value="Something else">Something else</option>
+                </select>
+              </div>
+              <div class="contact-form-field contact-form-message">
+                <label for="contact-message">Project details</label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows="5"
+                  maxlength="3000"
+                  required
+                ></textarea>
+              </div>
+            </div>
+            <label class="contact-consent">
+              <input type="checkbox" name="consent" value="true" />
+              <span>
+                Email me occasional marketing updates and growth resources. I
+                can unsubscribe at any time. This is optional and is not
+                required to send my inquiry.
+              </span>
+            </label>
+            <p class="contact-privacy-note">
+              Your details will be used to respond to your inquiry. See the
+              <a href="privacy.html">Privacy Policy</a>.
+            </p>
+            <button type="submit" class="btn contact-form-submit">
+              Send Inquiry
+            </button>
+            <p
+              id="contact-form-status"
+              class="contact-form-status"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+        </section>
+
         <!-- Contact Hub Card (Minimalist, Smooth & Professional) -->
         <div class="contact-hub-card">
           <h2 style="margin-top: 0; font-size: 2rem">Ready to Begin?</h2>
