@@ -25,41 +25,6 @@
   <link rel="alternate" hreflang="x-default" href="https://mowarsondeveloper.netlify.app/blog/lead-generation-strategies.html">
   
   <!-- HowTo Schema for AEO/GEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "Lead Generation Strategies That Work",
-    "description": "Five proven tactics to turn website traffic into leads.",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Create a Compelling Lead Magnet",
-        "text": "Offer something valuable in exchange for an email address – a free ebook, checklist, or discount code. Make sure it’s directly related to what your audience wants."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Use Clear, Action‑Oriented CTAs",
-        "text": "Your calls‑to‑action should stand out and tell visitors exactly what to do. “Get Your Free Quote” works better than “Submit.”"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Optimize Your Forms",
-        "text": "Keep forms short (name and email is often enough). Place them above the fold and use trust signals like “We never spam.”"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Design Dedicated Landing Pages",
-        "text": "For each campaign, create a landing page with a single goal. Remove navigation links to keep visitors focused."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Add Exit‑Intent Popups",
-        "text": "When a user is about to leave, display a targeted offer. Done right, this can capture up to 10% of abandoning visitors."
-      }
-    ]
-  }
-  </script>
   <style>
     .blog-post {
       max-width: 800px;
@@ -281,7 +246,59 @@
       }
     }
   </style>
-</head>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mowarsondeveloper.netlify.app/#organization",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mowarsondeveloper.netlify.app/assets/favicon.png"
+          },
+          "email": "mowarsondeveloper@gmail.com",
+          "telephone": "+916009825938",
+          "sameAs": [
+            "https://www.linkedin.com/in/mowarson-developer-298404302/",
+            "https://www.instagram.com/mowarson_developer/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mowarsondeveloper.netlify.app/#website",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "name": "Mowarson Developer",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
+          "@type": "BlogPosting",
+          "@id": "https://mowarsondeveloper.netlify.app/blog/lead-generation-strategies.html#page",
+          "url": "https://mowarsondeveloper.netlify.app/blog/lead-generation-strategies.html",
+          "name": "Lead Generation Strategies That Work – Convert Traffic into Customers",
+          "headline": "Lead Generation Strategies That Work – Convert Traffic into Customers",
+          "description": "Proven lead generation strategies for small businesses: CTAs, landing pages, forms, and content upgrades that turn visitors into leads.",
+          "inLanguage": "en-IN",
+          "isPartOf": {
+            "@id": "https://mowarsondeveloper.netlify.app/#website"
+          },
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Mowarson"
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 <body>
   <header>
   <div class="container header-inner">

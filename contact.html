@@ -56,19 +56,64 @@
       href="https://mowarsondeveloper.netlify.app/contact.html"
     />
 
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "ContactPage",
-        "name": "Contact Mowarson Developer",
-        "description": "Contact Mowarson Developer for strategic brand positioning, marketing systems, and high-conversion web architecture.",
-        "mainEntity": {
-          "@type": "Person",
-          "name": "Mowarson",
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mowarsondeveloper.netlify.app/#organization",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mowarsondeveloper.netlify.app/assets/favicon.png"
+          },
           "email": "mowarsondeveloper@gmail.com",
-          "telephone": "+916009825938"
+          "telephone": "+916009825938",
+          "sameAs": [
+            "https://www.linkedin.com/in/mowarson-developer-298404302/",
+            "https://www.instagram.com/mowarson_developer/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mowarsondeveloper.netlify.app/#website",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "name": "Mowarson Developer",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
+          "@type": "ContactPage",
+          "@id": "https://mowarsondeveloper.netlify.app/contact.html#page",
+          "url": "https://mowarsondeveloper.netlify.app/contact.html",
+          "name": "Contact Mowarson Developer – Brand Positioning &amp; Strategic Messaging Specialist",
+          "headline": "Contact Mowarson Developer – Brand Positioning &amp; Strategic Messaging Specialist",
+          "description": "Get in touch with Mowarson Developer. Professional Marketing Specialist in brand positioning, messaging architectures, and high-conversion web design with transparent pricing.",
+          "inLanguage": "en-IN",
+          "isPartOf": {
+            "@id": "https://mowarsondeveloper.netlify.app/#website"
+          },
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
+          "@type": "ContactPoint",
+          "@id": "https://mowarsondeveloper.netlify.app/contact.html#contact",
+          "telephone": "+916009825938",
+          "email": "mowarsondeveloper@gmail.com",
+          "contactType": "customer service",
+          "areaServed": {
+            "@type": "Country",
+            "name": "India"
+          }
         }
-      }
+      ]
+    }
     </script>
   </head>
   <body>

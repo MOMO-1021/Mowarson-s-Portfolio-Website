@@ -71,86 +71,72 @@
     <meta property="og:url" content="https://mowarsondeveloper.netlify.app/" />
 
     <!-- JSON-LD Schema (combined) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "ProfessionalService",
-            "name": "Mowarson Developer",
-            "description": "Professional brand marketing specialist focused on brand positioning and messaging, also building SEO-optimized websites for businesses.",
-            "serviceType": [
-              "Brand Positioning",
-              "Brand Messaging",
-              "SEO-Optimized Website Design"
-            ],
-            "url": "https://mowarsondeveloper.netlify.app",
-            "logo": "https://mowarsondeveloper.netlify.app/assets/favicon.png",
-            "sameAs": [
-              "https://www.linkedin.com/in/mowarson-developer-298404302/",
-              "https://www.instagram.com/mowarson_developer/"
-            ],
-            "priceRange": "₹4000 - ₹5000",
-            "areaServed": {
-              "@type": "Country",
-              "name": "India"
-            },
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "+916009825938",
-              "contactType": "customer service",
-              "areaServed": "India"
-            },
-            "hasOfferCatalog": {
-              "@type": "OfferCatalog",
-              "name": "Strategic Marketing & Web Architecture Services",
-              "itemListElement": [
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": "Brand Positioning & Strategic Marketing Bundle",
-                    "description": "Comprehensive brand positioning, messaging architecture, search optimization, and lead capture funnels + FREE custom conversion website."
-                  },
-                  "price": "5000",
-                  "priceCurrency": "INR"
-                },
-                {
-                  "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": "Conversion Website Design",
-                    "description": "SEO-optimized website built with clear brand messaging, structured offerings, and high conversion architecture."
-                  },
-                  "price": "4000",
-                  "priceCurrency": "INR"
-                }
-              ]
-            }
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mowarsondeveloper.netlify.app/#organization",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mowarsondeveloper.netlify.app/assets/favicon.png"
           },
-          {
-            "@type": "WebSite",
-            "name": "Mowarson Developer",
-            "url": "https://mowarsondeveloper.netlify.app",
-            "description": "Brand positioning and messaging specialist who also builds SEO-optimized websites."
-          },
-          {
-            "@type": "Person",
-            "name": "Mowarson",
-            "url": "https://mowarsondeveloper.netlify.app/about.html",
-            "jobTitle": "Brand Marketing Specialist",
-            "knowsAbout": [
-              "Brand Positioning",
-              "Brand Messaging",
-              "SEO-Optimized Website Design"
-            ],
-            "worksFor": {
-              "@type": "Organization",
-              "name": "Mowarson Developer"
-            }
+          "email": "mowarsondeveloper@gmail.com",
+          "telephone": "+916009825938",
+          "sameAs": [
+            "https://www.linkedin.com/in/mowarson-developer-298404302/",
+            "https://www.instagram.com/mowarson_developer/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mowarsondeveloper.netlify.app/#website",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "name": "Mowarson Developer",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
           }
-        ]
-      }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://mowarsondeveloper.netlify.app/#page",
+          "url": "https://mowarsondeveloper.netlify.app/",
+          "name": "Mowarson Developer | Brand Marketing Specialist: Brand Positioning &amp; Messaging",
+          "headline": "Mowarson Developer | Brand Marketing Specialist: Brand Positioning &amp; Messaging",
+          "description": "Mowarson is a professional brand marketing specialist in brand positioning and messaging, and builds SEO-optimized websites for growing businesses.",
+          "inLanguage": "en-IN",
+          "isPartOf": {
+            "@id": "https://mowarsondeveloper.netlify.app/#website"
+          },
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://mowarsondeveloper.netlify.app/#professional-service",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "provider": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "India"
+          },
+          "priceRange": "₹4000 - ₹5000",
+          "serviceType": [
+            "Brand Positioning",
+            "Brand Messaging",
+            "SEO-Optimized Website Design"
+          ]
+        }
+      ]
+    }
     </script>
   </head>
   <body>

@@ -367,25 +367,68 @@
         }
       }
     </style>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "AboutPage",
-        "name": "About Mowarson Developer",
-        "description": "Professional brand marketing specialist focused on brand positioning and messaging, also building SEO-optimized websites for businesses.",
-        "mainEntity": {
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mowarsondeveloper.netlify.app/#organization",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mowarsondeveloper.netlify.app/assets/favicon.png"
+          },
+          "email": "mowarsondeveloper@gmail.com",
+          "telephone": "+916009825938",
+          "sameAs": [
+            "https://www.linkedin.com/in/mowarson-developer-298404302/",
+            "https://www.instagram.com/mowarson_developer/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mowarsondeveloper.netlify.app/#website",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "name": "Mowarson Developer",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
+          "@type": "AboutPage",
+          "@id": "https://mowarsondeveloper.netlify.app/about.html#page",
+          "url": "https://mowarsondeveloper.netlify.app/about.html",
+          "name": "About Mowarson | Brand Marketing Specialist for Positioning &amp; Messaging",
+          "headline": "About Mowarson | Brand Marketing Specialist for Positioning &amp; Messaging",
+          "description": "Learn about Mowarson, a professional brand marketing specialist in brand positioning and messaging who also builds SEO-optimized websites.",
+          "inLanguage": "en-IN",
+          "isPartOf": {
+            "@id": "https://mowarsondeveloper.netlify.app/#website"
+          },
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
           "@type": "Person",
+          "@id": "https://mowarsondeveloper.netlify.app/about.html#person",
           "name": "Mowarson",
+          "url": "https://mowarsondeveloper.netlify.app/about.html",
           "jobTitle": "Brand Marketing Specialist",
           "knowsAbout": [
             "Brand Positioning",
             "Brand Messaging",
-            "SEO-Optimized Website Design",
-            "Local Search Optimization",
-            "Lead Funnels"
-          ]
+            "SEO-Optimized Website Design"
+          ],
+          "worksFor": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
         }
-      }
+      ]
+    }
     </script>
   </head>
   <body>

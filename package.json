@@ -4,6 +4,9 @@
   "description": "Mowarson Developer Portfolio & Payment Portal",
   "main": "server.js",
   "scripts": {
+    "seo": "node scripts/generate-seo.mjs",
+    "build": "npm run seo",
+    "prestart": "npm run seo",
     "start": "node server.js"
   },
   "dependencies": {

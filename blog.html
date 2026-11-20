@@ -53,34 +53,53 @@
     />
 
     <!-- Blog Schema for AEO/GEO -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Blog",
-        "name": "Mowarson Developer Blog",
-        "description": "Practical guides and insights on brand positioning, strategic messaging architectures, SEO-friendly web design, and client acquisition.",
-        "url": "https://mowarsondeveloper.netlify.app/blog.html",
-        "sameAs": [
-          "https://mowarson-developer.blogspot.com"
-        ],
-        "blogPost": [
-          {
-            "@type": "BlogPosting",
-            "headline": "SEO Friendly Website Design",
-            "url": "https://mowarsondeveloper.netlify.app/blog/seo-friendly-website-design-tips.html"
+        <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mowarsondeveloper.netlify.app/#organization",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mowarsondeveloper.netlify.app/assets/favicon.png"
           },
-          {
-            "@type": "BlogPosting",
-            "headline": "How to Choose a Web Design Consultant",
-            "url": "https://mowarsondeveloper.netlify.app/blog/web-design-consultant-tips.html"
-          },
-          {
-            "@type": "BlogPosting",
-            "headline": "Lead Generation Strategies That Work",
-            "url": "https://mowarsondeveloper.netlify.app/blog/lead-generation-strategies.html"
+          "email": "mowarsondeveloper@gmail.com",
+          "telephone": "+916009825938",
+          "sameAs": [
+            "https://www.linkedin.com/in/mowarson-developer-298404302/",
+            "https://www.instagram.com/mowarson_developer/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mowarsondeveloper.netlify.app/#website",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "name": "Mowarson Developer",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
           }
-        ]
-      }
+        },
+        {
+          "@type": "Blog",
+          "@id": "https://mowarsondeveloper.netlify.app/blog.html#page",
+          "url": "https://mowarsondeveloper.netlify.app/blog.html",
+          "name": "Blog – Mowarson Developer | Brand Positioning &amp; Marketing Insights",
+          "headline": "Blog – Mowarson Developer | Brand Positioning &amp; Marketing Insights",
+          "description": "Practical guides and insights on brand positioning, strategic messaging architectures, SEO-friendly web design, and client acquisition.",
+          "inLanguage": "en-IN",
+          "isPartOf": {
+            "@id": "https://mowarsondeveloper.netlify.app/#website"
+          },
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        }
+      ]
+    }
     </script>
   </head>
   <body>
@@ -201,38 +220,6 @@
             >
           </div>
 
-          <!-- ===================================================================
-               FUTURE BLOGGER ARTICLE CARD TEMPLATE (Matches Brand Palette):
-               When you publish a new article on your Blogger blog that you want
-               to feature on this website, copy and paste this card into this grid:
-
-               <div class="card">
-                 <div class="niche-badge" style="margin-bottom: 12px; font-size: 0.75rem; padding: 3px 12px;">
-                   <span class="badge-dot"></span> Blogger Post
-                 </div>
-                 <h3>
-                   <a
-                     href="https://mowarson-developer.blogspot.com/YOUR-POST-URL.html"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     style="text-decoration: none; color: inherit"
-                   >
-                     Your Post Title ↗
-                   </a>
-                 </h3>
-                 <p>
-                   1-2 sentence description of what the reader will learn.
-                 </p>
-                 <a
-                   href="https://mowarson-developer.blogspot.com/YOUR-POST-URL.html"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="btn-small"
-                 >
-                   Read on Blogger ↗
-                 </a>
-               </div>
-               =================================================================== -->
         </div>
 
         <!-- 100% FREE NEWSLETTER SECTION (KIT) -->

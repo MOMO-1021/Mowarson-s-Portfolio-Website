@@ -23,16 +23,55 @@
   <link rel="icon" href="assets/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Cancellation & Refund Policy – Mowarson Developer",
-    "url": "https://mowarsondeveloper.netlify.app/refund.html",
-    "description": "Cancellation and refund terms for services booked with Mowarson Developer."
-  }
-  </script>
-</head>
+      <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mowarsondeveloper.netlify.app/#organization",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mowarsondeveloper.netlify.app/assets/favicon.png"
+          },
+          "email": "mowarsondeveloper@gmail.com",
+          "telephone": "+916009825938",
+          "sameAs": [
+            "https://www.linkedin.com/in/mowarson-developer-298404302/",
+            "https://www.instagram.com/mowarson_developer/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mowarsondeveloper.netlify.app/#website",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "name": "Mowarson Developer",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://mowarsondeveloper.netlify.app/refund.html#page",
+          "url": "https://mowarsondeveloper.netlify.app/refund.html",
+          "name": "Cancellation & Refund Policy – Mowarson Developer",
+          "headline": "Cancellation & Refund Policy – Mowarson Developer",
+          "description": "Cancellation and Refund Policy for Mowarson Developer. Transparent terms for service cancellations, milestone refunds, and Razorpay processing timelines.",
+          "inLanguage": "en-IN",
+          "isPartOf": {
+            "@id": "https://mowarsondeveloper.netlify.app/#website"
+          },
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 <body>
   <!-- Header -->
   <header>

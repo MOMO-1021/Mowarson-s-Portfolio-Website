@@ -24,41 +24,6 @@
   <link rel="alternate" hreflang="x-default" href="https://mowarsondeveloper.netlify.app/blog/seo-friendly-website-design-tips.html">
 
   <!-- HowTo Schema for AEO/GEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Design an SEO-Friendly Website",
-    "description": "Step-by-step guide to creating a website that ranks well on search engines.",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Start with Keyword Research",
-        "text": "Before writing a single line of code, research what your potential customers are searching for. This informs the page structure, headings, and content. For example, if you’re a local plumber, target phrases like “emergency plumber near me” and “plumbing services [City].”"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Build a Solid Technical Foundation",
-        "text": "Search engines need to crawl and index your site easily. Ensure: clean, semantic HTML with proper heading hierarchy (H1, H2, etc.); fast loading times (image optimization, minification, caching); mobile responsiveness (Google’s mobile‑first indexing); XML sitemap and robots.txt."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "On-Page SEO Elements",
-        "text": "Every page gets unique title tags, meta descriptions, and URLs that include target keywords. Use internal linking to pass authority between pages."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Content That Answers Questions",
-        "text": "Google loves helpful content. Write articles, FAQs, and service pages that address your customers’ pain points. This builds trust and improves dwell time—a positive ranking signal."
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Ongoing Optimization",
-        "text": "SEO isn’t a one‑time task. Set up analytics and monitor performance, making adjustments as needed. You’ll always know how your site is performing."
-      }
-    ]
-  }
-  </script>
   <style>
     .blog-post {
       max-width: 800px;
@@ -280,7 +245,59 @@
       }
     }
   </style>
-</head>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mowarsondeveloper.netlify.app/#organization",
+          "name": "Mowarson Developer",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mowarsondeveloper.netlify.app/assets/favicon.png"
+          },
+          "email": "mowarsondeveloper@gmail.com",
+          "telephone": "+916009825938",
+          "sameAs": [
+            "https://www.linkedin.com/in/mowarson-developer-298404302/",
+            "https://www.instagram.com/mowarson_developer/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mowarsondeveloper.netlify.app/#website",
+          "url": "https://mowarsondeveloper.netlify.app",
+          "name": "Mowarson Developer",
+          "inLanguage": "en-IN",
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          }
+        },
+        {
+          "@type": "BlogPosting",
+          "@id": "https://mowarsondeveloper.netlify.app/blog/seo-friendly-website-design-tips.html#page",
+          "url": "https://mowarsondeveloper.netlify.app/blog/seo-friendly-website-design-tips.html",
+          "name": "SEO Friendly Website Design – Actionable Tips & Best Practices",
+          "headline": "SEO Friendly Website Design – Actionable Tips & Best Practices",
+          "description": "Learn how to create an SEO friendly website with actionable tips on page speed, keyword placement, and technical SEO from an expert designer.",
+          "inLanguage": "en-IN",
+          "isPartOf": {
+            "@id": "https://mowarsondeveloper.netlify.app/#website"
+          },
+          "publisher": {
+            "@id": "https://mowarsondeveloper.netlify.app/#organization"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Mowarson"
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
 <body>
   <header>
   <div class="container header-inner">

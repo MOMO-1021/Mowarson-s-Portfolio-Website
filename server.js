@@ -4,12 +4,34 @@ const path = require("path");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
 const { createCustomQuote, createPlanQuotes, verifyQuoteToken } = require("./payment-pricing");
+const { execFileSync } = require("child_process");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+try {
+  execFileSync(process.execPath, [path.join(__dirname, "scripts", "generate-seo.mjs")], {
+    cwd: __dirname,
+    stdio: "inherit"
+  });
+} catch (error) {
+  console.error("Unable to generate sitemap and JSON-LD:", error.message);
+}
+
+app.get("/sitemap.xml", (req, res) => {
+  try {
+    execFileSync(process.execPath, [path.join(__dirname, "scripts", "generate-seo.mjs")], {
+      cwd: __dirname,
+      stdio: "inherit"
+    });
+  } catch (error) {
+    console.error("Unable to refresh sitemap and JSON-LD:", error.message);
+  }
+  res.type("application/xml").sendFile(path.join(__dirname, "sitemap.xml"));
+});
 
 // Serve static assets from project root
 app.use(express.static(path.join(__dirname)));
