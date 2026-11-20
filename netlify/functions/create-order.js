@@ -71,7 +71,12 @@ exports.handler = async (event) => {
       throw new Error("Razorpay order amount or currency did not match the approved quote.");
     }
 
-    posthogLogger.info("payment_order_created");
+    posthogLogger.info("payment_order_created", {
+      razorpay_order_id: order.id,
+      amount_minor: order.amount,
+      currency: order.currency,
+      plan: data.notes?.plan || "(unknown)"
+    });
     await flushPostHogLogs();
 
     return {

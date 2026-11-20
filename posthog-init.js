@@ -38,6 +38,21 @@
         });
         if (localStorage.getItem("mowarson_analytics_consent") === "granted") {
           window.posthog.opt_in_capturing();
+          if (!sessionStorage.getItem("mowarson_posthog_pageview_captured")) {
+            const campaign = (() => {
+              try {
+                return JSON.parse(localStorage.getItem("mowarson_campaign_attribution") || "{}");
+              } catch {
+                return {};
+              }
+            })();
+            window.posthog.capture("$pageview", {
+              $current_url: window.location.href,
+              page_path: window.location.pathname,
+              ...campaign
+            });
+            sessionStorage.setItem("mowarson_posthog_pageview_captured", "true");
+          }
         }
       };
       document.head.appendChild(script);

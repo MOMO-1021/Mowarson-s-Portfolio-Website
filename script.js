@@ -29,11 +29,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.posthog) {
       if (granted) {
         window.posthog.opt_in_capturing();
-        window.posthog.capture('$pageview', {
-          $current_url: window.location.href,
-          page_path: window.location.pathname,
-          ...attribution
-        });
+        if (!sessionStorage.getItem('mowarson_posthog_pageview_captured')) {
+          window.posthog.capture('$pageview', {
+            $current_url: window.location.href,
+            page_path: window.location.pathname,
+            ...attribution
+          });
+          sessionStorage.setItem('mowarson_posthog_pageview_captured', 'true');
+        }
       } else {
         window.posthog.opt_out_capturing();
       }

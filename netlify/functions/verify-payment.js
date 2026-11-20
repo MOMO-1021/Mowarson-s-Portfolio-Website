@@ -114,7 +114,12 @@ exports.handler = async (event) => {
       };
     }
 
-    posthogLogger.info("payment_verified");
+    posthogLogger.info("payment_verified", {
+      razorpay_order_id: razorpay_order_id,
+      razorpay_payment_id: razorpay_payment_id,
+      amount_minor: order.amount,
+      currency: order.currency
+    });
     await flushPostHogLogs();
 
     return {
