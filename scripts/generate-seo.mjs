@@ -115,7 +115,7 @@ function pageSchema(relativePath, html) {
       "url": baseUrl,
       "provider": { "@id": `${baseUrl}/#organization` },
       "areaServed": { "@type": "Country", "name": "India" },
-      "priceRange": "₹4000 - ₹5000",
+      "priceRange": "₹5000 - ₹7000",
       "serviceType": ["Brand Positioning", "Brand Messaging", "SEO-Optimized Website Design"]
     });
   }

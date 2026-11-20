@@ -3,20 +3,32 @@ const crypto = require("crypto");
 const CURRENCIES = [
   "INR",
   "USD",
+  "AUD",
+  "CAD",
+  "CHF",
+  "CZK",
+  "DKK",
   "EUR",
   "GBP",
-  "CAD",
-  "AUD",
-  "AED",
-  "QAR",
-  "SGD",
-  "CNY",
   "HKD",
+  "HUF",
+  "ILS",
+  "JPY",
+  "MXN",
+  "NOK",
+  "NZD",
+  "PHP",
+  "PLN",
+  "RUB",
+  "SEK",
+  "SGD",
+  "THB",
+  "TWD",
 ];
 
 const PLAN_PRICES_USD = {
   website: 5000,
-  marketing: 6500,
+  marketing: 7000,
 };
 
 const QUOTE_LIFETIME_MS = 30 * 60 * 1000;
@@ -86,7 +98,7 @@ function createPlanQuote(plan, currency, usdRate, secret) {
 
   let amount;
   if (code === "INR") {
-    amount = plan === "website" ? 400000 : 500000;
+    amount = plan === "website" ? 500000 : 700000;
   } else {
     if (!Number.isFinite(usdRate) || usdRate <= 0) {
       throw new Error(`A valid ${code} exchange rate is unavailable.`);
