@@ -6,7 +6,8 @@ exports.handler = async (event) => {
   }
 
   const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
-  const posthogKey = process.env.POSTHOG_PROJECT_API_KEY;
+  const posthogKey =
+    process.env.POSTHOG_PROJECT_TOKEN || process.env.POSTHOG_PROJECT_API_KEY;
   const posthogHost = process.env.POSTHOG_HOST || "https://eu.posthog.com";
 
   if (!webhookSecret || !posthogKey) {
