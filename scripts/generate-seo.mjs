@@ -30,7 +30,10 @@ const organization = {
   "telephone": "+916009825938",
   "sameAs": [
     "https://www.linkedin.com/in/mowarson-developer-298404302/",
-    "https://www.instagram.com/mowarson_developer/"
+    "https://www.instagram.com/mowarson_developer/",
+    "https://www.facebook.com/profile.php?id=61596554436022",
+    "https://x.com/MowarsonDev",
+    "https://www.threads.com/@mowarson_developer"
   ]
 };
 
@@ -145,6 +148,40 @@ function pageSchema(relativePath, html) {
 
 function updateHtml(relativePath, filePath) {
   let html = fs.readFileSync(filePath, "utf8");
+
+  const socialLinks = [
+    '<a href="https://www.facebook.com/profile.php?id=61596554436022" target="_blank" rel="noopener noreferrer">Facebook</a>',
+    '<a href="https://x.com/MowarsonDev" target="_blank" rel="noopener noreferrer">X</a>',
+    '<a href="https://www.threads.com/@mowarson_developer" target="_blank" rel="noopener noreferrer">Threads</a>',
+    '<a href="https://www.instagram.com/mowarson_developer/" target="_blank" rel="noopener noreferrer">Instagram</a>',
+    '<a href="https://www.linkedin.com/in/mowarson-developer-298404302/" target="_blank" rel="noopener noreferrer">LinkedIn</a>'
+  ].join("");
+  const footerBlock = `\n      <div class="footer-links">${socialLinks}</div>\n`;
+
+  const inBlogFolder = relativePath.startsWith("blog/");
+  const prefix = inBlogFolder ? "../" : "";
+  const footerMarkup = [
+    "  <footer>",
+    '    <div class="container">',
+    '      <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>',
+    "      <p>",
+    `        <a href="${prefix}privacy.html">Privacy Policy</a> |`,
+    `        <a href="${prefix}terms.html">Terms &amp; Conditions</a> |`,
+    `        <a href="${prefix}refund.html">Refund Policy</a> |`,
+    `        <a href="${prefix}pay.html">Pay Online</a> |`,
+    `        <a href="${prefix}contact.html">Contact</a>`,
+    "      </p>",
+    `      <div class="footer-links">${socialLinks}</div>`,
+    "    </div>",
+    "  </footer>"
+  ].join("\n");
+
+  if (/<footer\b/i.test(html)) {
+    html = html.replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, footerMarkup);
+  } else {
+    html = html.replace(/<\/body>/i, `\n${footerMarkup}\n</body>`);
+  }
+
   html = html.replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>\s*/gi, "");
   const json = JSON.stringify(pageSchema(relativePath, html), null, 2);
   const ldJson = `    <script type="application/ld+json">\n${json.split("\n").map((line) => `    ${line}`).join("\n")}\n    </script>\n`;
