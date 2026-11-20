@@ -16,6 +16,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "posthog-js": "^1.453.0",
+    "posthog-node": "^6.0.5",
     "razorpay": "^2.9.5"
   }
 }

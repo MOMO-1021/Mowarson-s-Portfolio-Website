@@ -260,12 +260,17 @@ document.addEventListener('DOMContentLoaded', function() {
             marketing_consent: payload.consent
           });
         }
-        capture('generate_lead', {
-          lead_type: 'contact_inquiry',
-          marketing_consent: payload.consent,
-          service: payload.service || '(not specified)',
-          ...attribution
-        });
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'generate_lead', {
+            lead_type: 'contact_inquiry',
+            marketing_consent: payload.consent,
+            service: payload.service || '(not specified)',
+            ...attribution
+          });
+        }
+        if (window.posthog && typeof window.posthog.capture === 'function') {
+          window.posthog.capture('generate_lead', { email: payload.email });
+        }
         contactForm.reset();
         status.textContent = result.message || 'Thank you! Your inquiry has been received.';
       } catch (error) {
