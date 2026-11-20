@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
+const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
 
 exports.handler = async (event) => {
   const headers = {
@@ -112,6 +113,9 @@ exports.handler = async (event) => {
         })
       };
     }
+
+    posthogLogger.info("payment_verified");
+    await flushPostHogLogs();
 
     return {
       statusCode: 200,

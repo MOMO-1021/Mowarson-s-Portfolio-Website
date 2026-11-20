@@ -1,5 +1,131 @@
 // script.js – smooth scrolling, hamburger menu, and dropdown navigation
 document.addEventListener('DOMContentLoaded', function() {
+  const consentKey = 'mowarson_analytics_consent';
+  const campaignKey = 'mowarson_campaign_attribution';
+  const channelPatterns = [
+    ['facebook', /facebook\.com|fb\.com/i],
+    ['instagram', /instagram\.com/i],
+    ['linkedin', /linkedin\.com/i],
+    ['threads', /threads\.com/i],
+    ['x', /(?:^|\/)(?:x\.com|twitter\.com)(?:\/|$)/i],
+    ['whatsapp', /wa\.me|whatsapp\.com/i],
+    ['blog', /mowarsondeveloper-blog-website\.netlify\.app/i]
+  ];
+
+  function getConsent() {
+    return localStorage.getItem(consentKey) || '';
+  }
+
+  function setConsent(granted) {
+    localStorage.setItem(consentKey, granted ? 'granted' : 'denied');
+    if (typeof window.gtag === 'function') {
+      window.gtag('consent', 'update', {
+        analytics_storage: granted ? 'granted' : 'denied',
+        ad_storage: granted ? 'granted' : 'denied',
+        ad_user_data: granted ? 'granted' : 'denied',
+        ad_personalization: granted ? 'granted' : 'denied'
+      });
+    }
+    if (window.posthog) {
+      if (granted) {
+        window.posthog.opt_in_capturing();
+        window.posthog.capture('$pageview', {
+          $current_url: window.location.href,
+          page_path: window.location.pathname,
+          ...attribution
+        });
+      } else {
+        window.posthog.opt_out_capturing();
+      }
+    }
+  }
+
+  function capture(eventName, properties = {}) {
+    if (typeof window.gtag === 'function') window.gtag('event', eventName, properties);
+    if (window.posthog && typeof window.posthog.capture === 'function') {
+      window.posthog.capture(eventName, properties);
+    }
+  }
+
+  function getChannel(url) {
+    for (const [channel, pattern] of channelPatterns) {
+      if (pattern.test(url)) return channel;
+    }
+    return 'website';
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const campaignFields = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id', 'gclid', 'fbclid', 'msclkid'];
+  const campaign = {};
+  campaignFields.forEach((field) => {
+    const value = params.get(field);
+    if (value) campaign[field] = value.slice(0, 200);
+  });
+  if (Object.keys(campaign).length) {
+    localStorage.setItem(campaignKey, JSON.stringify(campaign));
+  }
+  let attribution = {};
+  try {
+    attribution = JSON.parse(localStorage.getItem(campaignKey) || '{}');
+  } catch {
+    attribution = {};
+  }
+  attribution.channel = getChannel(document.referrer || window.location.href);
+
+  if (typeof window.gtag === 'function') {
+    window.gtag('set', 'user_properties', {
+      marketing_channel: attribution.channel,
+      utm_source: attribution.utm_source || '(direct)',
+      utm_medium: attribution.utm_medium || '(none)',
+      utm_campaign: attribution.utm_campaign || '(none)'
+    });
+  }
+  if (window.posthog && typeof window.posthog.register === 'function') {
+    window.posthog.register(attribution);
+  }
+
+  const consent = getConsent();
+  if (!consent) {
+    const banner = document.createElement('div');
+    banner.className = 'analytics-consent-banner';
+    banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-label', 'Analytics consent');
+    banner.innerHTML =
+      '<div><strong>Help improve Mowarson Developer</strong><p>We use analytics and advertising cookies to understand channel performance and improve this website.</p></div>' +
+      '<div class="analytics-consent-actions">' +
+      '<button type="button" data-consent="accept">Accept</button>' +
+      '<button type="button" data-consent="decline">Decline</button>' +
+      '</div>';
+    document.body.appendChild(banner);
+    banner.querySelector('[data-consent="accept"]').addEventListener('click', function () {
+      setConsent(true);
+      banner.remove();
+    });
+    banner.querySelector('[data-consent="decline"]').addEventListener('click', function () {
+      setConsent(false);
+      banner.remove();
+    });
+  } else {
+    setConsent(consent === 'granted');
+  }
+
+  document.querySelectorAll('a[href]').forEach((anchor) => {
+    anchor.addEventListener('click', function () {
+      const url = anchor.href;
+      if (!url) return;
+      const channel = getChannel(url);
+      const isExternal = new URL(url, window.location.href).origin !== window.location.origin;
+      if (isExternal) {
+        capture('outbound_click', {
+          destination_domain: new URL(url, window.location.href).hostname,
+          destination_channel: channel,
+          link_text: (anchor.textContent || '').trim().slice(0, 120),
+          ...attribution
+        });
+      }
+    });
+  });
+
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -126,6 +252,17 @@ document.addEventListener('DOMContentLoaded', function() {
           throw new Error(result.error || 'Unable to send your inquiry. Please try again.');
         }
 
+        if (window.posthog && typeof window.posthog.capture === 'function') {
+          window.posthog.capture('contact_inquiry_submitted', {
+            marketing_consent: payload.consent
+          });
+        }
+        capture('generate_lead', {
+          lead_type: 'contact_inquiry',
+          marketing_consent: payload.consent,
+          service: payload.service || '(not specified)',
+          ...attribution
+        });
         contactForm.reset();
         status.textContent = result.message || 'Thank you! Your inquiry has been received.';
       } catch (error) {
@@ -136,4 +273,56 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  document.querySelectorAll('.formkit-form').forEach((form) => {
+    form.addEventListener('submit', function () {
+      capture('newsletter_signup_started', {
+        form_location: window.location.pathname,
+        ...attribution
+      });
+    });
+  });
+
+  document.querySelectorAll('a[href*="/pay"], a[href*="pay.html"], a[href*="service="]').forEach((link) => {
+    link.addEventListener('click', function () {
+      capture('service_interest', {
+        destination: link.href,
+        link_text: (link.textContent || '').trim().slice(0, 120),
+        ...attribution
+      });
+    });
+  });
+
+  document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp.com"]').forEach((link) => {
+    link.addEventListener('click', function () {
+      capture('whatsapp_click', {
+        link_text: (link.textContent || '').trim().slice(0, 120),
+        ...attribution
+      });
+    });
+  });
+
+  const scrollMilestones = [25, 50, 75, 90];
+  const recordedMilestones = new Set();
+  let scrollScheduled = false;
+  window.addEventListener('scroll', function () {
+    if (scrollScheduled) return;
+    scrollScheduled = true;
+    requestAnimationFrame(function () {
+      scrollScheduled = false;
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const percent = Math.round((window.scrollY / scrollable) * 100);
+      scrollMilestones.forEach((milestone) => {
+        if (percent >= milestone && !recordedMilestones.has(milestone)) {
+          recordedMilestones.add(milestone);
+          capture('scroll_depth', {
+            percent: milestone,
+            page_path: window.location.pathname,
+            ...attribution
+          });
+        }
+      });
+    });
+  }, { passive: true });
 });

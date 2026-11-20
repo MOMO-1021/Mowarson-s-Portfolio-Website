@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Analytics 4 with consent mode -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7P05N251P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        wait_for_update: 500
+      });
+      gtag("js", new Date());
+      gtag("config", "G-S7P05N251P", {
+        send_page_view: true,
+        linker: {
+          domains: ["mowarsondeveloper-blog-website.netlify.app"]
+        }
+      });
+    </script>
+
+    <!-- Google Analytics 4 with consent mode -->
+    
+
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7P05N251P"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-S7P05N251P');
-  </script>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy – Mowarson Developer</title>
@@ -23,7 +41,7 @@
   <link rel="icon" href="assets/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   
-                      <script type="application/ld+json">
+                                  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
@@ -177,7 +195,7 @@
   </main>
 
   <!-- Footer -->
-        <footer>
+              <footer>
     <div class="container">
       <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>
       <p>
@@ -191,6 +209,7 @@
     </div>
   </footer>
 
+  <script src="/posthog-init.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

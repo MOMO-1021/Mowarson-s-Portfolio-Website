@@ -1,12 +1,36 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Google Analytics 4 with consent mode -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7P05N251P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        wait_for_update: 500
+      });
+      gtag("js", new Date());
+      gtag("config", "G-S7P05N251P", {
+        send_page_view: true,
+        linker: {
+          domains: ["mowarsondeveloper-blog-website.netlify.app"]
+        }
+      });
+    </script>
+
+    <!-- Google Analytics 4 with consent mode -->
+    
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, follow" />
     <title>Page Not Found | Mowarson Developer</title>
     <link rel="stylesheet" href="style.css" />
-                      <script type="application/ld+json">
+                                  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
@@ -69,7 +93,7 @@
       </p>
     </main>
   
-        <footer>
+              <footer>
     <div class="container">
       <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>
       <p>
@@ -82,5 +106,6 @@
       <div class="footer-links"><a href="https://www.facebook.com/profile.php?id=61596554436022" target="_blank" rel="noopener noreferrer">Facebook</a><a href="https://x.com/MowarsonDev" target="_blank" rel="noopener noreferrer">X</a><a href="https://www.threads.com/@mowarson_developer" target="_blank" rel="noopener noreferrer">Threads</a><a href="https://www.instagram.com/mowarson_developer/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.linkedin.com/in/mowarson-developer-298404302/" target="_blank" rel="noopener noreferrer">LinkedIn</a></div>
     </div>
   </footer>
+  <script src="/posthog-init.js"></script>
 </body>
 </html>

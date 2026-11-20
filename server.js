@@ -4,6 +4,7 @@ const path = require("path");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
 const { createCustomQuote, createPlanQuotes, verifyQuoteToken } = require("./payment-pricing");
+const { posthogLogger, shutdownPostHogLogs } = require("./posthog-logs");
 const { execFileSync } = require("child_process");
 
 const app = express();
@@ -11,6 +12,15 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.get("/api/config", (req, res) => {
+  res.set("Cache-Control", "no-store");
+  res.json({
+    key_id: getRazorpayCredentials().key_id,
+    posthog_key: (process.env.POSTHOG_PROJECT_TOKEN || "").trim(),
+    posthog_host: (process.env.POSTHOG_HOST || "").trim()
+  });
+});
 
 try {
   execFileSync(process.execPath, [path.join(__dirname, "scripts", "generate-seo.mjs")], {
@@ -31,6 +41,13 @@ app.get("/sitemap.xml", (req, res) => {
     console.error("Unable to refresh sitemap and JSON-LD:", error.message);
   }
   res.type("application/xml").sendFile(path.join(__dirname, "sitemap.xml"));
+});
+
+app.get("/api/config", (req, res) => {
+  res.json({
+    posthog_key: process.env.POSTHOG_PROJECT_TOKEN || "",
+    posthog_host: process.env.POSTHOG_HOST || ""
+  });
 });
 
 // Serve static assets from project root
@@ -120,6 +137,8 @@ app.post("/api/create-order", async (req, res) => {
     }
 
     const { key_id } = getRazorpayCredentials();
+
+    posthogLogger.info("payment_order_created");
 
     return res.status(200).json({
       order_id: order.id,
@@ -217,6 +236,8 @@ app.post("/api/verify-payment", async (req, res) => {
       });
     }
 
+    posthogLogger.info("payment_verified");
+
     return res.status(200).json({
       success: true,
       message: "Payment verified successfully",
@@ -232,5 +253,10 @@ app.post("/api/verify-payment", async (req, res) => {
 });
 
 app.listen(PORT, () => {
+  posthogLogger.info("server_started");
   console.log(`Mowarson Portfolio & Payment Server running at http://localhost:${PORT}`);
+});
+
+process.once("beforeExit", () => {
+  void shutdownPostHogLogs();
 });

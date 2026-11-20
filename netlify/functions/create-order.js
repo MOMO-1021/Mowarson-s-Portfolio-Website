@@ -1,5 +1,6 @@
 const Razorpay = require("razorpay");
 const { verifyQuoteToken } = require("../../payment-pricing");
+const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
 
 exports.handler = async (event) => {
   const headers = {
@@ -69,6 +70,9 @@ exports.handler = async (event) => {
     if (order.amount !== quote.amount || order.currency !== quote.currency) {
       throw new Error("Razorpay order amount or currency did not match the approved quote.");
     }
+
+    posthogLogger.info("payment_order_created");
+    await flushPostHogLogs();
 
     return {
       statusCode: 200,

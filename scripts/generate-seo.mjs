@@ -148,6 +148,30 @@ function pageSchema(relativePath, html) {
 
 function updateHtml(relativePath, filePath) {
   let html = fs.readFileSync(filePath, "utf8");
+  html = html.replace(/<script[^>]*>[\s\S]*?G-S7P05N251P[\s\S]*?<\/script>/gi, "");
+  html = html.replace(/<script[^>]*src=["']https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-S7P05N251P["'][^>]*><\/script>/gi, "");
+  const analyticsBootstrap = `    <!-- Google Analytics 4 with consent mode -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7P05N251P"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        wait_for_update: 500
+      });
+      gtag("js", new Date());
+      gtag("config", "G-S7P05N251P", {
+        send_page_view: true,
+        linker: {
+          domains: ["mowarsondeveloper-blog-website.netlify.app"]
+        }
+      });
+    </script>
+`;
+  html = html.replace(/<head([^>]*)>/i, (match) => `${match}\n${analyticsBootstrap}`);
 
   const socialLinks = [
     '<a href="https://www.facebook.com/profile.php?id=61596554436022" target="_blank" rel="noopener noreferrer">Facebook</a>',
@@ -180,6 +204,11 @@ function updateHtml(relativePath, filePath) {
     html = html.replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, footerMarkup);
   } else {
     html = html.replace(/<\/body>/i, `\n${footerMarkup}\n</body>`);
+  }
+
+  if (!/posthog-init\.js/.test(html)) {
+    html = html.replace(/<script\b[^>]*src=["'][^"']*script\.js["'][^>]*><\/script>/i,
+      '<script src="/posthog-init.js"></script>\n    $&');
   }
 
   html = html.replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>\s*/gi, "");

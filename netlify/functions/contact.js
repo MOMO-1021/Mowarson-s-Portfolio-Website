@@ -3,6 +3,7 @@
  * Collects website inquiries and optionally subscribes opted-in contacts to Brevo.
  */
 
+const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BREVO_API_URL = "https://api.brevo.com/v3";
 
@@ -179,6 +180,9 @@ exports.handler = async (event) => {
     } catch (notificationError) {
       console.error("Could not send lead email notification via Brevo SMTP:", notificationError);
     }
+
+    posthogLogger.info("contact_inquiry_accepted", { marketing_consent: consent });
+    await flushPostHogLogs();
 
     return jsonResponse(200, {
       success: true,
