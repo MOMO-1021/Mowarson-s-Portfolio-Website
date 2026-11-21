@@ -23,8 +23,11 @@ exports.handler = async (event) => {
   }
 
   try {
-    const rawKeyId = process.env.RAZORPAY_KEY_ID || "";
-    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
+    const useTestKeys = (process.env.PAYMENT_MODE || "").trim().toLowerCase() === "test";
+    const rawKeyId = (useTestKeys ? process.env.RAZORPAY_TEST_KEY_ID : process.env.RAZORPAY_KEY_ID) || "";
+    const rawKeySecret = (useTestKeys ? process.env.RAZORPAY_TEST_KEY_SECRET : process.env.RAZORPAY_KEY_SECRET) || "";
+    // const rawKeyId = process.env.RAZORPAY_KEY_ID || "";
+    // const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
 
     const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
     const key_secret = rawKeySecret.trim().replace(/^["']|["']$/g, "");
