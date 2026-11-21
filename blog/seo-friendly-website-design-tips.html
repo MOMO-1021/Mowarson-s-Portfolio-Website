@@ -73,6 +73,9 @@
     <!-- Google Analytics 4 with consent mode -->
     
 
+    <!-- Google Analytics 4 with consent mode -->
+    
+
   <!-- Google tag (gtag.js) -->
   
   <meta charset="UTF-8">
@@ -310,7 +313,43 @@
       }
     }
   </style>
-                                                                                                <script type="application/ld+json">
+                                                                                                <!-- Meta Pixel Code -->
+    <script>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod
+            ? n.callMethod.apply(n, arguments)
+            : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = "2.0";
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(
+        window,
+        document,
+        "script",
+        "https://connect.facebook.net/en_US/fbevents.js",
+      );
+      fbq("init", "2390185648395048");
+      fbq("track", "PageView");
+    </script>
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display: none"
+        src="https://www.facebook.com/tr?id=2390185648395048&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+      <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
@@ -464,7 +503,7 @@
     </article>
   </main>
 
-                                                <footer>
+                                                  <footer>
     <div class="container">
       <p>&copy; 2026 Mowarson Developer. All rights reserved.</p>
       <p>
