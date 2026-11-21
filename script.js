@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ['linkedin', /linkedin\.com/i],
     ['threads', /threads\.com/i],
     ['x', /(?:^|\/)(?:x\.com|twitter\.com)(?:\/|$)/i],
-    ['whatsapp', /wa\.me|whatsapp\.com/i],
+    ['whatsapp', /wa\.me|api\.whatsapp\.com\/send|whatsapp\.com/i],
     ['blog', /mowarsondeveloper-blog-website\.netlify\.app/i]
   ];
 
@@ -307,8 +307,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp.com"]').forEach((link) => {
+  document.querySelectorAll('a[href*="wa.me"], a[href*="api.whatsapp.com/send"], a[href*="whatsapp.com"]').forEach((link) => {
+    if (link.href.includes('wa.me/')) {
+      const oldUrl = new URL(link.href);
+      const text = oldUrl.searchParams.get('text');
+      const apiUrl = new URL('https://api.whatsapp.com/send/');
+      apiUrl.searchParams.set('phone', '916009825938');
+      if (text) apiUrl.searchParams.set('text', text);
+      link.href = apiUrl.toString();
+    }
+
     link.addEventListener('click', function () {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'whatsapp_click',
+        link_url: link.href
+      });
       capture('whatsapp_click', {
         link_text: (link.textContent || '').trim().slice(0, 120),
         ...attribution
