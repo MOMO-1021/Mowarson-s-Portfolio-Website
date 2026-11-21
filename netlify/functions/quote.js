@@ -1,4 +1,7 @@
-const { createCustomQuote, createPlanQuotes } = require("../../payment-pricing");
+const {
+  createCustomQuote,
+  createPlanQuotes,
+} = require("../../payment-pricing");
 
 exports.handler = async (event) => {
   const headers = {
@@ -20,9 +23,15 @@ exports.handler = async (event) => {
   }
 
   try {
-    const secret = (process.env.RAZORPAY_KEY_SECRET || "")
-      .trim()
-      .replace(/^["']|["']$/g, "");
+    const useTestKeys =
+      (process.env.PAYMENT_MODE || "").trim().toLowerCase() === "test";
+    const rawSecret = useTestKeys
+      ? process.env.RAZORPAY_TEST_KEY_SECRET
+      : process.env.RAZORPAY_KEY_SECRET;
+    const secret = (rawSecret || "").trim().replace(/^["']|["']$/g, "");
+    // const secret = (process.env.RAZORPAY_KEY_SECRET || "")
+    //   .trim()
+    //   .replace(/^["']|["']$/g, "");
     const data = JSON.parse(event.body || "{}");
     const currency = String(data.currency || "").toUpperCase();
 
@@ -30,7 +39,9 @@ exports.handler = async (event) => {
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify(createCustomQuote(currency, data.customAmount, secret)),
+        body: JSON.stringify(
+          createCustomQuote(currency, data.customAmount, secret),
+        ),
       };
     }
 
@@ -44,7 +55,9 @@ exports.handler = async (event) => {
     return {
       statusCode: 400,
       headers,
-      body: JSON.stringify({ error: error.message || "Unable to prepare a price quote." }),
+      body: JSON.stringify({
+        error: error.message || "Unable to prepare a price quote.",
+      }),
     };
   }
 };
