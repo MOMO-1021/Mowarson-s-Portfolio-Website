@@ -23,6 +23,12 @@ exports.handler = async (event, context) => {
     // 3. Grab credentials from environment variables
     const pixelId = process.env.META_PIXEL_ID;
     const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
+    console.log(
+      "DEBUG TEST CODE:",
+      process.env.test_event_code,
+      process.env.TEST_EVENT_CODE,
+      process.env.META_TEST_EVENT_CODE,
+    );
 
     if (!pixelId || !accessToken) {
       throw new Error(
