@@ -48,6 +48,7 @@ exports.handler = async (event, context) => {
         },
       ],
       access_token: accessToken,
+      test_event_code: process.env.META_TEST_EVENT_CODE || undefined,
     };
 
     // 5. Clean up undefined fields so Meta doesn't reject the payload
