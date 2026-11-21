@@ -1,36 +1,71 @@
 /**
  * Netlify Function: /api/contact
- * Collects website inquiries and optionally subscribes opted-in contacts to Brevo.
+ * Validates inquiries, creates a signed thank-you token, and sends Meta CAPI.
  */
 
+const crypto = require("crypto");
 const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BREVO_API_URL = "https://api.brevo.com/v3";
 
-const jsonResponse = (statusCode, body) => ({
+const jsonResponse = (statusCode, body, extraHeaders = {}) => ({
   statusCode,
-  headers: { "Content-Type": "application/json" },
+  headers: { "Content-Type": "application/json", ...extraHeaders },
   body: JSON.stringify(body),
 });
 
 const escapeHtml = (value) =>
-  String(value).replace(/[&<>"']/g, (character) => {
-    const entities = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    };
-    return entities[character];
-  });
+  String(value).replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]);
+
+const sha256 = (value) =>
+  crypto.createHash("sha256").update(value).digest("hex");
+
+const base64Url = (value) =>
+  Buffer.from(value).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+
+const sign = (value, secret) =>
+  crypto.createHmac("sha256", secret).update(value).digest("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+
+const parseBody = (event) => {
+  if (typeof event.body !== "string") return null;
+  const contentType = event.headers["content-type"] || event.headers["Content-Type"] || "";
+  if (contentType.includes("application/json")) {
+    try {
+      return JSON.parse(event.body);
+    } catch {
+      return null;
+    }
+  }
+  return Object.fromEntries(new URLSearchParams(event.body));
+};
+
+const looksLikeSpam = (name, message) => {
+  if (name.length < 2 || /https?:\/\/|www\./i.test(name)) return true;
+  if (message.length < 10) return true;
+  if (/(.)\1{7,}/i.test(message)) return true;
+  const links = message.match(/https?:\/\/|www\./gi) || [];
+  return links.length > 3;
+};
+
+const getClientIp = (event) =>
+  event.headers["x-nf-client-connection-ip"] ||
+  event.headers["x-forwarded-for"] ||
+  event.headers["client-ip"] ||
+  undefined;
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 204,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Headers": "Content-Type, Accept",
         "Access-Control-Allow-Methods": "POST, OPTIONS",
       },
       body: "",
@@ -40,158 +75,165 @@ exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return jsonResponse(405, { error: "Method Not Allowed. Use POST." });
   }
+  if (typeof event.body !== "string" || event.body.length > 10000) {
+    return jsonResponse(400, { error: "The submitted form is invalid or too large." });
+  }
+
+  const data = parseBody(event);
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return jsonResponse(400, { error: "Please submit a valid form." });
+  }
+
+  const text = (value) => (typeof value === "string" ? value.trim() : "");
+  const name = text(data.name);
+  const email = text(data.email).toLowerCase();
+  const phone = text(data.phone);
+  const service = text(data.service);
+  const message = text(data.message);
+  const consent = data.consent === true || data.consent === "true";
+
+  if (text(data.website)) {
+    return jsonResponse(400, { error: "The submitted form could not be accepted." });
+  }
+  if (!name || name.length > 120 || looksLikeSpam(name, message)) {
+    return jsonResponse(400, { error: "Please provide a valid name and project details." });
+  }
+  if (!email || email.length > 254 || !EMAIL_REGEX.test(email)) {
+    return jsonResponse(400, { error: "Please provide a valid email address." });
+  }
+  if (!message || message.length > 3000) {
+    return jsonResponse(400, { error: "Please provide project details (up to 3,000 characters)." });
+  }
+  if (phone.length > 30 || service.length > 100) {
+    return jsonResponse(400, { error: "Please check the phone number and service fields." });
+  }
+
+  const brevoApiKey = (process.env.BREVO_API_KEY || "").trim().replace(/^["']|["']$/g, "");
+  const rawListId = (process.env.BREVO_LIST_ID || "").trim();
+  const listId = /^\d+$/.test(rawListId) ? Number(rawListId) : null;
+  const pixelId = (process.env.PIXEL_ID || "").trim();
+  const accessToken = (process.env.ACCESS_TOKEN || "").trim();
+  const tokenSecret = (process.env.THANK_YOU_TOKEN_SECRET || "").trim();
+
+  if (!brevoApiKey) {
+    return jsonResponse(503, { error: "The contact form is temporarily unavailable. Please contact us on WhatsApp." });
+  }
+  if (consent && (!Number.isSafeInteger(listId) || listId < 1)) {
+    return jsonResponse(503, { error: "Email updates are temporarily unavailable. Please uncheck the optional marketing box or try again." });
+  }
+  if (!pixelId || !accessToken || !tokenSecret) {
+    console.error("Missing PIXEL_ID, ACCESS_TOKEN, or THANK_YOU_TOKEN_SECRET.");
+    return jsonResponse(503, { error: "The form service is not configured. Please try again later." });
+  }
 
   try {
-    if (typeof event.body !== "string" || event.body.length > 10000) {
-      return jsonResponse(400, { error: "The submitted form is invalid or too large." });
-    }
-
-    let data;
-    try {
-      data = JSON.parse(event.body);
-    } catch {
-      return jsonResponse(400, { error: "Please submit a valid form." });
-    }
-
-    if (!data || typeof data !== "object" || Array.isArray(data)) {
-      return jsonResponse(400, { error: "Please submit a valid form." });
-    }
-
-    const text = (value) => (typeof value === "string" ? value.trim() : "");
-    const name = text(data.name);
-    const email = text(data.email).toLowerCase();
-    const phone = text(data.phone);
-    const service = text(data.service);
-    const message = text(data.message);
-    const consent = data.consent === true;
-
-    if (!name || name.length > 120) {
-      return jsonResponse(400, { error: "Please provide your name (up to 120 characters)." });
-    }
-
-    if (!email || email.length > 254 || !EMAIL_REGEX.test(email)) {
-      return jsonResponse(400, { error: "Please provide a valid email address." });
-    }
-
-    if (phone.length > 30 || service.length > 100) {
-      return jsonResponse(400, { error: "Please check the phone number and service fields." });
-    }
-
-    if (!message || message.length > 3000) {
-      return jsonResponse(400, { error: "Please provide project details (up to 3,000 characters)." });
-    }
-
-    const rawBrevoApiKey = process.env.BREVO_API_KEY || "";
-    const brevoApiKey = rawBrevoApiKey.trim().replace(/^["']|["']$/g, "");
-    const rawListId = (process.env.BREVO_LIST_ID || "").trim();
-    const listId = /^\d+$/.test(rawListId) ? Number(rawListId) : null;
-
-    if (!brevoApiKey) {
-      console.error("Contact submission unavailable: BREVO_API_KEY is not configured.");
-      return jsonResponse(503, {
-        error: "The contact form is temporarily unavailable. Please contact me on WhatsApp.",
-      });
-    }
-
-    if (consent && (!Number.isSafeInteger(listId) || listId < 1)) {
-      console.error("Marketing opt-in unavailable: BREVO_LIST_ID is not configured.");
-      return jsonResponse(503, {
-        error: "Email updates are temporarily unavailable. Please uncheck the optional marketing box or try again later.",
-      });
-    }
-
     const nameParts = name.split(/\s+/);
     const sanitizedPhone = phone.replace(/[^0-9+]/g, "");
-    const attributes = {
-      FIRSTNAME: nameParts[0],
-      ...(nameParts.length > 1 ? { LASTNAME: nameParts.slice(1).join(" ") } : {}),
-      ...(/^\+?\d{5,20}$/.test(sanitizedPhone) ? { SMS: sanitizedPhone } : {}),
-    };
-    const contactPayload = {
-      email,
-      attributes,
-      updateEnabled: true,
-      ...(consent ? { listIds: [listId] } : {}),
-    };
-
     const contactResponse = await fetch(`${BREVO_API_URL}/contacts`, {
       method: "POST",
-      headers: {
-        "api-key": brevoApiKey,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(contactPayload),
+      headers: { "api-key": brevoApiKey, "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        email,
+        attributes: {
+          FIRSTNAME: nameParts[0],
+          ...(nameParts.length > 1 ? { LASTNAME: nameParts.slice(1).join(" ") } : {}),
+          ...(/^\+?\d{5,20}$/.test(sanitizedPhone) ? { SMS: sanitizedPhone } : {}),
+        },
+        updateEnabled: true,
+        ...(consent ? { listIds: [listId] } : {}),
+      }),
     });
-
     if (!contactResponse.ok) {
-      const errorDetails = await contactResponse.text();
-      console.error("Brevo contact API request failed:", contactResponse.status, errorDetails);
-      return jsonResponse(502, {
-        error: "We couldn't save your inquiry right now. Please try again or reach out on WhatsApp.",
-      });
+      console.error("Brevo contact API failed:", contactResponse.status, await contactResponse.text());
+      return jsonResponse(502, { error: "We couldn't save your inquiry. Please try again." });
     }
 
     const notifyEmail = (process.env.LEAD_NOTIFICATION_EMAIL || "mowarsondeveloper@gmail.com").trim();
-    const safeName = escapeHtml(name);
-    const safeEmail = escapeHtml(email);
-    const safePhone = escapeHtml(phone || "Not provided");
-    const safeService = escapeHtml(service || "Not specified");
-    const safeMessage = escapeHtml(message);
+    await fetch(`${BREVO_API_URL}/smtp/email`, {
+      method: "POST",
+      headers: { "api-key": brevoApiKey, "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        sender: { name: "Mowarson Portfolio Lead", email: "mowarsondeveloper@gmail.com" },
+        to: [{ email: notifyEmail, name: "Mowarson" }],
+        replyTo: { email, name },
+        subject: "New website inquiry",
+        htmlContent: `
+          <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b;max-width:600px;margin:0 auto;padding:24px;">
+            <h2>New Website Inquiry</h2>
+            <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+            <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+            <p><strong>Phone / WhatsApp:</strong> ${escapeHtml(phone || "Not provided")}</p>
+            <p><strong>Service:</strong> ${escapeHtml(service || "Not specified")}</p>
+            <p><strong>Marketing opt-in:</strong> ${consent ? "Yes" : "No"}</p>
+            <h3>Project details</h3>
+            <p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
+          </div>`,
+      }),
+    }).catch((error) => console.error("Brevo lead notification failed:", error));
 
-    try {
-      const notificationResponse = await fetch(`${BREVO_API_URL}/smtp/email`, {
-        method: "POST",
-        headers: {
-          "api-key": brevoApiKey,
-          "Content-Type": "application/json",
-          Accept: "application/json",
+    const eventId = crypto.randomUUID();
+    const expiresAt = Date.now() + 10 * 60 * 1000;
+    const payload = base64Url(JSON.stringify({ eventId, expiresAt }));
+    const token = `${payload}.${sign(payload, tokenSecret)}`;
+    const secure = event.headers["x-forwarded-proto"] === "https";
+
+    const cookies = event.headers.cookie || event.headers.Cookie || "";
+    const fbpMatch = cookies.match(/(?:^|;\s*)_fbp=([^;]+)/);
+    const fbcMatch = cookies.match(/(?:^|;\s*)_fbc=([^;]+)/);
+    const fbclid = text(new URLSearchParams(event.rawQuery || "").get("fbclid"));
+    const fbc = fbcMatch
+      ? decodeURIComponent(fbcMatch[1])
+      : fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined;
+
+    const metaPayload = {
+      data: [{
+        event_name: "Contact",
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        action_source: "website",
+        event_source_url: event.headers.origin || event.headers.referer || "https://mowarsondeveloper.netlify.app/contact.html",
+        user_data: {
+          em: [sha256(email.trim().toLowerCase())],
+          ...(getClientIp(event) ? { client_ip_address: getClientIp(event) } : {}),
+          ...(event.headers["user-agent"] ? { client_user_agent: event.headers["user-agent"] } : {}),
+          ...(fbc ? { fbc } : {}),
+          ...(fbpMatch ? { fbp: decodeURIComponent(fbpMatch[1]) } : {}),
         },
-        body: JSON.stringify({
-          sender: {
-            name: "Mowarson Portfolio Lead",
-            email: "mowarsondeveloper@gmail.com",
-          },
-          to: [{ email: notifyEmail, name: "Mowarson" }],
-          replyTo: { email, name },
-          subject: "New website inquiry",
-          htmlContent: `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1e293b; max-width: 600px; margin: 0 auto; padding: 24px;">
-              <h2>New Website Inquiry</h2>
-              <p><strong>Name:</strong> ${safeName}</p>
-              <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
-              <p><strong>Phone / WhatsApp:</strong> ${safePhone}</p>
-              <p><strong>Service:</strong> ${safeService}</p>
-              <p><strong>Marketing opt-in:</strong> ${consent ? "Yes" : "No"}</p>
-              <h3>Project details</h3>
-              <p style="white-space: pre-wrap;">${safeMessage}</p>
-            </div>
-          `,
-        }),
-      });
+      }],
+      ...(process.env.META_TEST_EVENT_CODE
+        ? { test_event_code: process.env.META_TEST_EVENT_CODE.trim() }
+        : {}),
+    };
 
-      if (!notificationResponse.ok) {
-        console.error(
-          "Brevo lead notification failed:",
-          notificationResponse.status,
-          await notificationResponse.text()
-        );
+    const metaResponse = await fetch(
+      `https://graph.facebook.com/v21.0/${encodeURIComponent(pixelId)}/events?access_token=${encodeURIComponent(accessToken)}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(metaPayload),
       }
-    } catch (notificationError) {
-      console.error("Could not send lead email notification via Brevo SMTP:", notificationError);
+    );
+    if (!metaResponse.ok) {
+      console.error("Meta CAPI failed:", metaResponse.status, await metaResponse.text());
+      return jsonResponse(502, { error: "The inquiry was not fully processed. Please try again." });
     }
 
     posthogLogger.info("contact_inquiry_accepted", { marketing_consent: consent });
     await flushPostHogLogs();
 
-    return jsonResponse(200, {
-      success: true,
-      message: "Thank you! Your inquiry has been received. I will get back to you within 24 hours.",
-    });
+    const redirectTo = `/thank-you.html?token=${encodeURIComponent(token)}`;
+    const cookie = `thank_you_token=${encodeURIComponent(token)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=600${secure ? "; Secure" : ""}`;
+    const acceptsJson = (event.headers.accept || event.headers.Accept || "").includes("application/json");
+    if (acceptsJson) {
+      return jsonResponse(200, { success: true, redirectTo, eventId }, { "Set-Cookie": cookie });
+    }
+    return {
+      statusCode: 302,
+      headers: { Location: redirectTo, "Set-Cookie": cookie },
+      body: "",
+    };
   } catch (error) {
-    console.error("Error processing lead contact submission:", error);
-    return jsonResponse(500, {
-      error: "Unable to submit your inquiry right now. Please try again or reach out on WhatsApp.",
-    });
+    console.error("Error processing contact submission:", error);
+    return jsonResponse(500, { error: "Unable to submit your inquiry right now. Please try again." });
   }
 };

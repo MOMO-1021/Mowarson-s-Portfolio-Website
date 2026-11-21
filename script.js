@@ -246,7 +246,10 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         const response = await fetch('/api/contact', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify(payload)
         });
         const result = await response.json().catch(() => ({}));
@@ -271,8 +274,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.posthog && typeof window.posthog.capture === 'function') {
           window.posthog.capture('generate_lead', { email: payload.email });
         }
-        contactForm.reset();
-        window.location.assign('thank-you.html');
+        if (result.redirectTo) {
+          window.location.assign(result.redirectTo);
+        } else {
+          throw new Error('The form was submitted, but the thank-you redirect was not available.');
+        }
       } catch (error) {
         status.textContent = error.message || 'Unable to send your inquiry. Please try again.';
         status.classList.add('is-error');

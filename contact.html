@@ -267,7 +267,21 @@
           <p>
             Share a few details and I’ll get back to you within 24 hours.
           </p>
-          <form id="contact-form" class="contact-form" novalidate>
+          <form
+            id="contact-form"
+            class="contact-form"
+            action="/api/contact"
+            method="post"
+            novalidate
+          >
+            <input
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+              style="position:absolute;left:-10000px"
+            />
             <div class="contact-form-grid">
               <div class="contact-form-field">
                 <label for="contact-name">Name</label>
