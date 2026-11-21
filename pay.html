@@ -1056,7 +1056,9 @@
                     eventName: "Purchase",
                     eventId: metaEventId,
                     userData: {
-                      email: orderData.email || "",
+                      // email: orderData.email || "",
+                      email: "test.buyer@example.com", // TEMPORARY: Proves the pipeline works
+                      phone: "9876543210",
                       client_user_agent: navigator.userAgent,
                     },
                     customData: {
