@@ -42,6 +42,16 @@ exports.handler = async (event) => {
       };
     }
 
+    if (useTestKeys && (!key_id.startsWith("rzp_test_"))) {
+      return {
+        statusCode: 409,
+        headers,
+        body: JSON.stringify({
+          error: "Test mode is enabled but a live Razorpay Key ID is configured. Set RAZORPAY_TEST_KEY_ID and RAZORPAY_TEST_KEY_SECRET.",
+        }),
+      };
+    }
+
     const data = JSON.parse(event.body || "{}");
     let quote;
     try {

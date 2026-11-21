@@ -21,14 +21,13 @@ exports.handler = async (event, context) => {
     const { eventName, eventId, userData, customData } = body;
 
     // 3. Grab credentials from environment variables
-    const pixelId = process.env.META_PIXEL_ID;
-    const accessToken = process.env.META_CAPI_ACCESS_TOKEN;
-    console.log(
-      "DEBUG TEST CODE:",
-      process.env.test_event_code,
-      process.env.TEST_EVENT_CODE,
-      process.env.META_TEST_EVENT_CODE,
-    );
+    const pixelId = process.env.META_PIXEL_ID || process.env.PIXEL_ID;
+    const accessToken =
+      process.env.META_CAPI_ACCESS_TOKEN || process.env.ACCESS_TOKEN;
+    const testEventCode =
+      process.env.META_TEST_EVENT_CODE ||
+      process.env.TEST_EVENT_CODE ||
+      process.env.test_event_code;
 
     if (!pixelId || !accessToken) {
       throw new Error(
@@ -44,17 +43,23 @@ exports.handler = async (event, context) => {
           event_time: Math.floor(Date.now() / 1000), // Unix timestamp in seconds
           action_source: "website", // Required by Meta
           event_id: eventId, // CRITICAL: The unique ID (e.g., Razorpay order_id) for deduplication
+          event_source_url:
+            event.headers.referer ||
+            event.headers.origin ||
+            "https://mowarsondeveloper.netlify.app/pay.html", // CRITICAL: The unique ID (e.g., Razorpay order_id) for deduplication
           user_data: {
             em: userData.email ? [hashValue(userData.email)] : undefined,
             ph: userData.phone ? [hashValue(userData.phone)] : undefined,
             client_ip_address: userData.client_ip_address,
             client_user_agent: userData.client_user_agent,
+            fbp: userData.fbp,
+            fbc: userData.fbc,
           },
           custom_data: customData || {}, // e.g., { value: 999, currency: 'INR' }
         },
       ],
       access_token: accessToken,
-      test_event_code: process.env.test_event_code || undefined,
+      ...(testEventCode ? { test_event_code: testEventCode } : {}),
     };
 
     // 5. Clean up undefined fields so Meta doesn't reject the payload

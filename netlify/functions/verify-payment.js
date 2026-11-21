@@ -49,6 +49,17 @@ exports.handler = async (event) => {
       };
     }
 
+    if (useTestKeys && !key_id.startsWith("rzp_test_")) {
+      return {
+        statusCode: 409,
+        headers,
+        body: JSON.stringify({
+          success: false,
+          error: "Test mode is enabled but a live Razorpay Key ID is configured.",
+        }),
+      };
+    }
+
     const data = JSON.parse(event.body || "{}");
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = data;
 
@@ -134,6 +145,100 @@ exports.handler = async (event) => {
       currency: order.currency,
     });
     await flushPostHogLogs();
+
+    const pixelId =
+      (process.env.META_PIXEL_ID || process.env.PIXEL_ID || "").trim();
+    const accessToken =
+      (process.env.META_CAPI_ACCESS_TOKEN || process.env.ACCESS_TOKEN || "").trim();
+    const testEventCode =
+      process.env.META_TEST_EVENT_CODE ||
+      process.env.TEST_EVENT_CODE ||
+      process.env.test_event_code;
+
+    if (pixelId && accessToken) {
+      const hashValue = (value) =>
+        value
+          ? crypto
+              .createHash("sha256")
+              .update(String(value).trim().toLowerCase())
+              .digest("hex")
+          : undefined;
+      const cookieHeader =
+        event.headers?.cookie || event.headers?.Cookie || "";
+      const getCookie = (name) => {
+        const match = cookieHeader
+          .split(";")
+          .map((part) => part.trim())
+          .find((part) => part.startsWith(`${name}=`));
+        return match
+          ? decodeURIComponent(match.slice(name.length + 1))
+          : undefined;
+      };
+      const userData =
+        data.userData && typeof data.userData === "object"
+          ? data.userData
+          : {};
+      const clientIp =
+        event.headers["x-nf-client-connection-ip"] ||
+        event.headers["x-forwarded-for"] ||
+        event.headers["client-ip"];
+
+      const capiPayload = {
+        data: [{
+          event_name: "Purchase",
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: razorpay_order_id,
+          action_source: "website",
+          event_source_url:
+            event.headers.referer ||
+            event.headers.origin ||
+            "https://mowarsondeveloper.netlify.app/pay.html",
+          user_data: Object.fromEntries(
+            Object.entries({
+              em: userData.email ? [hashValue(userData.email)] : undefined,
+              ph: userData.phone ? [hashValue(userData.phone)] : undefined,
+              client_ip_address: clientIp,
+              client_user_agent:
+                event.headers["user-agent"] || userData.client_user_agent,
+              fbp: getCookie("_fbp") || userData.fbp,
+              fbc: getCookie("_fbc") || userData.fbc,
+            }).filter(([, value]) => value != null),
+          ),
+          custom_data: {
+            value: order.amount / 100,
+            currency: order.currency,
+            content_ids: [data.plan || "payment"],
+            content_type: "product",
+            transaction_id: razorpay_payment_id,
+          },
+        }],
+        ...(testEventCode ? { test_event_code: testEventCode } : {}),
+      };
+
+      try {
+        const metaResponse = await fetch(
+          `https://graph.facebook.com/v21.0/${encodeURIComponent(pixelId)}/events?access_token=${encodeURIComponent(accessToken)}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(capiPayload),
+          },
+        );
+        if (!metaResponse.ok) {
+          console.error(
+            "Meta Purchase CAPI failed:",
+            metaResponse.status,
+            await metaResponse.text(),
+          );
+        }
+      } catch (capiError) {
+        console.error("Meta Purchase CAPI request failed:", capiError);
+      }
+    } else {
+      console.error(
+        "Meta Purchase CAPI skipped: Meta Pixel or access token is missing",
+      );
+    }
 
     return {
       statusCode: 200,

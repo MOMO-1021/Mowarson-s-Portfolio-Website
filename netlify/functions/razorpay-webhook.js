@@ -1,5 +1,13 @@
 const crypto = require("crypto");
 
+const hashValue = (value) =>
+  value
+    ? crypto
+        .createHash("sha256")
+        .update(String(value).trim().toLowerCase())
+        .digest("hex")
+    : undefined;
+
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
@@ -117,6 +125,71 @@ exports.handler = async (event) => {
         properties: item.properties,
       }),
     });
+  }
+
+  const pixelId =
+    (process.env.META_PIXEL_ID || process.env.PIXEL_ID || "").trim();
+  const accessToken =
+    (
+      process.env.META_CAPI_ACCESS_TOKEN ||
+      process.env.ACCESS_TOKEN ||
+      ""
+    ).trim();
+  const testEventCode =
+    process.env.META_TEST_EVENT_CODE ||
+    process.env.TEST_EVENT_CODE ||
+    process.env.test_event_code;
+  const metaEventId =
+    payment.order_id || payload.payload?.order?.entity?.id || payment.id;
+
+  if (pixelId && accessToken) {
+    const email = payment.email || payment.notes?.client_email;
+    const phone = payment.contact || payment.notes?.client_phone;
+    const metaPayload = {
+      data: [{
+        event_name: "Purchase",
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: metaEventId,
+        action_source: "website",
+        event_source_url: "https://mowarsondeveloper.netlify.app/pay.html",
+        user_data: Object.fromEntries(
+          Object.entries({
+            em: email ? [hashValue(email)] : undefined,
+            ph: phone ? [hashValue(phone)] : undefined,
+          }).filter(([, value]) => value != null),
+        ),
+        custom_data: {
+          value: amountInMajorUnits,
+          currency: payment.currency || "INR",
+          transaction_id: payment.id,
+        },
+      }],
+      ...(testEventCode ? { test_event_code: testEventCode } : {}),
+    };
+
+    try {
+      const metaResponse = await fetch(
+        `https://graph.facebook.com/v21.0/${encodeURIComponent(pixelId)}/events?access_token=${encodeURIComponent(accessToken)}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(metaPayload),
+        },
+      );
+      if (!metaResponse.ok) {
+        console.error(
+          "Meta webhook Purchase CAPI failed:",
+          metaResponse.status,
+          await metaResponse.text(),
+        );
+      }
+    } catch (metaError) {
+      console.error("Meta webhook Purchase CAPI request failed:", metaError);
+    }
+  } else {
+    console.error(
+      "Meta webhook CAPI skipped: Meta environment variables are missing",
+    );
   }
 
   return {

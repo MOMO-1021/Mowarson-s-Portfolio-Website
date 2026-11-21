@@ -1,30 +1,7 @@
 const crypto = require("crypto");
 
-const CURRENCIES = [
-  "INR",
-  "USD",
-  "AUD",
-  "CAD",
-  "CHF",
-  "CZK",
-  "DKK",
-  "EUR",
-  "GBP",
-  "HKD",
-  "HUF",
-  "ILS",
-  "JPY",
-  "MXN",
-  "NOK",
-  "NZD",
-  "PHP",
-  "PLN",
-  "RUB",
-  "SEK",
-  "SGD",
-  "THB",
-  "TWD",
-];
+// The Razorpay account is configured for domestic INR payments only.
+const CURRENCIES = ["INR"];
 
 const PLAN_PRICES_USD = {
   website: 5000,
