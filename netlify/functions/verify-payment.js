@@ -7,7 +7,7 @@ exports.handler = async (event) => {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   };
 
   if (event.httpMethod === "OPTIONS") {
@@ -18,13 +18,23 @@ exports.handler = async (event) => {
     return {
       statusCode: 405,
       headers,
-      body: JSON.stringify({ error: "Method Not Allowed" })
+      body: JSON.stringify({ error: "Method Not Allowed" }),
     };
   }
 
   try {
-    const rawKeyId = process.env.RAZORPAY_KEY_ID || "";
-    const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
+    // const rawKeyId = process.env.RAZORPAY_KEY_ID || "";
+    // const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
+    const useTestKeys =
+      (process.env.PAYMENT_MODE || "").trim().toLowerCase() === "test";
+    const rawKeyId =
+      (useTestKeys
+        ? process.env.RAZORPAY_TEST_KEY_ID
+        : process.env.RAZORPAY_KEY_ID) || "";
+    const rawKeySecret =
+      (useTestKeys
+        ? process.env.RAZORPAY_TEST_KEY_SECRET
+        : process.env.RAZORPAY_KEY_SECRET) || "";
     const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
     const key_secret = rawKeySecret.trim().replace(/^["']|["']$/g, "");
 
@@ -33,8 +43,9 @@ exports.handler = async (event) => {
         statusCode: 500,
         headers,
         body: JSON.stringify({
-          error: "Razorpay secret key is not configured in environment variables."
-        })
+          error:
+            "Razorpay secret key is not configured in environment variables.",
+        }),
       };
     }
 
@@ -53,8 +64,9 @@ exports.handler = async (event) => {
         statusCode: 400,
         headers,
         body: JSON.stringify({
-          error: "Missing required fields: razorpay_order_id, razorpay_payment_id, and razorpay_signature are mandatory."
-        })
+          error:
+            "Missing required fields: razorpay_order_id, razorpay_payment_id, and razorpay_signature are mandatory.",
+        }),
       };
     }
 
@@ -76,8 +88,8 @@ exports.handler = async (event) => {
         headers,
         body: JSON.stringify({
           success: false,
-          error: "Signature mismatch. Payment verification failed."
-        })
+          error: "Signature mismatch. Payment verification failed.",
+        }),
       };
     }
 
@@ -97,8 +109,8 @@ exports.handler = async (event) => {
         headers,
         body: JSON.stringify({
           success: false,
-          error: "The payment details do not match the Razorpay order."
-        })
+          error: "The payment details do not match the Razorpay order.",
+        }),
       };
     }
 
@@ -109,8 +121,9 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           success: false,
           pending: true,
-          error: "Payment is not confirmed as captured yet. Please contact support before trying again."
-        })
+          error:
+            "Payment is not confirmed as captured yet. Please contact support before trying again.",
+        }),
       };
     }
 
@@ -118,7 +131,7 @@ exports.handler = async (event) => {
       razorpay_order_id: razorpay_order_id,
       razorpay_payment_id: razorpay_payment_id,
       amount_minor: order.amount,
-      currency: order.currency
+      currency: order.currency,
     });
     await flushPostHogLogs();
 
@@ -129,8 +142,8 @@ exports.handler = async (event) => {
         success: true,
         message: "Payment verified successfully",
         amount: order.amount,
-        currency: order.currency
-      })
+        currency: order.currency,
+      }),
     };
   } catch (err) {
     console.error("Netlify Function verify-payment error:", err);
@@ -138,8 +151,8 @@ exports.handler = async (event) => {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: err.message || "Internal server error during verification"
-      })
+        error: err.message || "Internal server error during verification",
+      }),
     };
   }
 };
