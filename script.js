@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function() {
           window.posthog.capture('generate_lead', { email: payload.email });
         }
         contactForm.reset();
-        status.textContent = result.message || 'Thank you! Your inquiry has been received.';
+        window.location.assign('thank-you.html');
       } catch (error) {
         status.textContent = error.message || 'Unable to send your inquiry. Please try again.';
         status.classList.add('is-error');
