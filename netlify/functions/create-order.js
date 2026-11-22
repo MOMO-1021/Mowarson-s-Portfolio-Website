@@ -3,6 +3,7 @@ const { verifyQuoteToken } = require("../../payment-pricing");
 const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
 const { getJsonHeaders } = require("../shared/http");
 const { getRazorpayCredentials } = require("../shared/razorpay");
+const { upsertOrder } = require("../shared/payments");
 
 exports.handler = async (event) => {
   const headers = getJsonHeaders("POST, OPTIONS");
@@ -43,6 +44,10 @@ exports.handler = async (event) => {
     }
 
     const data = JSON.parse(event.body || "{}");
+    const notes =
+      data.notes && typeof data.notes === "object" && !Array.isArray(data.notes)
+        ? data.notes
+        : {};
     let quote;
     try {
       quote = verifyQuoteToken(data.quote_token, key_secret);
@@ -65,8 +70,8 @@ exports.handler = async (event) => {
       receipt: `rcpt_${Date.now()}`,
     };
 
-    if (data.notes && typeof data.notes === "object") {
-      orderOptions.notes = data.notes;
+    if (Object.keys(notes).length > 0) {
+      orderOptions.notes = notes;
     }
 
     const order = await razorpay.orders.create(orderOptions);
@@ -74,11 +79,32 @@ exports.handler = async (event) => {
       throw new Error("Razorpay order amount or currency did not match the approved quote.");
     }
 
+    try {
+      await upsertOrder({
+        razorpayOrderId: order.id,
+        plan: notes.plan,
+        amountMinor: order.amount,
+        currency: order.currency,
+        customerEmail: notes.client_email,
+        customerPhone: notes.client_phone,
+        distinctId: notes.posthog_distinct_id,
+      });
+    } catch (error) {
+      console.error("Neon order persistence failed:", error);
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify({
+          error: "The payment service is temporarily unavailable. Please try again.",
+        }),
+      };
+    }
+
     posthogLogger.info("payment_order_created", {
       razorpay_order_id: order.id,
       amount_minor: order.amount,
       currency: order.currency,
-      plan: data.notes?.plan || "(unknown)"
+      plan: notes.plan || "(unknown)"
     });
     await flushPostHogLogs();
 

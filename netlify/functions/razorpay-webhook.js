@@ -1,4 +1,10 @@
 const crypto = require("crypto");
+const {
+  beginWebhookEvent,
+  completeWebhookEvent,
+  failWebhookEvent,
+  recordPayment,
+} = require("../shared/payments");
 
 const hashValue = (value) =>
   value
@@ -27,9 +33,10 @@ exports.handler = async (event) => {
     ? Buffer.from(event.body || "", "base64").toString("utf8")
     : event.body || "";
 
+  const headers = event.headers || {};
   const receivedSignature =
-    event.headers["x-razorpay-signature"] ||
-    event.headers["X-Razorpay-Signature"] ||
+    headers["x-razorpay-signature"] ||
+    headers["X-Razorpay-Signature"] ||
     "";
 
   // 2. Verify HMAC SHA256 signature
@@ -79,6 +86,34 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: "Missing payment or order entity" };
   }
 
+  const payloadHash = crypto
+    .createHash("sha256")
+    .update(rawBody)
+    .digest("hex");
+  const externalEventId =
+    headers["x-razorpay-event-id"] ||
+    headers["X-Razorpay-Event-Id"] ||
+    null;
+  let webhookRecord;
+  try {
+    webhookRecord = await beginWebhookEvent({
+      provider: "razorpay",
+      externalEventId,
+      eventName: razorpayEvent,
+      payloadHash,
+    });
+  } catch (error) {
+    console.error("Neon webhook event persistence failed:", error);
+    return { statusCode: 500, body: "Webhook persistence failed" };
+  }
+
+  if (!webhookRecord) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ ok: true, duplicate: true }),
+    };
+  }
+
   const distinctId =
     payment.notes?.posthog_distinct_id ||
     payment.email ||
@@ -99,6 +134,26 @@ exports.handler = async (event) => {
     payment_method: payment.method || "",
     source: "razorpay_webhook",
   };
+
+  try {
+    await recordPayment({
+      razorpayOrderId: payment.order_id || payment.id,
+      razorpayPaymentId: payment.id,
+      plan: payment.notes?.plan,
+      amountMinor: payment.amount,
+      currency: payment.currency || "INR",
+      status: "captured",
+      paymentMethod: payment.method,
+      customerEmail: payment.email || payment.notes?.client_email,
+      customerPhone: payment.contact || payment.notes?.client_phone,
+      distinctId,
+    });
+    await completeWebhookEvent(webhookRecord.id);
+  } catch (error) {
+    await failWebhookEvent(webhookRecord.id, error.message);
+    console.error("Neon webhook persistence failed:", error);
+    return { statusCode: 500, body: "Webhook persistence failed" };
+  }
 
   // 4. Send `purchase` and `payment_completed` to PostHog
   const eventsToSend = [

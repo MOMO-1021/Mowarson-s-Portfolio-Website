@@ -3,6 +3,7 @@ const Razorpay = require("razorpay");
 const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
 const { getJsonHeaders } = require("../shared/http");
 const { getRazorpayCredentials } = require("../shared/razorpay");
+const { recordPayment } = require("../shared/payments");
 
 exports.handler = async (event) => {
   const headers = getJsonHeaders("POST, OPTIONS");
@@ -122,6 +123,34 @@ exports.handler = async (event) => {
       };
     }
 
+    const userData =
+      data.userData && typeof data.userData === "object" ? data.userData : {};
+    try {
+      await recordPayment({
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        plan: data.plan,
+        amountMinor: order.amount,
+        currency: order.currency,
+        status: payment.status,
+        paymentMethod: payment.method,
+        signatureVerified: true,
+        customerEmail: userData.email,
+        customerPhone: userData.phone,
+        distinctId: userData.distinct_id,
+      });
+    } catch (error) {
+      console.error("Neon payment persistence failed:", error);
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify({
+          success: false,
+          error: "The payment record could not be saved. Please contact support.",
+        }),
+      };
+    }
+
     posthogLogger.info("payment_verified", {
       razorpay_order_id: razorpay_order_id,
       razorpay_payment_id: razorpay_payment_id,
@@ -158,10 +187,6 @@ exports.handler = async (event) => {
           ? decodeURIComponent(match.slice(name.length + 1))
           : undefined;
       };
-      const userData =
-        data.userData && typeof data.userData === "object"
-          ? data.userData
-          : {};
       const clientIp =
         event.headers["x-nf-client-connection-ip"] ||
         event.headers["x-forwarded-for"] ||
