@@ -2,10 +2,14 @@ exports.handler = async () => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
+    "Cache-Control": "no-store",
     "Content-Type": "application/json"
   };
 
-  const rawKeyId = process.env.RAZORPAY_KEY_ID || "";
+  const useTestKeys =
+    (process.env.PAYMENT_MODE || "").trim().toLowerCase() === "test";
+  const rawKeyId =
+    (useTestKeys ? process.env.RAZORPAY_TEST_KEY_ID : process.env.RAZORPAY_KEY_ID) || "";
   const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
 
   return {
