@@ -6,6 +6,7 @@
 const crypto = require("crypto");
 const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
 const { jsonResponse } = require("../shared/http");
+const { query } = require("../shared/db");
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BREVO_API_URL = "https://api.brevo.com/v3";
@@ -119,6 +120,28 @@ exports.handler = async (event) => {
   if (!pixelId || !accessToken || !tokenSecret) {
     console.error("Missing PIXEL_ID, ACCESS_TOKEN, or THANK_YOU_TOKEN_SECRET.");
     return jsonResponse(503, { error: "The form service is not configured. Please try again later." });
+  }
+
+  try {
+    await query(
+      `INSERT INTO leads
+        (name, email, phone, service, message, source, marketing_consent)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        name,
+        email,
+        phone || null,
+        service || null,
+        message,
+        "website_contact_form",
+        consent,
+      ],
+    );
+  } catch (error) {
+    console.error("Neon lead persistence failed:", error);
+    return jsonResponse(503, {
+      error: "The inquiry service is temporarily unavailable. Please try again later.",
+    });
   }
 
   try {
