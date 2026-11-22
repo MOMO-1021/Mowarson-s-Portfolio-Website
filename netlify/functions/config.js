@@ -1,16 +1,13 @@
+const { getJsonHeaders } = require("../shared/http");
+const { getRazorpayCredentials } = require("../shared/razorpay");
+
 exports.handler = async () => {
   const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
+    ...getJsonHeaders(),
     "Cache-Control": "no-store",
-    "Content-Type": "application/json"
   };
 
-  const useTestKeys =
-    (process.env.PAYMENT_MODE || "").trim().toLowerCase() === "test";
-  const rawKeyId =
-    (useTestKeys ? process.env.RAZORPAY_TEST_KEY_ID : process.env.RAZORPAY_KEY_ID) || "";
-  const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
+  const { key_id } = getRazorpayCredentials();
 
   return {
     statusCode: 200,

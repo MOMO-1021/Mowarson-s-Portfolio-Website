@@ -1,14 +1,11 @@
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
 const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
+const { getJsonHeaders } = require("../shared/http");
+const { getRazorpayCredentials } = require("../shared/razorpay");
 
 exports.handler = async (event) => {
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Content-Type": "application/json",
-  };
+  const headers = getJsonHeaders("POST, OPTIONS");
 
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
@@ -23,20 +20,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    // const rawKeyId = process.env.RAZORPAY_KEY_ID || "";
-    // const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || "";
-    const useTestKeys =
-      (process.env.PAYMENT_MODE || "").trim().toLowerCase() === "test";
-    const rawKeyId =
-      (useTestKeys
-        ? process.env.RAZORPAY_TEST_KEY_ID
-        : process.env.RAZORPAY_KEY_ID) || "";
-    const rawKeySecret =
-      (useTestKeys
-        ? process.env.RAZORPAY_TEST_KEY_SECRET
-        : process.env.RAZORPAY_KEY_SECRET) || "";
-    const key_id = rawKeyId.trim().replace(/^["']|["']$/g, "");
-    const key_secret = rawKeySecret.trim().replace(/^["']|["']$/g, "");
+    const { useTestKeys, key_id, key_secret } = getRazorpayCredentials();
 
     if (!key_id || !key_secret) {
       return {

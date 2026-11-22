@@ -2,14 +2,11 @@ const {
   createCustomQuote,
   createPlanQuotes,
 } = require("../../payment-pricing");
+const { getJsonHeaders } = require("../shared/http");
+const { getRazorpayCredentials } = require("../shared/razorpay");
 
 exports.handler = async (event) => {
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Content-Type": "application/json",
-  };
+  const headers = getJsonHeaders("POST, OPTIONS");
 
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
@@ -23,15 +20,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const useTestKeys =
-      (process.env.PAYMENT_MODE || "").trim().toLowerCase() === "test";
-    const rawSecret = useTestKeys
-      ? process.env.RAZORPAY_TEST_KEY_SECRET
-      : process.env.RAZORPAY_KEY_SECRET;
-    const secret = (rawSecret || "").trim().replace(/^["']|["']$/g, "");
-    // const secret = (process.env.RAZORPAY_KEY_SECRET || "")
-    //   .trim()
-    //   .replace(/^["']|["']$/g, "");
+    const { key_secret: secret } = getRazorpayCredentials();
     const data = JSON.parse(event.body || "{}");
     const currency = String(data.currency || "").toUpperCase();
 

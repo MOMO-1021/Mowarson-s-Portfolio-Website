@@ -5,15 +5,10 @@
 
 const crypto = require("crypto");
 const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
+const { jsonResponse } = require("../shared/http");
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BREVO_API_URL = "https://api.brevo.com/v3";
-
-const jsonResponse = (statusCode, body, extraHeaders = {}) => ({
-  statusCode,
-  headers: { "Content-Type": "application/json", ...extraHeaders },
-  body: JSON.stringify(body),
-});
 
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (character) => ({
