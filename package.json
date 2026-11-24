@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "seo": "node scripts/generate-seo.mjs",
-    "build": "npm run seo",
+    "validate:seo": "node scripts/validate-seo.mjs",
+    "build": "node scripts/generate-seo.mjs && node scripts/validate-seo.mjs",
     "prestart": "npm run seo",
     "start": "node server.js"
   },
