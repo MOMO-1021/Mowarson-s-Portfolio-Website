@@ -448,7 +448,7 @@
                 </div>
 
                 <div id="checkout-method-tip" style="margin-bottom: 14px; padding: 10px 12px; border-radius: 6px; font-size: 0.82rem; line-height: 1.4; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
-                  💡 <strong>Payment Method:</strong> Domestic Indian payment via UPI (GPay/PhonePe), Netbanking, or Cards.
+                  <strong>Domestic Payment:</strong> Pay using UPI (GPay, PhonePe, Paytm), Netbanking, or Debit/Credit Cards.
                 </div>
 
                 <button
@@ -699,16 +699,16 @@
               methodTip.style.background = "#eff6ff";
               methodTip.style.color = "#1e40af";
               methodTip.style.borderColor = "#bfdbfe";
-              methodTip.innerHTML = "💡 <strong>Domestic Payment:</strong> Pay using UPI (GPay, PhonePe, Paytm), Netbanking, or Debit/Credit Cards.";
+              methodTip.innerHTML = "<strong>Domestic Payment:</strong> Pay using UPI (GPay, PhonePe, Paytm), Netbanking, or Debit/Credit Cards.";
             }
           } else {
             note.textContent = `${currency} international payment processed securely via PayPal on Razorpay Checkout.`;
             paymentMethodNote.textContent = `Pay in ${currency} via PayPal on Razorpay Checkout.`;
             if (methodTip) {
-              methodTip.style.background = "#fefce8";
-              methodTip.style.color = "#854d0e";
-              methodTip.style.borderColor = "#fef08a";
-              methodTip.innerHTML = "💡 <strong>International Checkout:</strong> In the payment window, please choose <strong>PayPal</strong>. You can pay with your PayPal balance <em>or any international credit/debit card</em> securely through PayPal.";
+              methodTip.style.background = "#ecfdf5";
+              methodTip.style.color = "#065f46";
+              methodTip.style.borderColor = "#a7f3d0";
+              methodTip.innerHTML = "<strong>International Checkout:</strong> In the payment window, please choose <strong>PayPal</strong>. You can pay with your PayPal balance <em>or any international credit/debit card</em> securely through PayPal.";
             }
           }
           if (customAmountNeedsEntry) {
