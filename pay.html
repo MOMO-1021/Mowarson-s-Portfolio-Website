@@ -243,7 +243,12 @@
                   class="pay-input currency-select"
                   onchange="setCurrency(this.value)"
                 >
-                  <option value="INR">INR - Indian Rupee</option>
+                  <option value="INR">INR - Indian Rupee (₹) [UPI / Domestic Cards]</option>
+                  <option value="USD">USD - US Dollar ($) [PayPal / International]</option>
+                  <option value="EUR">EUR - Euro (€) [PayPal / International]</option>
+                  <option value="GBP">GBP - British Pound (£) [PayPal / International]</option>
+                  <option value="CAD">CAD - Canadian Dollar (C$) [PayPal / International]</option>
+                  <option value="AUD">AUD - Australian Dollar (A$) [PayPal / International]</option>
                 </select>
               </div>
               <p
@@ -251,7 +256,7 @@
                 id="currency-price-note"
                 role="status"
               >
-                INR payments are processed by Razorpay for domestic customers.
+                Select INR for domestic payment (UPI, Cards) or USD/EUR/GBP for PayPal &amp; International cards.
               </p>
 
               <!-- Service Selection -->
@@ -683,10 +688,11 @@
           document.getElementById("price-display-marketing").innerText =
             formatAmount(quotes.marketing.amount, currency);
           if (currency === "INR") {
-            note.textContent = "INR payments are processed by Razorpay.";
-            paymentMethodNote.textContent = "Pay with Razorpay Checkout.";
+            note.textContent = "INR payments are processed by Razorpay (UPI, Netbanking, Cards).";
+            paymentMethodNote.textContent = "Pay with Razorpay Checkout (UPI, Cards, Netbanking).";
           } else {
-            throw new Error("Only domestic INR payments are supported.");
+            note.textContent = `${currency} international payment processed securely via PayPal on Razorpay Checkout.`;
+            paymentMethodNote.textContent = `Pay in ${currency} via PayPal on Razorpay Checkout.`;
           }
           if (customAmountNeedsEntry) {
             note.textContent +=

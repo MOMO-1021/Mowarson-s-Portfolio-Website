@@ -103,17 +103,29 @@ test("Backend: Quote-Token Expiration & Tampering", async (t) => {
 test("Backend: Currency Verification", async (t) => {
   await t.test("Rejects unsupported currencies for quotes", async () => {
     await assert.rejects(
-      async () => createPlanQuotes("USD", TEST_SECRET),
+      async () => createPlanQuotes("XYZ", TEST_SECRET),
       /supported payment currency/i
     );
     await assert.rejects(
-      async () => createPlanQuotes("EUR", TEST_SECRET),
+      async () => createPlanQuotes("JPY", TEST_SECRET),
       /supported payment currency/i
     );
     assert.throws(
-      () => createCustomQuote("GBP", 100, TEST_SECRET),
+      () => createCustomQuote("KRW", 100, TEST_SECRET),
       /supported payment currency/i
     );
+  });
+
+  await t.test("Accepts supported international currencies (USD, EUR, GBP, CAD, AUD)", async () => {
+    const usdQuote = await createPlanQuotes("USD", TEST_SECRET);
+    assert.equal(usdQuote.currency, "USD");
+    assert.equal(usdQuote.website.amount, 5000); // $50.00 in cents
+    assert.equal(usdQuote.marketing.amount, 7000); // $70.00 in cents
+    assert.ok(usdQuote.website.token);
+
+    const customUsd = createCustomQuote("USD", 150, TEST_SECRET);
+    assert.equal(customUsd.currency, "USD");
+    assert.equal(customUsd.amount, 15000); // $150.00 in cents
   });
 });
 

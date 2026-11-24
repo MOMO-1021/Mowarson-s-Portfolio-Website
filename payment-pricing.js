@@ -1,11 +1,20 @@
 const crypto = require("crypto");
 
-// The Razorpay account is configured for domestic INR payments only.
-const CURRENCIES = ["INR"];
+// Supported currencies: Domestic INR + International Currencies (PayPal / Cards on Razorpay)
+const CURRENCIES = ["INR", "USD", "EUR", "GBP", "CAD", "AUD"];
 
 const PLAN_PRICES_USD = {
   website: 5000,
   marketing: 7000,
+};
+
+const FALLBACK_RATES = {
+  USD: 1.0,
+  EUR: 0.95,
+  GBP: 0.79,
+  CAD: 1.40,
+  AUD: 1.55,
+  INR: 86.5,
 };
 
 const QUOTE_LIFETIME_MS = 30 * 60 * 1000;
@@ -44,6 +53,9 @@ async function getUsdRates() {
     cachedRates = data.rates;
     cachedRatesAt = Date.now();
     return cachedRates;
+  } catch (err) {
+    if (cachedRates) return cachedRates;
+    return FALLBACK_RATES;
   } finally {
     clearTimeout(timeoutId);
   }
