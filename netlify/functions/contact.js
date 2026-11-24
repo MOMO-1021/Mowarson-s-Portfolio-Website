@@ -104,8 +104,15 @@ exports.handler = async (event) => {
     return jsonResponse(400, { error: "Please check the phone number and service fields." });
   }
 
+  const isPreview =
+    (process.env.IS_PREVIEW || "").trim().toLowerCase() === "true" ||
+    ["deploy-preview", "branch-deploy"].includes((process.env.CONTEXT || "").trim().toLowerCase());
+
   const brevoApiKey = (process.env.BREVO_API_KEY || "").trim().replace(/^["']|["']$/g, "");
-  const rawListId = (process.env.BREVO_LIST_ID || "").trim();
+  // In preview mode, do not send test leads to the production Brevo list
+  const rawListId = isPreview
+    ? (process.env.BREVO_TEST_LIST_ID || process.env.TEST_BREVO_LIST_ID || "").trim()
+    : (process.env.BREVO_LIST_ID || "").trim();
   const listId = /^\d+$/.test(rawListId) ? Number(rawListId) : null;
   const pixelId = (process.env.PIXEL_ID || "").trim();
   const accessToken = (process.env.ACCESS_TOKEN || "").trim();
@@ -114,7 +121,7 @@ exports.handler = async (event) => {
   if (!brevoApiKey) {
     return jsonResponse(503, { error: "The contact form is temporarily unavailable. Please contact us on WhatsApp." });
   }
-  if (consent && (!Number.isSafeInteger(listId) || listId < 1)) {
+  if (!isPreview && consent && (!Number.isSafeInteger(listId) || listId < 1)) {
     return jsonResponse(503, { error: "Email updates are temporarily unavailable. Please uncheck the optional marketing box or try again." });
   }
   if (!pixelId || !accessToken || !tokenSecret) {
@@ -133,7 +140,7 @@ exports.handler = async (event) => {
         phone || null,
         service || null,
         message,
-        "website_contact_form",
+        isPreview ? "preview_contact_form" : "website_contact_form",
         consent,
       ],
     );
@@ -158,7 +165,7 @@ exports.handler = async (event) => {
           ...(/^\+?\d{5,20}$/.test(sanitizedPhone) ? { SMS: sanitizedPhone } : {}),
         },
         updateEnabled: true,
-        ...(consent ? { listIds: [listId] } : {}),
+        ...(consent && listId ? { listIds: [listId] } : {}),
       }),
     });
     if (!contactResponse.ok) {
@@ -174,7 +181,7 @@ exports.handler = async (event) => {
         sender: { name: "Mowarson Portfolio Lead", email: "mowarsondeveloper@gmail.com" },
         to: [{ email: notifyEmail, name: "Mowarson" }],
         replyTo: { email, name },
-        subject: "New website inquiry",
+        subject: isPreview ? "[TEST PREVIEW] New website inquiry" : "New website inquiry",
         htmlContent: `
           <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b;max-width:600px;margin:0 auto;padding:24px;">
             <h2>New Website Inquiry</h2>

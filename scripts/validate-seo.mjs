@@ -45,6 +45,9 @@ function readRedirectUrls() {
 
 const htmlFiles = findHtmlFiles(root);
 const redirectUrls = readRedirectUrls();
+const isPreviewValidation = process.argv.includes("--preview") ||
+  process.env.IS_PREVIEW === "true" ||
+  ["deploy-preview", "branch-deploy"].includes((process.env.CONTEXT || "").trim().toLowerCase());
 
 console.log("=== SEO & DYNAMIC BLOG BUILD VALIDATION ===");
 
@@ -66,10 +69,26 @@ if (!sitemapXml.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap
 // Extract all <url> blocks
 const urlBlocks = sitemapXml.match(/<url>[\s\S]*?<\/url>/g) || [];
 if (urlBlocks.length === 0) {
+  if (isPreviewValidation) {
+    pass("Preview sitemap contains 0 public URL entries as expected to prevent search crawler indexing");
+    console.log("\n🎉 ALL PREVIEW STAGING VALIDATIONS PASSED!");
+    process.exit(0);
+  }
   fail("sitemap.xml contains no <url> entries");
 }
 
 const sitemapUrls = [];
+
+if (isPreviewValidation) {
+  pass("Preview staging validation active: confirming all preview pages are protected with NOINDEX");
+  for (const file of htmlFiles) {
+    const html = fs.readFileSync(file, "utf8");
+    if (!isNoindex(html)) {
+      fail(`Preview staging protection failed: Page ${path.relative(root, file)} is missing noindex meta tag!`);
+    }
+  }
+  pass(`Preview staging protection verified: All ${htmlFiles.length} pages are guarded with NOINDEX`);
+}
 for (const block of urlBlocks) {
   const locMatch = block.match(/<loc>(.*?)<\/loc>/);
   const lastmodMatch = block.match(/<lastmod>(.*?)<\/lastmod>/);

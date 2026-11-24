@@ -2,7 +2,17 @@ const { Pool } = require("@neondatabase/serverless");
 
 let pool;
 
+const isPreviewEnvironment = () => {
+  const context = (process.env.CONTEXT || "").trim().toLowerCase();
+  const isPreview = (process.env.IS_PREVIEW || "").trim().toLowerCase() === "true";
+  return isPreview || context === "deploy-preview" || context === "branch-deploy";
+};
+
 const getDatabaseUrl = () => {
+  if (isPreviewEnvironment()) {
+    const previewDbUrl = (process.env.PREVIEW_DATABASE_URL || process.env.DATABASE_URL || "").trim();
+    if (previewDbUrl) return previewDbUrl;
+  }
   const databaseUrl = (process.env.DATABASE_URL || "").trim();
   if (!databaseUrl) {
     throw new Error("DATABASE_URL is not configured.");
@@ -34,4 +44,4 @@ const withTransaction = async (callback) => {
   }
 };
 
-module.exports = { getPool, query, withTransaction };
+module.exports = { getPool, query, withTransaction, getDatabaseUrl, isPreviewEnvironment };

@@ -8,7 +8,13 @@
     "publish:post": "node scripts/publish-post.mjs",
     "seo": "node scripts/generate-seo.mjs",
     "validate:seo": "node scripts/validate-seo.mjs",
+    "build:preview": "node scripts/generate-blog.mjs && node scripts/generate-seo.mjs --preview && node scripts/validate-seo.mjs --preview",
     "build": "node scripts/generate-blog.mjs && node scripts/generate-seo.mjs && node scripts/validate-seo.mjs",
+    "test:backend": "node tests/backend.test.mjs",
+    "test:build": "node tests/build.test.mjs",
+    "test:browser": "node tests/browser.test.mjs",
+    "test:seo": "node tests/seo.test.mjs",
+    "test": "node tests/backend.test.mjs && node tests/build.test.mjs && node tests/browser.test.mjs && node tests/seo.test.mjs",
     "prestart": "npm run build",
     "start": "node server.js"
   },

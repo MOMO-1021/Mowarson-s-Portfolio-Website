@@ -29,6 +29,10 @@ function isNoindex(html) {
   return /<meta\s+[^>]*name=["']robots["'][^>]*content=["'][^"']*(?:noindex|none)/i.test(html);
 }
 
+const isPreviewBuild = process.argv.includes("--preview") ||
+  process.env.IS_PREVIEW === "true" ||
+  ["deploy-preview", "branch-deploy"].includes((process.env.CONTEXT || "").trim().toLowerCase());
+
 function getBlogPostsMap() {
   const map = { ...siteConfig.blogPosts };
   if (fs.existsSync(postsJsonPath)) {
@@ -469,6 +473,20 @@ function updateHtml(relativePath, filePath, existingSitemapDates) {
   const blogPostsMap = getBlogPostsMap();
   const pageCfg = siteConfig.pages[relativePath] || blogPostsMap[relativePath];
   const isExcluded = relativePath === "404.html" || relativePath === "thank-you.html";
+
+  // Handle Robots Meta Tag & Preview Staging Protection (Phase 10)
+  const shouldBeNoindex = isPreviewBuild || pageCfg?.noindex || relativePath === "404.html" || relativePath === "thank-you.html";
+  if (shouldBeNoindex) {
+    const robotsContent = (relativePath === "pay.html" && !isPreviewBuild) ? "noindex, follow" : "noindex, nofollow";
+    if (/<meta\s+[^>]*name=["']robots["'][^>]*>/i.test(html)) {
+      html = html.replace(/<meta\s+[^>]*name=["']robots["'][^>]*>/i, `<meta name="robots" content="${robotsContent}" />`);
+    } else {
+      html = html.replace("</head>", `    <meta name="robots" content="${robotsContent}" />\n  </head>`);
+    }
+  } else {
+    // Normal production build: remove any preview or accidental noindex tags
+    html = html.replace(/[ \t]*<meta\s+[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex[^"']*["'][^>]*>\s*/gi, "\n");
+  }
 
   if (!isExcluded) {
     const canonicalUrl = pageCfg?.canonical ||

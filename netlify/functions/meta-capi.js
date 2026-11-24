@@ -21,13 +21,18 @@ exports.handler = async (event, context) => {
     const { eventName, eventId, userData, customData } = body;
 
     // 3. Grab credentials from environment variables
+    const isPreview =
+      (process.env.IS_PREVIEW || "").trim().toLowerCase() === "true" ||
+      ["deploy-preview", "branch-deploy"].includes((process.env.CONTEXT || "").trim().toLowerCase());
+
     const pixelId = process.env.META_PIXEL_ID || process.env.PIXEL_ID;
     const accessToken =
       process.env.META_CAPI_ACCESS_TOKEN || process.env.ACCESS_TOKEN;
     const testEventCode =
       process.env.META_TEST_EVENT_CODE ||
       process.env.TEST_EVENT_CODE ||
-      process.env.test_event_code;
+      process.env.test_event_code ||
+      (isPreview ? "TEST71947" : undefined);
 
     if (!pixelId || !accessToken) {
       throw new Error(
