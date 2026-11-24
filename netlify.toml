@@ -20,8 +20,6 @@
   PAYMENT_MODE = "test"
   NODE_ENV = "preview"
   IS_PREVIEW = "true"
-  PREVIEW_DATABASE_URL = "postgresql://neondb_owner:npg_JTEbDw3pF0Qk@ep-polished-term-a1ucne6h-pooler.ap-southeast-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require"
-  DATABASE_URL = "postgresql://neondb_owner:npg_JTEbDw3pF0Qk@ep-polished-term-a1ucne6h-pooler.ap-southeast-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require"
   META_TEST_EVENT_CODE = "TEST71947"
   BREVO_LIST_ID = "999999"
 
@@ -38,8 +36,6 @@
   PAYMENT_MODE = "test"
   NODE_ENV = "staging"
   IS_PREVIEW = "true"
-  PREVIEW_DATABASE_URL = "postgresql://neondb_owner:npg_JTEbDw3pF0Qk@ep-polished-term-a1ucne6h-pooler.ap-southeast-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require"
-  DATABASE_URL = "postgresql://neondb_owner:npg_JTEbDw3pF0Qk@ep-polished-term-a1ucne6h-pooler.ap-southeast-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require"
   META_TEST_EVENT_CODE = "TEST71947"
   BREVO_LIST_ID = "999999"
 
