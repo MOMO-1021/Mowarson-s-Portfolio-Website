@@ -32,7 +32,7 @@
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacy Policy – Mowarson Developer</title>
-  <meta name="description" content="Privacy Policy for Mowarson Developer. Learn how we collect, protect, and handle your data and online payment information securely via Razorpay.">
+  <meta name="description" content="Privacy Policy for Mowarson Developer. Learn how we collect, protect, and handle your data and online payment information securely via Razorpay, PayPal, and Neon.">
     <link rel="canonical" href="https://mowarsondeveloper.netlify.app/privacy.html" />
 <link rel="stylesheet" href="style.css">
   
@@ -120,7 +120,7 @@
           "url": "https://mowarsondeveloper.netlify.app/privacy.html",
           "name": "Privacy Policy – Mowarson Developer",
           "headline": "Privacy Policy – Mowarson Developer",
-          "description": "Privacy Policy for Mowarson Developer. Learn how we collect, protect, and handle your data and online payment information securely via Razorpay.",
+          "description": "Privacy Policy for Mowarson Developer. Learn how we collect, protect, and handle your data and online payment information securely via Razorpay, PayPal, and Neon.",
           "inLanguage": "en-IN",
           "isPartOf": {
             "@id": "https://mowarsondeveloper.netlify.app/#website"
@@ -170,7 +170,7 @@
           </p>
 
           <div class="policy-highlight-box">
-            <strong>Key Summary:</strong> We only collect necessary project and communication information. We never sell or rent your personal information. All online payments are securely processed through Razorpay's PCI-DSS compliant, 256-bit encrypted gateway.
+            <strong>Key Summary:</strong> We only collect necessary project, contact, and communication information. We never sell or rent your personal data. All online transactions are processed through PCI-DSS compliant, 256-bit encrypted gateways via Razorpay and PayPal. Data stored in our database (Neon PostgreSQL) is protected with strict encryption in transit and at rest.
           </div>
 
           <h2>1. Information We Collect</h2>
@@ -179,16 +179,19 @@
             <li><strong>Contact Information:</strong> Full name, email address, phone/WhatsApp number.</li>
             <li><strong>Business &amp; Project Details:</strong> Company or business name, website URLs, project requirements, and service preferences.</li>
             <li><strong>Communication Records:</strong> Messages, feedback, and project correspondence shared via contact forms, email, or WhatsApp.</li>
+            <li><strong>Technical &amp; Attribution Metadata:</strong> Browser User-Agent, anonymized connection data, and advertising attribution cookies (<code>_fbp</code>, <code>_fbc</code>) collected during payment or inquiry submissions to prevent payment fraud and deduplicate conversion events.</li>
           </ul>
 
           <h2>2. Payment Information &amp; Security</h2>
           <p>
-            All online financial transactions conducted on this website are routed securely through <strong>Razorpay Payment Gateway</strong> (Razorpay Software Private Limited). 
+            All financial transactions conducted on this website are routed securely through authorized, tier-1 payment gateways:
           </p>
           <ul>
-            <li>Mowarson Developer does <strong>not</strong> collect, store, or view sensitive payment card details, CVV numbers, UPI PINs, or bank net banking passwords on our servers.</li>
-            <li>All transaction data is transmitted using industry-standard 256-bit Secure Sockets Layer (SSL) encryption meeting international PCI-DSS compliance standards.</li>
-            <li>Upon successful payment, Razorpay shares a verification reference (Payment ID), transaction status, and payer contact details so we can issue your tax/project invoice and commence work.</li>
+            <li><strong>Razorpay:</strong> Handles domestic Indian Rupee (INR) transactions via UPI, Net Banking, and domestic cards under PCI-DSS Level 1 compliance.</li>
+            <li><strong>PayPal:</strong> Handles international foreign currency transactions (USD, EUR, GBP, CAD, AUD), allowing foreign buyers to pay via PayPal balance or international debit/credit cards via PayPal Guest Checkout without exposing card details to our servers.</li>
+            <li><strong>Zero Sensitive Card Storage:</strong> Mowarson Developer does <strong>not</strong> collect, view, or store sensitive payment card numbers, CVVs, UPI PINs, or banking passwords on our servers. Sensitive card entry is handled entirely by Razorpay and PayPal.</li>
+            <li><strong>Cryptographic Signatures &amp; Webhook Idempotency:</strong> All payment sessions, order quotes, and webhook notifications are authenticated using HMAC-SHA256 cryptographic signatures. Duplicate payments and replayed webhooks are automatically detected and handled idempotently.</li>
+            <li><strong>Database Security &amp; Branch Isolation:</strong> Transaction metadata (Payment ID, Order ID, service plan, amount, currency, timestamp, and contact email) is securely recorded in our serverless <strong>Neon PostgreSQL</strong> database with SSL/TLS encryption in transit and AES-256 at rest. Staging environments use isolated preview database branches to safeguard live production data.</li>
           </ul>
 
           <h2>3. How We Use Your Information</h2>
@@ -203,23 +206,32 @@
 
           <h2>4. Data Sharing &amp; Third Parties</h2>
           <p>
-            We do not sell your personally identifiable information or share it with third parties for their own marketing purposes. Data is shared only with trusted service providers as needed to provide our services and communications:
+            We do not sell your personally identifiable information or share it with third parties for their own marketing purposes. Data is shared only with trusted technical service providers as strictly necessary to operate our website, communicate with you, and deliver services:
           </p>
           <ul>
-            <li><strong>Razorpay:</strong> To process secure UPI, card, and Net Banking payments.</li>
-            <li><strong>ConvertKit / Kit:</strong> To manage optional newsletter communications.</li>
-            <li><strong>Brevo:</strong> To process contact form inquiries, send inquiry notifications, and manage optional marketing emails only when you choose to opt in.</li>
-            <li><strong>Google Analytics:</strong> Anonymized metrics to evaluate website usage and improve site performance.</li>
+            <li><strong>Razorpay:</strong> To process secure domestic Indian payments (UPI, Net Banking, Cards).</li>
+            <li><strong>PayPal:</strong> To process secure international payments in foreign currencies and foreign debit/credit card guest transactions.</li>
+            <li><strong>Neon Database:</strong> Serverless cloud PostgreSQL hosting our encrypted database for lead persistence, dynamic blog generation, and payment verification records.</li>
+            <li><strong>Netlify:</strong> Edge delivery platform providing global hosting, continuous deployment build hooks, and secure serverless function execution.</li>
+            <li><strong>Brevo (formerly Sendinblue):</strong> To handle contact form inquiries, deliver transactional email confirmations, and manage optional newsletter lists.</li>
+            <li><strong>Meta Pixel &amp; Conversions API (CAPI):</strong> To measure marketing effectiveness and optimize campaigns with privacy-safe SHA-256 hashed identifiers and server-side deduplication.</li>
+            <li><strong>PostHog &amp; Google Analytics 4:</strong> Privacy-conscious analytics platforms used to analyze site traffic, page usability, and technical performance with Consent Mode default denial enabled.</li>
           </ul>
 
           <h2>5. Cookies &amp; Tracking Technologies</h2>
           <p>
-            Our website uses standard browser cookies and analytics tags to understand how visitors interact with our pages, optimize loading speeds, and enhance navigation. You may choose to disable cookies through your browser settings without affecting core browsing capability.
+            Our website uses standard browser cookies and analytics tags to understand how visitors interact with our pages, optimize loading speeds, and measure campaign performance:
           </p>
+          <ul>
+            <li><strong>Essential &amp; Security Cookies:</strong> Ensure website navigation, quote session validation, and secure payment submission.</li>
+            <li><strong>Analytics Cookies:</strong> Google Analytics (`_ga`) and PostHog anonymous session cookies help us understand page navigation and user journeys.</li>
+            <li><strong>Marketing &amp; Attribution Tags:</strong> Meta cookies (`_fbp`, `_fbc`) help measure ad attribution and prevent duplicate event reporting.</li>
+          </ul>
+          <p>You can adjust cookie settings in your browser at any time or browse in private/incognito mode without affecting basic website access.</p>
 
-          <h2>6. Your Rights</h2>
+          <h2>6. Your Rights &amp; Legal Compliance</h2>
           <p>
-            You have the right to request access to the personal data we hold about you, request corrections to inaccurate information, or request deletion of your contact data from our active databases, subject to legal and accounting record-retention requirements.
+            We adhere to applicable data protection laws, including the <strong>Digital Personal Data Protection (DPDP) Act, 2023 (India)</strong>, as well as recognized global privacy principles (such as GDPR and CCPA) for international clients. You have the right to request access to your personal data, request correction of inaccurate records, or request deletion of your contact details from our active databases, subject to standard legal, tax, and accounting record-retention rules.
           </p>
 
           <h2>7. Contact Information</h2>

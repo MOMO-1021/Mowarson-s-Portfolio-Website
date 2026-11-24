@@ -32,7 +32,7 @@
 <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms & Conditions – Mowarson Developer</title>
-  <meta name="description" content="Terms and Conditions of Service for Mowarson Developer. Details on project milestones, payment processing via Razorpay, intellectual property, and service terms.">
+  <meta name="description" content="Terms and Conditions of Service for Mowarson Developer. Details on project milestones, multi-currency payment processing via Razorpay and PayPal, intellectual property, and service terms.">
     <link rel="canonical" href="https://mowarsondeveloper.netlify.app/terms.html" />
 <link rel="stylesheet" href="style.css">
   
@@ -120,7 +120,7 @@
           "url": "https://mowarsondeveloper.netlify.app/terms.html",
           "name": "Terms & Conditions – Mowarson Developer",
           "headline": "Terms & Conditions – Mowarson Developer",
-          "description": "Terms and Conditions of Service for Mowarson Developer. Details on project milestones, payment processing via Razorpay, intellectual property, and service terms.",
+          "description": "Terms and Conditions of Service for Mowarson Developer. Details on project milestones, multi-currency payment processing via Razorpay and PayPal, intellectual property, and service terms.",
           "inLanguage": "en-IN",
           "isPartOf": {
             "@id": "https://mowarsondeveloper.netlify.app/#website"
@@ -180,18 +180,23 @@
           </ul>
           <p>The specific deliverables, scope, and milestones for each engagement are agreed upon prior to project commencement via our official proposal, WhatsApp consultation, or the service package selected on our portal.</p>
 
-          <h2>2. Payment Terms &amp; Processing</h2>
+          <h2>2. Payment Terms, Currencies &amp; Processing</h2>
           <ul>
-            <li>All online payments are securely processed via <strong>Razorpay</strong>, supporting UPI (Google Pay, PhonePe, Paytm), RuPay, Net Banking, and international credit/debit cards.</li>
-            <li>Prices listed on the website (e.g., ₹5,000 for standalone conversion website design, ₹7,000 for brand positioning &amp; marketing bundles) represent standard package base rates. Custom project scopes are agreed upon individually.</li>
-            <li>Projects may require a 50% milestone advance or full upfront package fee prior to commencement, as specified during booking.</li>
-            <li>Upon successful transaction, an electronic receipt and Payment ID are generated instantly.</li>
+            <li><strong>Domestic Payments (India):</strong> Indian Rupee (INR - ₹) payments are processed securely via <strong>Razorpay</strong>, supporting UPI (Google Pay, PhonePe, Paytm, BHIM), Net Banking, and domestic RuPay, Visa, and Mastercard cards.</li>
+            <li><strong>International Payments (Global):</strong> For international clients, we accept payments in major foreign currencies including <strong>USD ($), EUR (€), GBP (£), CAD (C$), and AUD (A$)</strong>. These payments are processed securely via <strong>PayPal on Razorpay Checkout</strong>. Clients can pay using their PayPal account balance or directly with any international debit or credit card (Visa, Mastercard, American Express) via PayPal Guest Checkout without needing a PayPal account.</li>
+            <li><strong>International Bank Transfers (MoneySaver):</strong> Clients may also settle invoices and high-ticket project milestones via direct local bank wire transfers into designated virtual receiving accounts (ACH for USD, SEPA for EUR, Faster Payments for GBP, and SWIFT wires).</li>
+            <li><strong>Real-Time Dynamic Pricing &amp; Cryptographic Price Locks:</strong> Foreign currency quotes on our checkout portal reflect live exchange rates. To protect against exchange rate volatility and guarantee pricing transparency, quote tokens are cryptographically signed with HMAC-SHA256 and remain valid for 15 minutes upon generation.</li>
+            <li><strong>Standard Packages &amp; Custom Milestones:</strong> Standard packages (such as Conversion Website Design and the Brand Positioning &amp; Marketing Bundle) are listed with transparent baseline rates. For bespoke projects, clients can pay customized milestone or retainer amounts using the Custom Amount option on our Pay Online portal.</li>
+            <li><strong>Cryptographic Receipts &amp; Idempotency:</strong> Upon successful transaction verification, a cryptographically authenticated Payment ID is generated, duplicate payment attempts are blocked, and order records are securely persisted in our database.</li>
           </ul>
 
           <h2>3. Digital Service Delivery &amp; Timelines</h2>
           <div class="policy-highlight-box">
             <strong>Fulfillment &amp; Digital Delivery:</strong> All services provided by Mowarson Developer are strictly digital. Staging links, code repositories, design assets, and marketing setup credentials are delivered electronically via email and WhatsApp. Typical turnaround is between <strong>3 to 10 business days</strong> depending on project complexity. No physical shipping is required.
           </div>
+          <p>
+            <strong>Staging Previews &amp; Staging Isolation:</strong> Work-in-progress websites, design previews, and dynamic blog generation are hosted on dedicated, isolated deploy preview environments protected with strict <code>noindex, nofollow, noarchive</code> directives. This guarantees that unreleased client drafts and preview iterations are never exposed to or indexed by public search engines prior to formal launch.
+          </p>
 
           <h2>4. Client Responsibilities</h2>
           <p>To ensure project milestones are delivered on schedule, clients agree to:</p>
