@@ -15,6 +15,7 @@
     "test:browser": "node tests/browser.test.mjs",
     "test:seo": "node tests/seo.test.mjs",
     "test": "node tests/backend.test.mjs && node tests/build.test.mjs && node tests/browser.test.mjs && node tests/seo.test.mjs",
+    "verify:rollout": "node scripts/verify-phase12-rollout.mjs",
     "prestart": "npm run build",
     "start": "node server.js"
   },

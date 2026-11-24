@@ -40,6 +40,7 @@ const functionHandlers = {
   "/api/quote": require("./netlify/functions/quote").handler,
   "/api/create-order": require("./netlify/functions/create-order").handler,
   "/api/verify-payment": require("./netlify/functions/verify-payment").handler,
+  "/api/publish-post": require("./netlify/functions/publish-post").handler,
 };
 
 const invokeFunction = async (handler, req, res) => {
