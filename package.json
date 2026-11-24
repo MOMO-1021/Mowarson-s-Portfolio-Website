@@ -4,10 +4,11 @@
   "description": "Mowarson Developer Portfolio & Payment Portal",
   "main": "server.js",
   "scripts": {
+    "build:blog": "node scripts/generate-blog.mjs",
     "seo": "node scripts/generate-seo.mjs",
     "validate:seo": "node scripts/validate-seo.mjs",
-    "build": "node scripts/generate-seo.mjs && node scripts/validate-seo.mjs",
-    "prestart": "npm run seo",
+    "build": "node scripts/generate-blog.mjs && node scripts/generate-seo.mjs && node scripts/validate-seo.mjs",
+    "prestart": "npm run build",
     "start": "node server.js"
   },
   "dependencies": {

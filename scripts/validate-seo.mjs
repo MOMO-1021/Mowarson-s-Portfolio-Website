@@ -5,6 +5,7 @@ import { siteConfig } from "./site-config.mjs";
 const root = process.cwd();
 const sitemapFile = path.join(root, "sitemap.xml");
 const redirectsFile = path.join(root, "_redirects");
+const postsJsonPath = path.join(root, "data", "posts.json");
 
 function fail(msg) {
   console.error(`❌ CHECK FAILED: ${msg}`);
@@ -45,7 +46,7 @@ function readRedirectUrls() {
 const htmlFiles = findHtmlFiles(root);
 const redirectUrls = readRedirectUrls();
 
-console.log("=== SEO BUILD VALIDATION ===");
+console.log("=== SEO & DYNAMIC BLOG BUILD VALIDATION ===");
 
 // 1. VALID XML & SITEMAP VALIDATION
 if (!fs.existsSync(sitemapFile)) {
@@ -141,13 +142,72 @@ for (const redirectPath of redirectUrls) {
 }
 pass("Sitemap contains only canonical, indexable URLs and no redirect-only URLs");
 
-// 5. PER-PAGE VALIDATIONS ACROSS ALL HTML FILES
+// 5. DYNAMIC BLOG AND DRAFT SAFETY CHECKS
+if (fs.existsSync(postsJsonPath)) {
+  const allPosts = JSON.parse(fs.readFileSync(postsJsonPath, "utf8"));
+  const publishedPosts = allPosts.filter((p) => p.status === "published");
+  const draftPosts = allPosts.filter((p) => p.status === "draft" || p.status === "archived");
+
+  const blogHtmlContent = fs.readFileSync(path.join(root, "blog.html"), "utf8");
+
+  // Check 5.1: Every published post exists as a server-rendered HTML file
+  for (const post of publishedPosts) {
+    const postFilePath = path.join(root, "blog", `${post.slug}.html`);
+    if (!fs.existsSync(postFilePath)) {
+      fail(`Published post missing HTML file: blog/${post.slug}.html`);
+    }
+
+    const postHtml = fs.readFileSync(postFilePath, "utf8");
+    if (!postHtml.includes('<article class="blog-post">')) {
+      fail(`Published post blog/${post.slug}.html is missing server-rendered article container`);
+    }
+
+    // Google can read article content without JavaScript
+    const postTextSnippet = post.content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 50);
+    const htmlText = postHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+    if (!htmlText.includes(postTextSnippet)) {
+      fail(`Server-rendered HTML in blog/${post.slug}.html does not contain article content`);
+    }
+
+    // Must be in sitemap
+    const expectedLoc = post.canonical_url || `${siteConfig.productionUrl}/blog/${post.slug}.html`;
+    if (!sitemapUrls.includes(expectedLoc)) {
+      fail(`Published post '${expectedLoc}' missing from sitemap.xml`);
+    }
+
+    // Must appear in blog index
+    if (!blogHtmlContent.includes(`blog/${post.slug}.html`)) {
+      fail(`Published post '${post.slug}' missing from blog.html index`);
+    }
+  }
+  pass(`Published blog content (${publishedPosts.length} posts) is fully server-rendered and listed in sitemap & blog index`);
+
+  // Check 5.2: Draft content never appears publicly
+  for (const draft of draftPosts) {
+    const draftFilePath = path.join(root, "blog", `${draft.slug}.html`);
+    if (fs.existsSync(draftFilePath)) {
+      fail(`Draft post file '${draftFilePath}' must NOT exist publicly!`);
+    }
+
+    const draftLoc = `${siteConfig.productionUrl}/blog/${draft.slug}.html`;
+    if (sitemapUrls.includes(draftLoc)) {
+      fail(`Draft post '${draftLoc}' found in sitemap.xml! Draft content must never appear in sitemap.`);
+    }
+
+    if (blogHtmlContent.includes(`blog/${draft.slug}.html`)) {
+      fail(`Draft post '${draft.slug}' linked in blog.html index! Draft content must never appear publicly.`);
+    }
+  }
+  pass(`Draft content safety: ${draftPosts.length} draft/archived post(s) successfully prevented from appearing publicly`);
+}
+
+// 6. PER-PAGE VALIDATIONS ACROSS ALL HTML FILES
 for (const filePath of htmlFiles) {
   const relPath = path.relative(root, filePath).split(path.sep).join("/");
   const html = fs.readFileSync(filePath, "utf8");
   const noindex = isNoindex(html) || relPath === "404.html";
 
-  // Check 5.1: Exactly one title per page
+  // Check 6.1: Exactly one title per page
   const titleMatches = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/gi) || [];
   if (titleMatches.length !== 1) {
     fail(`Expected exactly 1 <title> in ${relPath}, found ${titleMatches.length}`);
@@ -157,7 +217,7 @@ for (const filePath of htmlFiles) {
     fail(`Empty <title> tag in ${relPath}`);
   }
 
-  // Check 5.2: Exactly one meta description per indexable page
+  // Check 6.2: Exactly one meta description per indexable page
   const descMatches = html.match(/<meta\s+[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/gi) || [];
   if (!noindex) {
     if (descMatches.length !== 1) {
@@ -169,7 +229,7 @@ for (const filePath of htmlFiles) {
     }
   }
 
-  // Check 5.3: Canonical URL check
+  // Check 6.3: Canonical URL check
   const canonicalMatches = html.match(/<link\s+[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["'][^>]*>/gi) || [];
   if (!noindex || relPath === "pay.html") {
     if (canonicalMatches.length !== 1) {
@@ -193,7 +253,7 @@ for (const filePath of htmlFiles) {
     }
   }
 
-  // Check 5.4: Valid JSON-LD syntax and page-specific schema verification
+  // Check 6.4: Valid JSON-LD syntax and page-specific schema verification
   const ldJsonMatches = html.match(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi) || [];
 
   if (relPath === "404.html") {
@@ -268,7 +328,7 @@ for (const filePath of htmlFiles) {
     }
   }
 
-  // Check 5.5: Integrations preserved (GA4, GTM, PostHog)
+  // Check 6.5: Integrations preserved (GA4, GTM, PostHog)
   if (!html.includes(siteConfig.integrations.ga4Id)) {
     fail(`Accidental removal of GA4 (${siteConfig.integrations.ga4Id}) in ${relPath}`);
   }
@@ -286,5 +346,5 @@ pass("All indexable HTML pages have valid, verified canonical URLs");
 pass("All pages have valid JSON-LD schemas matching specification");
 pass("All integrations (GA4, GTM, PostHog) are fully preserved across all pages");
 
-console.log("\n🎉 ALL SEO VALIDATION CHECKS PASSED!");
+console.log("\n🎉 ALL BUILD & DYNAMIC SEO VALIDATIONS PASSED!");
 process.exit(0);

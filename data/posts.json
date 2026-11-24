@@ -1,0 +1,87 @@
+[
+  {
+    "slug": "lead-generation-strategies",
+    "title": "Lead Generation Strategies That Work – Convert Traffic into Customers",
+    "description": "Proven lead generation strategies for small businesses: CTAs, landing pages, forms, and content upgrades that turn visitors into leads.",
+    "content": "<h1>Lead Generation Strategies That Work</h1>\r\n      <p>You’ve worked hard to get traffic to your website. Now it’s time to turn that traffic into leads and customers. Here are five proven strategies I use with my clients.</p>\r\n      \r\n      <!-- Video embed: Lead Generation Strategies -->\r\n      <div class=\"video-wrapper\">\r\n        <div class=\"video-container\">\r\n          <iframe \r\n            src=\"https://www.youtube.com/embed/QxI9v_-8hcI\" \r\n            title=\"Lead Generation Strategies That Work\"\r\n            allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\"\r\n            allowfullscreen>\r\n          </iframe>\r\n        </div>\r\n        <div class=\"video-caption\">\r\n          Watch this overview of effective lead generation tactics.\r\n        </div>\r\n      </div>\r\n      \r\n      <h2>1. Create a Compelling Lead Magnet</h2>\r\n      <p>Offer something valuable in exchange for an email address – a free ebook, checklist, or discount code. Make sure it’s directly related to what your audience wants.</p>\r\n      \r\n      <h2>2. Use Clear, Action‑Oriented CTAs</h2>\r\n      <p>Your calls‑to‑action should stand out and tell visitors exactly what to do. “Get Your Free Quote” works better than “Submit.”</p>\r\n      \r\n      <h2>3. Optimize Your Forms</h2>\r\n      <p>Keep forms short (name and email is often enough). Place them above the fold and use trust signals like “We never spam.”</p>\r\n      \r\n      <h2>4. Design Dedicated Landing Pages</h2>\r\n      <p>For each campaign, create a landing page with a single goal. Remove navigation links to keep visitors focused.</p>\r\n      \r\n      <h2>5. Add Exit‑Intent Popups</h2>\r\n      <p>When a user is about to leave, display a targeted offer. Done right, this can capture up to 10% of abandoning visitors.</p>\r\n      \r\n      <p>Ready to implement these strategies? My <a href=\"../services.html\">conversion website design</a> service can help you build a site that converts. <a href=\"../contact.html\">Let’s talk</a>.</p>\r\n\r\n      <!-- NEW: Need a Lead-Generating Website? -->\r\n      <div style=\"background: #2563eb10; border-radius: 24px; padding: 24px; margin: 48px 0;\">\r\n        <h3 style=\"margin-top: 0;\">Need a Lead-Generating Website?</h3>\r\n        <p>I design websites that turn visitors into paying customers. Explore my services or contact me to get started.</p>\r\n        <a href=\"../services.html\" class=\"btn-small\" style=\"margin-right: 12px;\">View Services</a>\r\n        <a href=\"../contact.html\" class=\"btn-small\">Contact Me</a>\r\n      </div>\r\n\r\n      <!-- Related Articles -->\r\n      <div class=\"related-grid\">\r\n        <div class=\"related-card\">\r\n          <h3><a href=\"seo-friendly-website-design-tips.html\">SEO Friendly Website Design</a></h3>\r\n          <p>Learn the essential elements of an SEO‑optimized site: site structure, keyword placement, technical tips, and more.</p>\r\n          <a href=\"seo-friendly-website-design-tips.html\" class=\"read-more\">Read More →</a>\r\n        </div>\r\n        <div class=\"related-card\">\r\n          <h3><a href=\"web-design-consultant-tips.html\">How to Choose a Web Design Consultant</a></h3>\r\n          <p>What to look for when hiring a consultant, and how the right advice can save you time and money.</p>\r\n          <a href=\"web-design-consultant-tips.html\" class=\"read-more\">Read More →</a>\r\n        </div>\r\n      </div>",
+    "author": "Mowarson",
+    "featured_image": "https://mowarsondeveloper.netlify.app/My-Image.jpg",
+    "status": "published",
+    "published_at": "2026-03-25T14:32:49Z",
+    "updated_at": "2026-11-22T00:32:23Z",
+    "canonical_url": "https://mowarsondeveloper.netlify.app/blog/lead-generation-strategies.html",
+    "created_at": "2026-03-25T14:32:49Z",
+    "articleSection": "Lead Generation & Conversion",
+    "keywords": [
+      "lead generation",
+      "conversion rate optimization",
+      "landing pages",
+      "call to action",
+      "small business marketing"
+    ],
+    "breadcrumbName": "Lead Generation Strategies"
+  },
+  {
+    "slug": "seo-friendly-website-design-tips",
+    "title": "SEO Friendly Website Design – Actionable Tips & Best Practices",
+    "description": "Learn how to create an SEO friendly website with actionable tips on page speed, keyword placement, and technical SEO from an expert designer.",
+    "content": "<h1>SEO Friendly Website Design: A Practical Guide</h1>\r\n      <p>You want a website that not only looks good but also appears on the first page of Google. In this guide, I’ll share my proven process for <strong>SEO friendly website design</strong>—the same techniques I use for all my clients.</p>\r\n      \r\n      <!-- Video embed: SEO Friendly Web Design Tutorial -->\r\n      <div class=\"video-wrapper\">\r\n        <div class=\"video-container\">\r\n          <iframe \r\n            src=\"https://www.youtube.com/embed/SIR4Kn62bLQ\" \r\n            title=\"SEO Friendly Web Design Tutorial\"\r\n            allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\"\r\n            allowfullscreen>\r\n          </iframe>\r\n        </div>\r\n        <div class=\"video-caption\">\r\n          Watch this quick guide on building SEO‑friendly websites.\r\n        </div>\r\n      </div>\r\n      \r\n      <h2>1. Start with Keyword Research</h2>\r\n      <p>Before writing a single line of code, research what your potential customers are searching for. This informs the page structure, headings, and content. For example, if you’re a local plumber, target phrases like “emergency plumber near me” and “plumbing services [City].”</p>\r\n      \r\n      <h2>2. Build a Solid Technical Foundation</h2>\r\n      <p>Search engines need to crawl and index your site easily. Ensure:</p>\r\n      <ul>\r\n        <li><strong>Clean, semantic HTML</strong> with proper heading hierarchy (H1, H2, etc.).</li>\r\n        <li><strong>Fast loading times</strong> (image optimization, minification, caching).</li>\r\n        <li><strong>Mobile responsiveness</strong> (Google’s mobile‑first indexing).</li>\r\n        <li><strong>XML sitemap and robots.txt</strong>.</li>\r\n      </ul>\r\n      \r\n      <h2>3. On-Page SEO Elements</h2>\r\n      <p>Every page gets unique title tags, meta descriptions, and URLs that include target keywords. Use internal linking to pass authority between pages—like linking this article to my <a href=\"../services.html\">conversion website design</a> page.</p>\r\n      \r\n      <h2>4. Content That Answers Questions</h2>\r\n      <p>Google loves helpful content. Write articles, FAQs, and service pages that address your customers’ pain points. This builds trust and improves dwell time—a positive ranking signal.</p>\r\n      \r\n      <h2>5. Ongoing Optimization</h2>\r\n      <p>SEO isn’t a one‑time task. Set up analytics and monitor performance, making adjustments as needed. You’ll always know how your site is performing.</p>\r\n      \r\n      <p>Ready to build an SEO‑friendly site? Check out my <a href=\"../services.html\">conversion website design services</a> or <a href=\"../contact.html\">contact me</a> for a custom quote.</p>\r\n\r\n      <!-- NEW: Get a Website That Ranks -->\r\n      <div style=\"background: #2563eb10; border-radius: 24px; padding: 24px; margin: 48px 0;\">\r\n        <h3 style=\"margin-top: 0;\">Ready to Build an SEO‑Friendly Website?</h3>\r\n        <p>Let me turn these strategies into a high‑ranking, lead‑generating site for your business.</p>\r\n        <a href=\"../services.html\" class=\"btn-small\" style=\"margin-right: 12px;\">Explore Services →</a>\r\n        <a href=\"../contact.html\" class=\"btn-small\">Contact Me</a>\r\n      </div>\r\n\r\n      <!-- Related Articles -->\r\n      <div class=\"related-grid\">\r\n        <div class=\"related-card\">\r\n          <h3><a href=\"lead-generation-strategies.html\">Lead Generation Strategies That Work</a></h3>\r\n          <p>Proven tactics to turn website visitors into leads—CTAs, forms, landing pages, and more.</p>\r\n          <a href=\"lead-generation-strategies.html\" class=\"read-more\">Read More →</a>\r\n        </div>\r\n        <div class=\"related-card\">\r\n          <h3><a href=\"web-design-consultant-tips.html\">How to Choose a Web Design Consultant</a></h3>\r\n          <p>What to look for when hiring a consultant, and how the right advice can save you time and money.</p>\r\n          <a href=\"web-design-consultant-tips.html\" class=\"read-more\">Read More →</a>\r\n        </div>\r\n      </div>",
+    "author": "Mowarson",
+    "featured_image": "https://mowarsondeveloper.netlify.app/My-Image.jpg",
+    "status": "published",
+    "published_at": "2026-03-25T14:32:49Z",
+    "updated_at": "2026-11-22T00:32:23Z",
+    "canonical_url": "https://mowarsondeveloper.netlify.app/blog/seo-friendly-website-design-tips.html",
+    "created_at": "2026-03-25T14:32:49Z",
+    "articleSection": "SEO & Web Design",
+    "keywords": [
+      "SEO website design",
+      "technical SEO",
+      "keyword research",
+      "page speed optimization",
+      "mobile responsiveness"
+    ],
+    "breadcrumbName": "SEO Friendly Website Design Tips"
+  },
+  {
+    "slug": "web-design-consultant-tips",
+    "title": "How to Choose a Web Design Consultant – Tips for Business Owners",
+    "description": "Learn what to look for when hiring a web design consultant, and how the right advice can save you time and money on your website project.",
+    "content": "<h1>How to Choose a Web Design Consultant</h1>\r\n      <p>Hiring a web design consultant can be a game‑changer for your business – but only if you choose the right one. Here are key factors to consider before you book a session.</p>\r\n      \r\n      <!-- Video embed: How to Hire a Web Design Consultant -->\r\n      <div class=\"video-wrapper\">\r\n        <div class=\"video-container\">\r\n          <iframe \r\n            src=\"https://www.youtube.com/embed/iXCDIyL8dRs\" \r\n            title=\"How to Hire a Web Design Consultant\"\r\n            allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\"\r\n            allowfullscreen>\r\n          </iframe>\r\n        </div>\r\n        <div class=\"video-caption\">\r\n          Learn what to ask before hiring a consultant.\r\n        </div>\r\n      </div>\r\n      \r\n      <h2>1. Look for Relevant Experience</h2>\r\n      <p>Ask about past projects similar to yours. A consultant who has worked with small businesses in your industry will understand your challenges and opportunities better than a generalist.</p>\r\n      \r\n      <h2>2. Check Their Strategic Approach</h2>\r\n      <p>A good consultant doesn’t just talk about design – they ask about your business goals, target audience, and marketing plans. They should offer a clear process for how they’ll help you.</p>\r\n      \r\n      <h2>3. Read Testimonials and Case Studies</h2>\r\n      <p>Look for evidence of results. Did they help other businesses increase traffic, improve conversion rates, or save money on development?</p>\r\n      \r\n      <h2>4. Understand Their Communication Style</h2>\r\n      <p>You’ll be working closely together, so make sure they explain things clearly and listen to your ideas. A free initial call is a great way to gauge compatibility.</p>\r\n      \r\n      <h2>5. Clarify Deliverables and Pricing</h2>\r\n      <p>Will you receive a written report? A strategy document? Ongoing support? Know exactly what you’re paying for.</p>\r\n      \r\n      <p>If you’re looking for a consultant who ticks all these boxes, <a href=\"../services.html\">check out my services</a> or <a href=\"../contact.html\">contact me</a> for a free introductory chat.</p>\r\n\r\n      <!-- NEW: Ready to Get Expert Advice? -->\r\n      <div style=\"background: #2563eb10; border-radius: 24px; padding: 24px; margin: 48px 0;\">\r\n        <h3 style=\"margin-top: 0;\">Ready to Get Expert Advice?</h3>\r\n        <p>Let’s discuss your website goals and create a strategy that works. Book a session or contact me today.</p>\r\n        <a href=\"../services.html\" class=\"btn-small\" style=\"margin-right: 12px;\">Explore Services →</a>\r\n        <a href=\"../contact.html\" class=\"btn-small\">Contact Me</a>\r\n      </div>\r\n\r\n      <!-- Related Articles -->\r\n      <div class=\"related-grid\">\r\n        <div class=\"related-card\">\r\n          <h3><a href=\"seo-friendly-website-design-tips.html\">SEO Friendly Website Design</a></h3>\r\n          <p>Learn the essential elements of an SEO‑optimized site: site structure, keyword placement, technical tips, and more.</p>\r\n          <a href=\"seo-friendly-website-design-tips.html\" class=\"read-more\">Read More →</a>\r\n        </div>\r\n        <div class=\"related-card\">\r\n          <h3><a href=\"lead-generation-strategies.html\">Lead Generation Strategies That Work</a></h3>\r\n          <p>Proven tactics to turn website visitors into leads—CTAs, forms, landing pages, and more.</p>\r\n          <a href=\"lead-generation-strategies.html\" class=\"read-more\">Read More →</a>\r\n        </div>\r\n      </div>",
+    "author": "Mowarson",
+    "featured_image": "https://mowarsondeveloper.netlify.app/My-Image.jpg",
+    "status": "published",
+    "published_at": "2026-03-25T14:32:49Z",
+    "updated_at": "2026-11-22T00:32:23Z",
+    "canonical_url": "https://mowarsondeveloper.netlify.app/blog/web-design-consultant-tips.html",
+    "created_at": "2026-03-25T14:32:49Z",
+    "articleSection": "Web Consulting & Brand Positioning",
+    "keywords": [
+      "web design consultant",
+      "hiring a web designer",
+      "brand positioning consultant",
+      "website strategy",
+      "small business web design"
+    ],
+    "breadcrumbName": "How to Choose a Web Design Consultant"
+  },
+  {
+    "slug": "upcoming-ai-branding-guide",
+    "title": "Upcoming AI Branding Guide (Draft)",
+    "description": "Internal preview of modern AI branding workflows. Not for public indexing.",
+    "content": "<h1>Upcoming AI Branding Guide</h1><p>This draft guide is strictly in progress and must never appear publicly.</p>",
+    "author": "Mowarson",
+    "featured_image": "https://mowarsondeveloper.netlify.app/My-Image.jpg",
+    "status": "draft",
+    "published_at": null,
+    "updated_at": "2026-11-24T10:21:00.567Z",
+    "canonical_url": "https://mowarsondeveloper.netlify.app/blog/upcoming-ai-branding-guide.html",
+    "created_at": "2026-11-24T10:21:00.568Z",
+    "articleSection": "AI & Brand Strategy",
+    "keywords": [
+      "AI branding",
+      "draft"
+    ],
+    "breadcrumbName": "Upcoming AI Branding Guide"
+  }
+]

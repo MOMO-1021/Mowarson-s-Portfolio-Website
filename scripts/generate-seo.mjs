@@ -5,6 +5,7 @@ import { siteConfig } from "./site-config.mjs";
 
 const root = process.cwd();
 const outputFile = path.join(root, "sitemap.xml");
+const postsJsonPath = path.join(root, "data", "posts.json");
 
 function escapeXml(value) {
   return String(value)
@@ -28,6 +29,37 @@ function isNoindex(html) {
   return /<meta\s+[^>]*name=["']robots["'][^>]*content=["'][^"']*(?:noindex|none)/i.test(html);
 }
 
+function getBlogPostsMap() {
+  const map = { ...siteConfig.blogPosts };
+  if (fs.existsSync(postsJsonPath)) {
+    try {
+      const posts = JSON.parse(fs.readFileSync(postsJsonPath, "utf8"));
+      for (const p of posts) {
+        if (p.status === "published") {
+          const key = `blog/${p.slug}.html`;
+          map[key] = {
+            title: p.title,
+            description: p.description,
+            author: p.author || "Mowarson",
+            datePublished: p.published_at ? p.published_at.slice(0, 10) : (map[key]?.datePublished || "2026-03-25"),
+            dateModified: p.updated_at ? p.updated_at.slice(0, 10) : (map[key]?.dateModified || "2026-11-22"),
+            image: p.featured_image || map[key]?.image || siteConfig.defaultImage,
+            canonical: p.canonical_url || `${siteConfig.productionUrl}/blog/${p.slug}.html`,
+            articleSection: p.articleSection || map[key]?.articleSection || "Brand Positioning & Marketing",
+            keywords: p.keywords || map[key]?.keywords || ["Brand Positioning", "Web Design"],
+            breadcrumbName: p.breadcrumbName || map[key]?.breadcrumbName || p.title.split("–")[0].trim(),
+            priority: "0.7",
+            changefreq: "monthly"
+          };
+        }
+      }
+    } catch (e) {
+      // Ignore parse errors, fallback to siteConfig
+    }
+  }
+  return map;
+}
+
 function readExistingSitemapDates(sitemapPath) {
   const dates = {};
   if (!fs.existsSync(sitemapPath)) return dates;
@@ -47,7 +79,9 @@ function readExistingSitemapDates(sitemapPath) {
 }
 
 function getRealLastModifiedDate(filePath, relativePath, existingSitemapDates = {}) {
+  const blogPostsMap = getBlogPostsMap();
   const canonical = siteConfig.pages[relativePath]?.canonical ||
+    blogPostsMap[relativePath]?.canonical ||
     (relativePath === "index.html" ? `${siteConfig.productionUrl}/` : `${siteConfig.productionUrl}/${relativePath}`);
 
   // 1. Try git log for exact commit date
@@ -63,9 +97,9 @@ function getRealLastModifiedDate(filePath, relativePath, existingSitemapDates = 
     // Git unavailable
   }
 
-  // 2. Check siteConfig definition for blog posts
-  if (siteConfig.blogPosts[relativePath]?.dateModified) {
-    return siteConfig.blogPosts[relativePath].dateModified;
+  // 2. Check blog post map definition
+  if (blogPostsMap[relativePath]?.dateModified) {
+    return blogPostsMap[relativePath].dateModified;
   }
 
   // 3. Fallback to existing sitemap date if available
@@ -93,7 +127,8 @@ function findHtmlFiles(directory, files = []) {
 }
 
 function extractBlogData(relativePath, html, filePath, existingSitemapDates) {
-  const config = siteConfig.blogPosts[relativePath] || {};
+  const blogPostsMap = getBlogPostsMap();
+  const config = blogPostsMap[relativePath] || siteConfig.blogPosts[relativePath] || {};
   const title = config.title || readMatch(html, /<title[^>]*>([\s\S]*?)<\/title>/i, relativePath);
   const description = config.description || readMatch(html, /<meta\s+[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i, "");
   const canonical = config.canonical || `${siteConfig.productionUrl}/${relativePath}`;
@@ -125,8 +160,10 @@ function buildPageSchema(relativePath, html, filePath, existingSitemapDates) {
     return null;
   }
 
+  const blogPostsMap = getBlogPostsMap();
   const pageCfg = siteConfig.pages[relativePath] || {};
   const canonicalUrl = pageCfg.canonical ||
+    blogPostsMap[relativePath]?.canonical ||
     (relativePath === "index.html" ? `${siteConfig.productionUrl}/` : `${siteConfig.productionUrl}/${relativePath}`);
 
   const title = readMatch(html, /<title[^>]*>([\s\S]*?)<\/title>/i, relativePath);
@@ -429,7 +466,8 @@ function updateHtml(relativePath, filePath, existingSitemapDates) {
   }
 
   // 5. Ensure Canonical URL tag is correct and not duplicated on indexable / designated pages
-  const pageCfg = siteConfig.pages[relativePath];
+  const blogPostsMap = getBlogPostsMap();
+  const pageCfg = siteConfig.pages[relativePath] || blogPostsMap[relativePath];
   const isExcluded = relativePath === "404.html" || relativePath === "thank-you.html";
 
   if (!isExcluded) {
@@ -502,11 +540,18 @@ function updateHtml(relativePath, filePath, existingSitemapDates) {
 
 // Main Execution
 const existingSitemapDates = readExistingSitemapDates(outputFile);
+const blogPostsMap = getBlogPostsMap();
 const htmlFiles = findHtmlFiles(root);
 const sitemapEntries = [];
 
 for (const filePath of htmlFiles) {
   const relativePath = relativeUrl(path.relative(root, filePath));
+
+  // Exclude non-published / draft posts in blog directory
+  if (relativePath.startsWith("blog/") && !blogPostsMap[relativePath]) {
+    continue;
+  }
+
   const html = updateHtml(relativePath, filePath, existingSitemapDates);
 
   const pageCfg = siteConfig.pages[relativePath] || {};
@@ -516,7 +561,7 @@ for (const filePath of htmlFiles) {
     continue;
   }
 
-  const blogCfg = siteConfig.blogPosts[relativePath];
+  const blogCfg = blogPostsMap[relativePath];
   const priority = pageCfg.priority || blogCfg?.priority || (relativePath.startsWith("blog/") ? "0.7" : "0.5");
   const changefreq = pageCfg.changefreq || blogCfg?.changefreq || (relativePath.startsWith("blog/") ? "monthly" : "yearly");
   const lastmod = getRealLastModifiedDate(filePath, relativePath, existingSitemapDates);
