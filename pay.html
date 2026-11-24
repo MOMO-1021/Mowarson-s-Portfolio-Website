@@ -447,6 +447,10 @@
                   ></textarea>
                 </div>
 
+                <div id="checkout-method-tip" style="margin-bottom: 14px; padding: 10px 12px; border-radius: 6px; font-size: 0.82rem; line-height: 1.4; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;">
+                  💡 <strong>Payment Method:</strong> Domestic Indian payment via UPI (GPay/PhonePe), Netbanking, or Cards.
+                </div>
+
                 <button
                   type="submit"
                   class="btn-pay-submit"
@@ -687,12 +691,25 @@
             formatAmount(quotes.website.amount, currency);
           document.getElementById("price-display-marketing").innerText =
             formatAmount(quotes.marketing.amount, currency);
+          const methodTip = document.getElementById("checkout-method-tip");
           if (currency === "INR") {
             note.textContent = "INR payments are processed by Razorpay (UPI, Netbanking, Cards).";
             paymentMethodNote.textContent = "Pay with Razorpay Checkout (UPI, Cards, Netbanking).";
+            if (methodTip) {
+              methodTip.style.background = "#eff6ff";
+              methodTip.style.color = "#1e40af";
+              methodTip.style.borderColor = "#bfdbfe";
+              methodTip.innerHTML = "💡 <strong>Domestic Payment:</strong> Pay using UPI (GPay, PhonePe, Paytm), Netbanking, or Debit/Credit Cards.";
+            }
           } else {
             note.textContent = `${currency} international payment processed securely via PayPal on Razorpay Checkout.`;
             paymentMethodNote.textContent = `Pay in ${currency} via PayPal on Razorpay Checkout.`;
+            if (methodTip) {
+              methodTip.style.background = "#fefce8";
+              methodTip.style.color = "#854d0e";
+              methodTip.style.borderColor = "#fef08a";
+              methodTip.innerHTML = "💡 <strong>International Checkout:</strong> In the payment window, please choose <strong>PayPal</strong>. You can pay with your PayPal balance <em>or any international credit/debit card</em> securely through PayPal.";
+            }
           }
           if (customAmountNeedsEntry) {
             note.textContent +=
@@ -1054,6 +1071,10 @@
             if (reasonText.toLowerCase().includes("authentication failed")) {
               alert(
                 "Payment could not be completed. Please try again or contact support.",
+              );
+            } else if (reasonText.toLowerCase().includes("international card")) {
+              alert(
+                "Direct card entry is not available for international cards. Please select the 'PayPal' option in the checkout popup — you can pay with any international debit or credit card (Visa, Mastercard, Amex) through PayPal without needing a PayPal account.",
               );
             } else {
               alert("Payment failed: " + reasonText);
