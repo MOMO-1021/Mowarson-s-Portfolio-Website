@@ -4,6 +4,7 @@
 /api/quote                                    /.netlify/functions/quote                        200
 /api/create-order                             /.netlify/functions/create-order                 200
 /api/verify-payment                           /.netlify/functions/verify-payment               200
+/api/publish-post                             /.netlify/functions/publish-post              200
 
 # Pretty URLs
 /pay                                          /pay.html                                        200

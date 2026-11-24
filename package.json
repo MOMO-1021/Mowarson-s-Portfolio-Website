@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build:blog": "node scripts/generate-blog.mjs",
+    "publish:post": "node scripts/publish-post.mjs",
     "seo": "node scripts/generate-seo.mjs",
     "validate:seo": "node scripts/validate-seo.mjs",
     "build": "node scripts/generate-blog.mjs && node scripts/generate-seo.mjs && node scripts/validate-seo.mjs",
