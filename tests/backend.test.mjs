@@ -20,6 +20,11 @@ import { handler as createOrderHandler } from "../netlify/functions/create-order
 import { handler as verifyPaymentHandler } from "../netlify/functions/verify-payment.js";
 import { handler as contactHandler } from "../netlify/functions/contact.js";
 import { handler as publishPostHandler } from "../netlify/functions/publish-post.js";
+import { handler as posthogToGa4Handler } from "../netlify/functions/posthog-to-ga4.js";
+import {
+  sanitizeGa4Params,
+  sendGa4MeasurementProtocolEvent
+} from "../netlify/shared/ga4.js";
 
 const TEST_SECRET = process.env.RAZORPAY_KEY_SECRET || "test_secret_for_regression_12345";
 
@@ -402,6 +407,99 @@ test("Backend: API Error Responses", async (t) => {
       assert.ok(body.error);
     } finally {
       process.env.ADMIN_API_KEY = origKey;
+    }
+  });
+});
+
+test("Backend: GA4 Measurement Protocol", async (t) => {
+  await t.test("sanitizeGa4Params strips internal $-prefixed and reserved keys while preserving ecommerce items", () => {
+    const cleaned = sanitizeGa4Params({
+      $current_url: "https://example.com/pay.html",
+      $device_id: "dev_123",
+      ga_session_id: "12345",
+      firebase_screen: "pay",
+      google_ad: "test",
+      transaction_id: "pay_123",
+      value: 4999,
+      items: [
+        { item_id: "website", item_name: "Conversion Website Design", quantity: 1, price: 4999 }
+      ]
+    });
+
+    assert.equal(cleaned.$current_url, undefined);
+    assert.equal(cleaned.$device_id, undefined);
+    assert.equal(cleaned.ga_session_id, undefined);
+    assert.equal(cleaned.firebase_screen, undefined);
+    assert.equal(cleaned.google_ad, undefined);
+    assert.equal(cleaned.transaction_id, "pay_123");
+    assert.equal(cleaned.value, 4999);
+    assert.equal(cleaned.currency, "INR");
+    assert.equal(cleaned.engagement_time_msec, 100);
+    assert.equal(cleaned.items.length, 1);
+    assert.equal(cleaned.items[0].item_id, "website");
+  });
+
+  await t.test("sendGa4MeasurementProtocolEvent skips cleanly when env vars are absent", async () => {
+    const result = await sendGa4MeasurementProtocolEvent({
+      eventName: "purchase",
+      clientId: "123.456",
+      params: { transaction_id: "pay_123", value: 100, currency: "INR" },
+      measurementId: "",
+      apiSecret: ""
+    });
+    assert.equal(result.skipped, true);
+  });
+
+  await t.test("posthog-to-ga4 forwards purchase events with items and ga_client_id", async () => {
+    const origMeasurementId = process.env.GA4_MEASUREMENT_ID;
+    const origApiSecret = process.env.GA4_API_SECRET;
+    const origFetch = globalThis.fetch;
+
+    process.env.GA4_MEASUREMENT_ID = "G-S7P05N251P";
+    process.env.GA4_API_SECRET = "test_api_secret";
+
+    let capturedUrl = "";
+    let capturedBody = null;
+    globalThis.fetch = async (url, init) => {
+      capturedUrl = url;
+      capturedBody = JSON.parse(init.body);
+      return new Response(null, { status: 204 });
+    };
+
+    try {
+      const res = await posthogToGa4Handler({
+        httpMethod: "POST",
+        body: JSON.stringify({
+          event: {
+            event: "purchase",
+            distinct_id: "user_1",
+            properties: {
+              ga_client_id: "111.222",
+              $current_url: "https://mowarsondeveloper.netlify.app/pay.html",
+              transaction_id: "pay_abc",
+              value: 4999,
+              currency: "INR",
+              items: [{ item_id: "website", item_name: "Website", quantity: 1, price: 4999 }]
+            }
+          }
+        })
+      });
+
+      assert.equal(res.statusCode, 200);
+      const body = JSON.parse(res.body);
+      assert.equal(body.ok, true);
+      assert.equal(body.event, "purchase");
+      assert.equal(body.transaction_id, "pay_abc");
+      assert.ok(capturedUrl.includes("measurement_id=G-S7P05N251P"));
+      assert.equal(capturedBody.client_id, "111.222");
+      assert.equal(capturedBody.events[0].name, "purchase");
+      assert.equal(capturedBody.events[0].params.transaction_id, "pay_abc");
+      assert.equal(capturedBody.events[0].params.$current_url, undefined);
+      assert.equal(capturedBody.events[0].params.items.length, 1);
+    } finally {
+      globalThis.fetch = origFetch;
+      process.env.GA4_MEASUREMENT_ID = origMeasurementId;
+      process.env.GA4_API_SECRET = origApiSecret;
     }
   });
 });

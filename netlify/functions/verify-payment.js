@@ -4,6 +4,7 @@ const { flushPostHogLogs, posthogLogger } = require("../../posthog-logs");
 const { getJsonHeaders } = require("../shared/http");
 const { getRazorpayCredentials } = require("../shared/razorpay");
 const { recordPayment } = require("../shared/payments");
+const { sendGa4MeasurementProtocolEvent } = require("../shared/ga4");
 
 exports.handler = async (event) => {
   const headers = getJsonHeaders("POST, OPTIONS");
@@ -247,6 +248,33 @@ exports.handler = async (event) => {
       console.error(
         "Meta Purchase CAPI skipped: Meta Pixel or access token is missing",
       );
+    }
+
+    try {
+      const ga4Result = await sendGa4MeasurementProtocolEvent({
+        eventName: "purchase",
+        clientId: userData.ga_client_id || userData.distinct_id || razorpay_payment_id,
+        params: {
+          transaction_id: razorpay_payment_id,
+          value: order.amount / 100,
+          currency: order.currency,
+          items: [
+            {
+              item_id: data.plan || "payment",
+              item_name: data.plan || "Service Payment",
+              quantity: 1,
+              price: order.amount / 100,
+            },
+          ],
+        },
+      });
+      if (ga4Result.skipped) {
+        console.warn("GA4 Measurement Protocol skipped:", ga4Result.reason);
+      } else if (!ga4Result.ok) {
+        console.error("GA4 Measurement Protocol purchase failed:", ga4Result.status, ga4Result.error);
+      }
+    } catch (ga4Error) {
+      console.error("GA4 Measurement Protocol request failed:", ga4Error);
     }
 
     return {

@@ -632,6 +632,13 @@
         return match ? decodeURIComponent(match.slice(name.length + 1)) : undefined;
       }
 
+      function getGaClientId() {
+        const gaCookie = getMetaBrowserCookie("_ga");
+        if (!gaCookie) return undefined;
+        const parts = gaCookie.split(".");
+        return parts.length >= 4 ? parts.slice(-2).join(".") : gaCookie;
+      }
+
       async function setCurrency(currency) {
         const previousCurrency = currentCurrency;
         const currencySelect = document.getElementById("currency-select");
@@ -950,6 +957,7 @@
                       client_user_agent: navigator.userAgent,
                       fbp: getMetaBrowserCookie("_fbp"),
                       fbc: getMetaBrowserCookie("_fbc"),
+                      ga_client_id: getGaClientId(),
                     },
                   }),
                 });
@@ -1012,6 +1020,7 @@
                       client_user_agent: navigator.userAgent,
                       fbp: getMetaBrowserCookie("_fbp"),
                       fbc: getMetaBrowserCookie("_fbc"),
+                      ga_client_id: getGaClientId(),
                     },
                     customData: {
                       value: purchaseValue,

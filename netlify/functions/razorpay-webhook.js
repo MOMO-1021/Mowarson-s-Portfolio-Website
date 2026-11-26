@@ -5,6 +5,7 @@ const {
   failWebhookEvent,
   recordPayment,
 } = require("../shared/payments");
+const { sendGa4MeasurementProtocolEvent } = require("../shared/ga4");
 
 const hashValue = (value) =>
   value
@@ -245,6 +246,33 @@ exports.handler = async (event) => {
     console.error(
       "Meta webhook CAPI skipped: Meta environment variables are missing",
     );
+  }
+
+  try {
+    const ga4Result = await sendGa4MeasurementProtocolEvent({
+      eventName: "purchase",
+      clientId: payment.notes?.ga_client_id || distinctId,
+      params: {
+        transaction_id: payment.id,
+        value: amountInMajorUnits,
+        currency: payment.currency || "INR",
+        items: [
+          {
+            item_id: payment.notes?.plan || "payment",
+            item_name: payment.notes?.plan || "Service Payment",
+            quantity: 1,
+            price: amountInMajorUnits,
+          },
+        ],
+      },
+    });
+    if (ga4Result.skipped) {
+      console.warn("GA4 webhook Measurement Protocol skipped:", ga4Result.reason);
+    } else if (!ga4Result.ok) {
+      console.error("GA4 webhook Measurement Protocol failed:", ga4Result.status, ga4Result.error);
+    }
+  } catch (ga4Error) {
+    console.error("GA4 webhook Measurement Protocol request failed:", ga4Error);
   }
 
   return {
