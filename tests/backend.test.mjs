@@ -453,10 +453,16 @@ test("Backend: GA4 Measurement Protocol", async (t) => {
   await t.test("posthog-to-ga4 forwards purchase events with items and ga_client_id", async () => {
     const origMeasurementId = process.env.GA4_MEASUREMENT_ID;
     const origApiSecret = process.env.GA4_API_SECRET;
+    const origPaymentMode = process.env.PAYMENT_MODE;
+    const origIsPreview = process.env.IS_PREVIEW;
+    const origContext = process.env.CONTEXT;
     const origFetch = globalThis.fetch;
 
     process.env.GA4_MEASUREMENT_ID = "G-S7P05N251P";
     process.env.GA4_API_SECRET = "test_api_secret";
+    process.env.PAYMENT_MODE = "live";
+    process.env.IS_PREVIEW = "";
+    process.env.CONTEXT = "production";
 
     let capturedUrl = "";
     let capturedBody = null;
@@ -500,6 +506,60 @@ test("Backend: GA4 Measurement Protocol", async (t) => {
       globalThis.fetch = origFetch;
       process.env.GA4_MEASUREMENT_ID = origMeasurementId;
       process.env.GA4_API_SECRET = origApiSecret;
+      process.env.PAYMENT_MODE = origPaymentMode;
+      process.env.IS_PREVIEW = origIsPreview;
+      process.env.CONTEXT = origContext;
+    }
+  });
+
+  await t.test("posthog-to-ga4 skips test payment events", async () => {
+    const origMeasurementId = process.env.GA4_MEASUREMENT_ID;
+    const origApiSecret = process.env.GA4_API_SECRET;
+    const origPaymentMode = process.env.PAYMENT_MODE;
+    const origIsPreview = process.env.IS_PREVIEW;
+    const origContext = process.env.CONTEXT;
+    const origFetch = globalThis.fetch;
+
+    process.env.GA4_MEASUREMENT_ID = "G-S7P05N251P";
+    process.env.GA4_API_SECRET = "test_api_secret";
+    process.env.PAYMENT_MODE = "live";
+    process.env.IS_PREVIEW = "";
+    process.env.CONTEXT = "production";
+
+    let fetchCalled = false;
+    globalThis.fetch = async () => {
+      fetchCalled = true;
+      return new Response(null, { status: 204 });
+    };
+
+    try {
+      const res = await posthogToGa4Handler({
+        httpMethod: "POST",
+        body: JSON.stringify({
+          event: {
+            event: "purchase",
+            distinct_id: "user_test",
+            properties: {
+              payment_mode: "test",
+              transaction_id: "pay_test_123",
+              value: 4999,
+              currency: "INR"
+            }
+          }
+        })
+      });
+
+      assert.equal(res.statusCode, 200);
+      const body = JSON.parse(res.body);
+      assert.equal(body.skipped, true);
+      assert.equal(fetchCalled, false, "Should not forward test payment to GA4");
+    } finally {
+      globalThis.fetch = origFetch;
+      process.env.GA4_MEASUREMENT_ID = origMeasurementId;
+      process.env.GA4_API_SECRET = origApiSecret;
+      process.env.PAYMENT_MODE = origPaymentMode;
+      process.env.IS_PREVIEW = origIsPreview;
+      process.env.CONTEXT = origContext;
     }
   });
 });

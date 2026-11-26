@@ -7,13 +7,14 @@ exports.handler = async () => {
     "Cache-Control": "no-store",
   };
 
-  const { key_id } = getRazorpayCredentials();
+  const { useTestKeys, key_id } = getRazorpayCredentials();
 
   return {
     statusCode: 200,
     headers,
     body: JSON.stringify({
       key_id,
+      payment_mode: useTestKeys ? "test" : "live",
       posthog_key: process.env.POSTHOG_PROJECT_TOKEN || "",
       posthog_host: process.env.POSTHOG_HOST || ""
     })

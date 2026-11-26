@@ -592,8 +592,19 @@
       let currentCurrency = "INR";
       let activeQuotes = {};
       let currencyRates = {};
+      let currentPaymentIsTest = ["localhost", "127.0.0.1"].includes(
+        window.location.hostname,
+      );
 
       function capturePaymentEvent(eventName, properties) {
+        if (currentPaymentIsTest) {
+          console.info(
+            "[Analytics] Skipped test payment event:",
+            eventName,
+            properties,
+          );
+          return;
+        }
         if (window.posthog && typeof window.posthog.capture === "function") {
           window.posthog.capture(eventName, properties);
         }
@@ -895,6 +906,10 @@
           const orderData = await orderResponse.json();
           const orderId = orderData.order_id || orderData.id;
           const checkoutKey = orderData.key_id;
+          currentPaymentIsTest =
+            ["localhost", "127.0.0.1"].includes(window.location.hostname) ||
+            orderData.payment_mode === "test" ||
+            String(checkoutKey || "").startsWith("rzp_test_");
 
           if (
             !orderId ||
@@ -997,6 +1012,7 @@
                 const purchaseValue = verifyResult.amount / 100;
                 const purchaseCurrency = verifyResult.currency;
 
+                if (!currentPaymentIsTest) {
                 // 1. Browser Pixel
                 if (window.fbq) {
                   window.fbq("track", "Purchase", {
@@ -1030,6 +1046,7 @@
                     },
                   }),
                 }).catch((err) => console.error("Meta CAPI failed:", err));
+                }
                 // --- META PIXEL & CAPI TRACKING END ---
 
                 showSuccessConfirmation(

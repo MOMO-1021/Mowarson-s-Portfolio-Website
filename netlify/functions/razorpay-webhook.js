@@ -6,6 +6,7 @@ const {
   recordPayment,
 } = require("../shared/payments");
 const { sendGa4MeasurementProtocolEvent } = require("../shared/ga4");
+const { isTestMode } = require("../shared/razorpay");
 
 const hashValue = (value) =>
   value
@@ -156,31 +157,37 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: "Webhook persistence failed" };
   }
 
-  // 4. Send `purchase` and `payment_completed` to PostHog
-  const eventsToSend = [
-    {
-      event: "purchase",
-      distinct_id: distinctId,
-      properties: baseProperties,
-    },
-    {
-      event: "payment_completed",
-      distinct_id: distinctId,
-      properties: baseProperties,
-    },
-  ];
+  const isTestPayment =
+    isTestMode() ||
+    String(payment.notes?.payment_mode || "").trim().toLowerCase() === "test";
 
-  for (const item of eventsToSend) {
-    await fetch(`${posthogHost}/capture/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        api_key: posthogKey,
-        event: item.event,
-        distinct_id: item.distinct_id,
-        properties: item.properties,
-      }),
-    });
+  // 4. Send `purchase` and `payment_completed` to PostHog (skip test payments)
+  if (!isTestPayment) {
+    const eventsToSend = [
+      {
+        event: "purchase",
+        distinct_id: distinctId,
+        properties: baseProperties,
+      },
+      {
+        event: "payment_completed",
+        distinct_id: distinctId,
+        properties: baseProperties,
+      },
+    ];
+
+    for (const item of eventsToSend) {
+      await fetch(`${posthogHost}/capture/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          api_key: posthogKey,
+          event: item.event,
+          distinct_id: item.distinct_id,
+          properties: item.properties,
+        }),
+      });
+    }
   }
 
   const pixelId =
@@ -198,7 +205,7 @@ exports.handler = async (event) => {
   const metaEventId =
     payment.order_id || payload.payload?.order?.entity?.id || payment.id;
 
-  if (pixelId && accessToken) {
+  if (pixelId && accessToken && (!isTestPayment || testEventCode)) {
     const email = payment.email || payment.notes?.client_email;
     const phone = payment.contact || payment.notes?.client_phone;
     const metaPayload = {
@@ -248,31 +255,35 @@ exports.handler = async (event) => {
     );
   }
 
-  try {
-    const ga4Result = await sendGa4MeasurementProtocolEvent({
-      eventName: "purchase",
-      clientId: payment.notes?.ga_client_id || distinctId,
-      params: {
-        transaction_id: payment.id,
-        value: amountInMajorUnits,
-        currency: payment.currency || "INR",
-        items: [
-          {
-            item_id: payment.notes?.plan || "payment",
-            item_name: payment.notes?.plan || "Service Payment",
-            quantity: 1,
-            price: amountInMajorUnits,
-          },
-        ],
-      },
-    });
-    if (ga4Result.skipped) {
-      console.warn("GA4 webhook Measurement Protocol skipped:", ga4Result.reason);
-    } else if (!ga4Result.ok) {
-      console.error("GA4 webhook Measurement Protocol failed:", ga4Result.status, ga4Result.error);
+  if (isTestPayment) {
+    console.info("GA4 webhook Measurement Protocol skipped for test payment:", payment.id);
+  } else {
+    try {
+      const ga4Result = await sendGa4MeasurementProtocolEvent({
+        eventName: "purchase",
+        clientId: payment.notes?.ga_client_id || distinctId,
+        params: {
+          transaction_id: payment.id,
+          value: amountInMajorUnits,
+          currency: payment.currency || "INR",
+          items: [
+            {
+              item_id: payment.notes?.plan || "payment",
+              item_name: payment.notes?.plan || "Service Payment",
+              quantity: 1,
+              price: amountInMajorUnits,
+            },
+          ],
+        },
+      });
+      if (ga4Result.skipped) {
+        console.warn("GA4 webhook Measurement Protocol skipped:", ga4Result.reason);
+      } else if (!ga4Result.ok) {
+        console.error("GA4 webhook Measurement Protocol failed:", ga4Result.status, ga4Result.error);
+      }
+    } catch (ga4Error) {
+      console.error("GA4 webhook Measurement Protocol request failed:", ga4Error);
     }
-  } catch (ga4Error) {
-    console.error("GA4 webhook Measurement Protocol request failed:", ga4Error);
   }
 
   return {

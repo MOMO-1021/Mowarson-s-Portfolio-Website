@@ -89,5 +89,7 @@ test("Browser: Analytics Event Dispatching", async (t) => {
     assert.ok(scriptJs.includes("if (window.posthog && typeof window.posthog.capture === 'function')"), "Guards PostHog capture call");
     assert.ok(scriptJs.includes("window.dataLayer = window.dataLayer || []"), "Initializes dataLayer safely");
     assert.ok(payHtml.includes("function capturePaymentEvent(eventName, properties)"), "Defines unified capturePaymentEvent in pay.html");
+    assert.ok(payHtml.includes("if (currentPaymentIsTest)"), "Guards capturePaymentEvent against test payments");
+    assert.ok(payHtml.includes('startsWith("rzp_test_")'), "Detects Razorpay test key prefix");
   });
 });

@@ -68,11 +68,11 @@ exports.handler = async (event) => {
       amount: quote.amount,
       currency: quote.currency,
       receipt: `rcpt_${Date.now()}`,
+      notes: {
+        ...notes,
+        payment_mode: useTestKeys ? "test" : "live",
+      },
     };
-
-    if (Object.keys(notes).length > 0) {
-      orderOptions.notes = notes;
-    }
 
     const order = await razorpay.orders.create(orderOptions);
     if (order.amount !== quote.amount || order.currency !== quote.currency) {
@@ -115,7 +115,8 @@ exports.handler = async (event) => {
         order_id: order.id,
         amount: order.amount,
         currency: order.currency,
-        key_id: key_id
+        key_id: key_id,
+        payment_mode: useTestKeys ? "test" : "live"
       })
     };
   } catch (err) {

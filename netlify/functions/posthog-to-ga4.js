@@ -1,4 +1,5 @@
 const { sendGa4MeasurementProtocolEvent } = require("../shared/ga4");
+const { isTestMode } = require("../shared/razorpay");
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -37,6 +38,25 @@ exports.handler = async (event) => {
     eventObj.properties && typeof eventObj.properties === "object"
       ? eventObj.properties
       : {};
+
+  const isTestEvent =
+    isTestMode() ||
+    props.is_test === true ||
+    String(props.payment_mode || "").trim().toLowerCase() === "test" ||
+    ["preview", "staging", "development"].includes(
+      String(props.environment || "").trim().toLowerCase(),
+    );
+
+  if (isTestEvent) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        ok: true,
+        skipped: true,
+        reason: "Test or preview event excluded from GA4",
+      }),
+    };
+  }
 
   const transactionId =
     props.transaction_id || props.razorpay_payment_id || undefined;

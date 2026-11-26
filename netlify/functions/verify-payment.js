@@ -152,11 +152,14 @@ exports.handler = async (event) => {
       };
     }
 
+    const isTestPayment = useTestKeys || String(key_id).startsWith("rzp_test_");
+
     posthogLogger.info("payment_verified", {
       razorpay_order_id: razorpay_order_id,
       razorpay_payment_id: razorpay_payment_id,
       amount_minor: order.amount,
       currency: order.currency,
+      payment_mode: isTestPayment ? "test" : "live",
     });
     await flushPostHogLogs();
 
@@ -169,7 +172,7 @@ exports.handler = async (event) => {
       process.env.TEST_EVENT_CODE ||
       process.env.test_event_code;
 
-    if (pixelId && accessToken) {
+    if (pixelId && accessToken && (!isTestPayment || testEventCode)) {
       const hashValue = (value) =>
         value
           ? crypto
@@ -250,31 +253,35 @@ exports.handler = async (event) => {
       );
     }
 
-    try {
-      const ga4Result = await sendGa4MeasurementProtocolEvent({
-        eventName: "purchase",
-        clientId: userData.ga_client_id || userData.distinct_id || razorpay_payment_id,
-        params: {
-          transaction_id: razorpay_payment_id,
-          value: order.amount / 100,
-          currency: order.currency,
-          items: [
-            {
-              item_id: data.plan || "payment",
-              item_name: data.plan || "Service Payment",
-              quantity: 1,
-              price: order.amount / 100,
-            },
-          ],
-        },
-      });
-      if (ga4Result.skipped) {
-        console.warn("GA4 Measurement Protocol skipped:", ga4Result.reason);
-      } else if (!ga4Result.ok) {
-        console.error("GA4 Measurement Protocol purchase failed:", ga4Result.status, ga4Result.error);
+    if (isTestPayment) {
+      console.info("GA4 Measurement Protocol purchase skipped for test payment:", razorpay_payment_id);
+    } else {
+      try {
+        const ga4Result = await sendGa4MeasurementProtocolEvent({
+          eventName: "purchase",
+          clientId: userData.ga_client_id || userData.distinct_id || razorpay_payment_id,
+          params: {
+            transaction_id: razorpay_payment_id,
+            value: order.amount / 100,
+            currency: order.currency,
+            items: [
+              {
+                item_id: data.plan || "payment",
+                item_name: data.plan || "Service Payment",
+                quantity: 1,
+                price: order.amount / 100,
+              },
+            ],
+          },
+        });
+        if (ga4Result.skipped) {
+          console.warn("GA4 Measurement Protocol skipped:", ga4Result.reason);
+        } else if (!ga4Result.ok) {
+          console.error("GA4 Measurement Protocol purchase failed:", ga4Result.status, ga4Result.error);
+        }
+      } catch (ga4Error) {
+        console.error("GA4 Measurement Protocol request failed:", ga4Error);
       }
-    } catch (ga4Error) {
-      console.error("GA4 Measurement Protocol request failed:", ga4Error);
     }
 
     return {
