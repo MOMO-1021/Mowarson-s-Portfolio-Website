@@ -20,7 +20,7 @@ const getDatabaseUrl = () => {
   return databaseUrl;
 };
 
-// Mock in‑memory pool (used only when DATABASE_URL is missing)
+// Simple in‑memory mock pool used when no real DB URL is set
 class MockPool {
   constructor() {
     this.queries = [];
@@ -30,54 +30,49 @@ class MockPool {
     this.orders = [];
   }
 
-  // Provide a mock connect that mimics pg Pool's client
+  // Mimic pg Pool's client connection API
   async connect() {
-    // Return an object with query method bound to this instance and a dummy release
     return {
       query: this.query.bind(this),
       release: () => {},
     };
   }
-    this.queries = [];
-    this.payments = [];
-    this.webhooks = [];
-    this.leads = [];
-    this.orders = [];
-  }
+
   async query(text, values) {
-    // Handle INSERT INTO payments with idempotency
+        // Update webhook event processed flag
+    if (/UPDATE webhook_events.*SET processed = TRUE/i.test(text)) {
+      const id = values[0];
+      const webhook = this.webhooks.find(w => w.id === id);
+      if (webhook) webhook.processed = true;
+      return { rows: [] };
+    }
     if (/INSERT INTO payments/i.test(text)) {
       const paymentId = values[0]; // razorpay_payment_id
       const existing = this.payments.find(p => p.razorpay_payment_id === paymentId);
-      if (existing) {
-        // Simulate UPDATE conflict path – return existing id
-        return { rows: [{ id: existing.id }] };
-      }
+      if (existing) return { rows: [{ id: existing.id }] };
       const id = this.payments.length + 1;
       const record = { id, razorpay_payment_id: paymentId, ...values };
       this.payments.push(record);
       return { rows: [{ id }] };
     }
-    // Handle INSERT INTO webhook_events with ON CONFLICT DO NOTHING
+    // Webhook events – ON CONFLICT DO NOTHING semantics
     if (/INSERT INTO webhook_events/i.test(text)) {
       const provider = values[0];
       const payloadHash = values[3];
       const existing = this.webhooks.find(w => w.provider === provider && w.payload_hash === payloadHash);
-      if (existing) {
-        return { rows: [] };
-      }
+      if (existing) return { rows: [] };
       const id = this.webhooks.length + 1;
       this.webhooks.push({ id, provider, payload_hash: payloadHash, processed: false });
       return { rows: [{ id }] };
     }
-    // Handle INSERT INTO leads with RETURNING
+    // Leads – simple insert with RETURNING
     if (/INSERT INTO leads/i.test(text)) {
       const id = this.leads.length + 1;
       const record = { id, ...values };
       this.leads.push(record);
       return { rows: [{ id, ...record }] };
     }
-    // Generic INSERT returning id (e.g., orders, others)
+    // Generic INSERT returning id (orders, etc.)
     if (/INSERT.+RETURNING id/i.test(text)) {
       const id = this.queries.length + 1;
       this.queries.push({ text, values, id });
@@ -85,8 +80,7 @@ class MockPool {
     }
     // SELECT COUNT(*) FROM payments
     if (/SELECT COUNT\\(\\*\\) FROM payments/i.test(text)) {
-      const count = this.payments.length;
-      return { rows: [{ count }] };
+      return { rows: [{ count: this.payments.length }] };
     }
     // SELECT id, processed FROM webhook_events
     if (/SELECT id, processed FROM webhook_events/i.test(text)) {
@@ -95,47 +89,7 @@ class MockPool {
       if (existing) return { rows: [{ id: existing.id, processed: existing.processed }] };
       return { rows: [] };
     }
-    // DELETE or other queries – no effect
-    return { rows: [] };
-  }
-}
-  constructor() {
-    this.queries = [];
-    this.payments = [];
-    this.webhooks = [];
-    this.leads = [];
-    this.orders = [];
-  }
-
-  // Provide a mock connect that mimics pg Pool's client
-  async connect() {
-    // Return an object with query method bound to this instance and a dummy release
-    return {
-      query: this.query.bind(this),
-      release: () => {},
-    };
-  }
-    this.queries = [];
-  }
-  async query(text, values) {
-    // Minimal mock handling for INSERT…RETURNING id, SELECT COUNT(*) and webhook look‑ups.
-    if (/INSERT.+RETURNING id/i.test(text)) {
-      const id = this.queries.length + 1;
-      this.queries.push({ text, values, id });
-      return { rows: [{ id }] };
-    }
-    if (/SELECT COUNT\(\*\) FROM payments/i.test(text)) {
-      const count = this.queries.filter(q => /INSERT INTO payments/i.test(q.text)).length;
-      return { rows: [{ count }] };
-    }
-    if (/SELECT id, processed FROM webhook_events/i.test(text)) {
-      const [provider, payloadHash] = values;
-      const existing = this.queries.find(
-        q => q.text.includes("INSERT INTO webhook_events") && q.values[0] === provider && q.values[3] === payloadHash
-      );
-      if (existing) return { rows: [{ id: existing.id, processed: false }] };
-      return { rows: [] };
-    }
+    // No‑op for any other queries
     return { rows: [] };
   }
 }
@@ -145,19 +99,17 @@ const getPool = () => {
     if (process.env.DATABASE_URL && process.env.DATABASE_URL.trim()) {
       pool = new Pool({ connectionString: getDatabaseUrl() });
     } else {
-      // Fall back to in‑memory mock when no real DB URL is supplied.
       pool = new MockPool();
     }
   }
   return pool;
 };
 
-// Helper to detect real DB configuration (used by payments.js & tests)
 const isDbConfigured = () => !!(process.env.DATABASE_URL && process.env.DATABASE_URL.trim());
 
 const query = (text, values) => getPool().query(text, values);
 
-const withTransaction = async (callback) => {
+const withTransaction = async callback => {
   const client = await getPool().connect();
   try {
     await client.query("BEGIN");
