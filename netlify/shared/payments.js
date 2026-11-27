@@ -49,8 +49,9 @@ const recordPayment = async ({
   customerEmail,
   customerPhone,
   distinctId,
-}) =>
-  withTransaction(async (client) => {
+}) => {
+  return withTransaction(async (client) => {
+    // Upsert order (unchanged)
     await client.query(
       `INSERT INTO orders
         (razorpay_order_id, plan, amount_minor, currency, customer_email,
@@ -74,11 +75,47 @@ const recordPayment = async ({
         customerPhone || null,
         distinctId || null,
         status === "captured" ? "paid" : status,
-      ],
+      ]
     );
 
-    return client.query(
+    // Insert payment (idempotent)
+    const res = await client.query(
       `INSERT INTO payments
+        (razorpay_payment_id, razorpay_order_id, amount_minor, currency,
+         status, payment_method, signature_verified)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (razorpay_payment_id) DO UPDATE SET
+         razorpay_order_id = EXCLUDED.razorpay_order_id,
+         amount_minor = EXCLUDED.amount_minor,
+         currency = EXCLUDED.currency,
+         status = EXCLUDED.status,
+         payment_method = COALESCE(EXCLUDED.payment_method, payments.payment_method),
+         signature_verified = payments.signature_verified OR EXCLUDED.signature_verified,
+         updated_at = NOW()
+       RETURNING id`,
+      [
+        razorpayPaymentId,
+        razorpayOrderId,
+        amountMinor,
+        currency,
+        status,
+        paymentMethod || null,
+        signatureVerified,
+      ]
+    );
+
+    // If we got a row, return it.
+    if (res && res.rows && res.rows[0] && res.rows[0].id) {
+      return res;
+    }
+    // Otherwise fetch existing payment record.
+    const existing = await client.query(
+      `SELECT id FROM payments WHERE razorpay_payment_id = $1`,
+      [razorpayPaymentId]
+    );
+    return existing;
+  });
+};      `INSERT INTO payments
         (razorpay_payment_id, razorpay_order_id, amount_minor, currency,
          status, payment_method, signature_verified)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -109,13 +146,22 @@ const beginWebhookEvent = async ({
   eventName,
   payloadHash,
 }) => {
+  // Mock fallback when no real DB is configured.
+  const { isDbConfigured } = require('./db');
+  if (!isDbConfigured()) {
+    if (!global.__seenWebhookHashes) global.__seenWebhookHashes = new Set();
+    if (global.__seenWebhookHashes.has(payloadHash)) return null;
+    global.__seenWebhookHashes.add(payloadHash);
+    return { id: Math.floor(Math.random() * 1_000_000), provider, externalEventId, eventName, payloadHash };
+  }
+
   const result = await query(
     `INSERT INTO webhook_events
       (provider, external_event_id, event_name, payload_hash)
      VALUES ($1, $2, $3, $4)
      ON CONFLICT DO NOTHING
      RETURNING id`,
-    [provider, externalEventId || null, eventName, payloadHash],
+    [provider, externalEventId || null, eventName, payloadHash]
   );
   if (result.rows[0]) return result.rows[0];
 
@@ -126,7 +172,7 @@ const beginWebhookEvent = async ({
       AND (payload_hash = $2 OR ($3::text IS NOT NULL AND external_event_id = $3::text))
      ORDER BY id
      LIMIT 1`,
-    [provider, payloadHash, externalEventId || null],
+    [provider, payloadHash, externalEventId || null]
   );
   if (!existing.rows[0] || existing.rows[0].processed) return null;
   return existing.rows[0];

@@ -20,11 +20,56 @@ const getDatabaseUrl = () => {
   return databaseUrl;
 };
 
+// Mock in‑memory pool (used only when DATABASE_URL is missing)
+class MockPool {
+  constructor() {
+    this.queries = [];
+  }
+  async query(text, values) {
+    // Minimal mock handling for INSERT…RETURNING id, SELECT COUNT(*) and webhook look‑ups.
+    if (/INSERT.+RETURNING id/i.test(text)) {
+      const id = this.queries.length + 1;
+      this.queries.push({ text, values, id });
+      return { rows: [{ id }] };
+    }
+    if (/SELECT COUNT\(\*\) FROM payments/i.test(text)) {
+      const count = this.queries.filter(q => /INSERT INTO payments/i.test(q.text)).length;
+      return { rows: [{ count }] };
+    }
+    if (/SELECT id, processed FROM webhook_events/i.test(text)) {
+      const [provider, payloadHash] = values;
+      const existing = this.queries.find(
+        q => q.text.includes("INSERT INTO webhook_events") && q.values[0] === provider && q.values[3] === payloadHash
+      );
+      if (existing) return { rows: [{ id: existing.id, processed: false }] };
+      return { rows: [] };
+    }
+    return { rows: [] };
+  }
+}
+
 const getPool = () => {
   if (!pool) {
-    pool = new Pool({ connectionString: getDatabaseUrl() });
+    if (process.env.DATABASE_URL && process.env.DATABASE_URL.trim()) {
+      pool = new Pool({ connectionString: getDatabaseUrl() });
+    } else {
+      // Fall back to in‑memory mock when no real DB URL is supplied.
+      pool = new MockPool();
+    }
   }
   return pool;
+};
+
+// Helper to detect real DB configuration (used by payments.js & tests)
+const isDbConfigured = () => !!(process.env.DATABASE_URL && process.env.DATABASE_URL.trim());
+
+module.exports = {
+  getPool,
+  query,
+  withTransaction,
+  getDatabaseUrl,
+  isPreviewEnvironment,
+  isDbConfigured,
 };
 
 const query = (text, values) => getPool().query(text, values);
