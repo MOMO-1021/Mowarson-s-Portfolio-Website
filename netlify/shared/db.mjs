@@ -1,2 +1,2 @@
-import pkg from "../netlify/shared/db.js";
+import pkg from "./db.js";
 export const { query, withTransaction, getPool, getDatabaseUrl, isPreviewEnvironment, isDbConfigured } = pkg;
