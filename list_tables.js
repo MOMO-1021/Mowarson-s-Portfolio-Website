@@ -1,5 +1,5 @@
 // list_tables.js
-require("dotenv").config();
+require("dotenv").config({ override: true });
 const { query } = require("./netlify/shared/db");
 
 (async () => {
