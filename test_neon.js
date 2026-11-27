@@ -1,5 +1,5 @@
 // test_neon.js – minimal Neon connection sanity check
-require("dotenv").config(); // loads .env automatically
+require("dotenv").config({ override: true }); // loads .env automatically
 const { Pool } = require("@neondatabase/serverless");
 
 // Use the DATABASE_URL env‑var that you placed in .env
