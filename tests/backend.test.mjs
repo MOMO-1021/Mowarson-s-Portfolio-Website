@@ -14,7 +14,7 @@ import {
   beginWebhookEvent,
   completeWebhookEvent,
   upsertOrder
-} from "../netlify/shared/payments.js";
+} from "../netlify/shared/payments.mjs";
 import { query } from "../netlify/shared/db.js";
 import { handler as quoteHandler } from "../netlify/functions/quote.js";
 import { handler as createOrderHandler } from "../netlify/functions/create-order.js";
