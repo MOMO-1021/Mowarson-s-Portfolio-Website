@@ -115,37 +115,9 @@ const recordPayment = async ({
     );
     return existing;
   });
-};      `INSERT INTO payments
-        (razorpay_payment_id, razorpay_order_id, amount_minor, currency,
-         status, payment_method, signature_verified)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       ON CONFLICT (razorpay_payment_id) DO UPDATE SET
-         razorpay_order_id = EXCLUDED.razorpay_order_id,
-         amount_minor = EXCLUDED.amount_minor,
-         currency = EXCLUDED.currency,
-         status = EXCLUDED.status,
-         payment_method = COALESCE(EXCLUDED.payment_method, payments.payment_method),
-         signature_verified = payments.signature_verified OR EXCLUDED.signature_verified,
-         updated_at = NOW()
-       RETURNING id`,
-      [
-        razorpayPaymentId,
-        razorpayOrderId,
-        amountMinor,
-        currency,
-        status,
-        paymentMethod || null,
-        signatureVerified,
-      ],
-    );
-  });
+};
 
-const beginWebhookEvent = async ({
-  provider,
-  externalEventId,
-  eventName,
-  payloadHash,
-}) => {
+const beginWebhookEvent = async ({ provider, externalEventId, eventName, payloadHash }) => {
   // Mock fallback when no real DB is configured.
   const { isDbConfigured } = require('./db');
   if (!isDbConfigured()) {
@@ -183,7 +155,7 @@ const completeWebhookEvent = (id) =>
     `UPDATE webhook_events
      SET processed = TRUE, processed_at = NOW(), processing_error = NULL
      WHERE id = $1`,
-    [id],
+    [id]
   );
 
 const failWebhookEvent = (id, error) =>
@@ -191,7 +163,7 @@ const failWebhookEvent = (id, error) =>
     `UPDATE webhook_events
      SET processing_error = $2
      WHERE id = $1`,
-    [id, String(error).slice(0, 1000)],
+    [id, String(error).slice(0, 1000)]
   );
 
 module.exports = {
