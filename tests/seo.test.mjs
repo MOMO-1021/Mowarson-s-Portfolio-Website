@@ -1,4 +1,5 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config({ override: true });
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";

@@ -1,4 +1,5 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config({ override: true });
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import { handler as quoteHandler } from "../netlify/functions/quote.js";
