@@ -392,7 +392,7 @@ function updateBlogIndex(publishedPosts) {
               ${p.description}
             </p>
             <a href="blog/${p.slug}.html" class="btn-small"
-              >Read More →</a
+              >Read More</a
             >
           </div>`
     )

@@ -217,7 +217,7 @@ exports.handler = async (event) => {
               <p>I have received your inquiry for <strong>${escapeHtml(selectedServiceLabel)}</strong> and will review your details shortly.</p>
               <p>Everything in our all-inclusive <strong>₹8,000</strong> package is built to boost your online visibility and turn prospective customers into clients—including your SEO-Optimized Website, Monthly SEO Packages, Local Business SEO, Technical SEO, and SEO Blog.</p>
               <p style="margin:24px 0;">
-                <a href="${whatsappQuickLink}" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:8px;margin-right:10px;">Chat Instantly on WhatsApp →</a>
+                <a href="${whatsappQuickLink}" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:8px;margin-right:10px;">Chat Instantly on WhatsApp</a>
                 <a href="https://mowarsondeveloper.netlify.app/pay.html?service=seo" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:8px;">Get Started (₹8,000)</a>
               </p>
               <p style="font-size:14px;color:#475569;">Talk soon,<br/><strong>Mowarson</strong><br/>Mowarson Developer</p>
