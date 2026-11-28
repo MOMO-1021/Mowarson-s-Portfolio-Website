@@ -7,7 +7,6 @@ import path from "node:path";
 
 const root = process.cwd();
 const contactHtml = fs.readFileSync(path.join(root, "contact.html"), "utf8");
-const indexHtml = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const payHtml = fs.readFileSync(path.join(root, "pay.html"), "utf8");
 const scriptJs = fs.readFileSync(path.join(root, "script.js"), "utf8");
 
@@ -19,12 +18,6 @@ test("Browser: Contact Form Structure & Interaction Flow", async (t) => {
     assert.ok(/<input[^>]*name=["']email["'][^>]*required/i.test(contactHtml), "Email input should be required");
     assert.ok(/<textarea[^>]*name=["']message["'][^>]*required/i.test(contactHtml), "Message textarea should be required");
     assert.ok(/<input[^>]*name=["']website["']/i.test(contactHtml), "Honeypot 'website' field should exist");
-  });
-
-  await t.test("Homepage has quick inquiry form and 1-click WhatsApp conversion triggers", () => {
-    assert.ok(indexHtml.includes('id="home-contact-form"'), "Homepage quick inquiry form should exist");
-    assert.ok(indexHtml.includes('data-whatsapp-prefill'), "Homepage 1-click WhatsApp trigger should exist");
-    assert.ok(scriptJs.includes('data-whatsapp-prefill'), "script.js handles dynamic WhatsApp prefill");
   });
 
   await t.test("Contact submission handler manages loading state, error display, and redirect", () => {

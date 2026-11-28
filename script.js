@@ -227,39 +227,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  const leadForms = document.querySelectorAll('#contact-form, form[data-lead-form]');
-  leadForms.forEach((leadForm) => {
-    const status = leadForm.querySelector('#contact-form-status, [data-lead-status]') || document.querySelector('#contact-form-status');
-    const submitButton = leadForm.querySelector('button[type="submit"]');
-    const whatsappPrefillBtn = leadForm.querySelector('[data-whatsapp-prefill]');
+  const contactForm = document.querySelector('#contact-form');
+  if (contactForm) {
+    const status = document.querySelector('#contact-form-status');
+    const submitButton = contactForm.querySelector('button[type="submit"]');
 
-    if (whatsappPrefillBtn) {
-      whatsappPrefillBtn.addEventListener('click', function () {
-        const nameVal = (leadForm.querySelector('[name="name"]')?.value || '').trim();
-        const msgVal = (leadForm.querySelector('[name="message"]')?.value || '').trim();
-        const serviceVal = (leadForm.querySelector('[name="service"]')?.value || 'SEO-Optimized Website & Monthly SEO Packages (Rs. 8,000)').trim();
-        const parts = [`Hi Mowarson, I'm interested in ${serviceVal}.`];
-        if (nameVal) parts.push(`Name: ${nameVal}`);
-        if (msgVal) parts.push(`Details: ${msgVal}`);
-        const waUrl = new URL('https://api.whatsapp.com/send/');
-        waUrl.searchParams.set('phone', '916009825938');
-        waUrl.searchParams.set('text', parts.join(' '));
-        whatsappPrefillBtn.href = waUrl.toString();
-      });
-    }
-
-    leadForm.addEventListener('submit', async function(event) {
+    contactForm.addEventListener('submit', async function(event) {
       event.preventDefault();
-      if (!leadForm.reportValidity()) return;
+      if (!contactForm.reportValidity()) return;
 
-      const formData = new FormData(leadForm);
+      const formData = new FormData(contactForm);
       const payload = Object.fromEntries(formData.entries());
       payload.consent = formData.has('consent');
-      if (status) {
-        status.textContent = 'Sending your inquiry…';
-        status.classList.remove('is-error');
-      }
-      if (submitButton) submitButton.disabled = true;
+      status.textContent = 'Sending your inquiry…';
+      status.classList.remove('is-error');
+      submitButton.disabled = true;
 
       try {
         const response = await fetch('/api/contact', {
@@ -286,8 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (window.posthog && typeof window.posthog.capture === 'function') {
           window.posthog.capture('contact_inquiry_submitted', {
-            marketing_consent: payload.consent,
-            form_id: leadForm.id || 'lead_form'
+            marketing_consent: payload.consent
           });
         }
         if (typeof window.gtag === 'function') {
@@ -307,15 +288,13 @@ document.addEventListener('DOMContentLoaded', function() {
           throw new Error('The form was submitted, but the thank-you redirect was not available.');
         }
       } catch (error) {
-        if (status) {
-          status.textContent = error.message || 'Unable to send your inquiry. Please try again.';
-          status.classList.add('is-error');
-        }
+        status.textContent = error.message || 'Unable to send your inquiry. Please try again.';
+        status.classList.add('is-error');
       } finally {
-        if (submitButton) submitButton.disabled = false;
+        submitButton.disabled = false;
       }
     });
-  });
+  }
 
   document.querySelectorAll('.formkit-form').forEach((form) => {
     form.addEventListener('submit', function () {
