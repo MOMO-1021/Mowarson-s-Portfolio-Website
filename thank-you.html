@@ -169,14 +169,45 @@
     <main>
       <div class="container" style="padding-top: 80px; padding-bottom: 80px; text-align: center;">
         <div class="niche-badge">
-          <span class="badge-dot"></span> Inquiry Received
+          <span class="badge-dot"></span> Automated Confirmation Sent
         </div>
         <h1>Thank You!</h1>
         <p style="max-width: 650px; margin: 16px auto 28px; color: #475569; font-size: 1.2rem;">
-          Your message has been received. I’ll get back to you within 24 hours.
+          Your inquiry has been received and an automated confirmation has been sent to your email. Want to start right now? Tap below for an instant 1-click WhatsApp chat.
         </p>
-        <a href="index.html" class="btn">Return to Home</a>
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+          <a
+            id="thankyou-whatsapp-btn"
+            href="https://api.whatsapp.com/send/?phone=916009825938&amp;text=Hi%20Mowarson%2C%20I%27m%20interested%20in%20your%20SEO-Optimized%20Website%20%26%20Monthly%20SEO%20Package%20%28Rs.%208%2C000%29.%20Please%20share%20the%20next%20steps."
+            class="btn btn-whatsapp-cta"
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="btn-text-main">Chat Instantly on WhatsApp →</span>
+          </a>
+          <a href="index.html" class="btn btn-outline">Return to Home</a>
+        </div>
       </div>
+      <script>
+        (function () {
+          try {
+            const raw = sessionStorage.getItem("mowarson_last_inquiry");
+            if (!raw) return;
+            const info = JSON.parse(raw);
+            sessionStorage.removeItem("mowarson_last_inquiry");
+            const btn = document.getElementById("thankyou-whatsapp-btn");
+            if (!btn) return;
+            const parts = ["Hi Mowarson, I just submitted an inquiry on your website."];
+            if (info.name) parts.push("Name: " + info.name);
+            if (info.service) parts.push("Service: " + info.service);
+            if (info.message) parts.push("Goal: " + info.message);
+            const waUrl = new URL("https://api.whatsapp.com/send/");
+            waUrl.searchParams.set("phone", "916009825938");
+            waUrl.searchParams.set("text", parts.join(" | "));
+            btn.href = waUrl.toString();
+          } catch {}
+        })();
+      </script>
     </main>
 
   <footer>

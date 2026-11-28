@@ -174,27 +174,57 @@ exports.handler = async (event) => {
     }
 
     const notifyEmail = (process.env.LEAD_NOTIFICATION_EMAIL || "mowarsondeveloper@gmail.com").trim();
-    await fetch(`${BREVO_API_URL}/smtp/email`, {
-      method: "POST",
-      headers: { "api-key": brevoApiKey, "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        sender: { name: "Mowarson Portfolio Lead", email: "mowarsondeveloper@gmail.com" },
-        to: [{ email: notifyEmail, name: "Mowarson" }],
-        replyTo: { email, name },
-        subject: isPreview ? "[TEST PREVIEW] New website inquiry" : "New website inquiry",
-        htmlContent: `
-          <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b;max-width:600px;margin:0 auto;padding:24px;">
-            <h2>New Website Inquiry</h2>
-            <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-            <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-            <p><strong>Phone / WhatsApp:</strong> ${escapeHtml(phone || "Not provided")}</p>
-            <p><strong>Service:</strong> ${escapeHtml(service || "Not specified")}</p>
-            <p><strong>Marketing opt-in:</strong> ${consent ? "Yes" : "No"}</p>
-            <h3>Project details</h3>
-            <p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
-          </div>`,
-      }),
-    }).catch((error) => console.error("Brevo lead notification failed:", error));
+    const selectedServiceLabel = service || "SEO-Optimized Website & Monthly SEO Packages (₹8,000)";
+    const whatsappQuickLink = `https://api.whatsapp.com/send/?phone=916009825938&text=${encodeURIComponent(
+      `Hi Mowarson, I'm ${name}. I just submitted an inquiry for ${selectedServiceLabel}.`
+    )}`;
+
+    await Promise.all([
+      fetch(`${BREVO_API_URL}/smtp/email`, {
+        method: "POST",
+        headers: { "api-key": brevoApiKey, "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          sender: { name: "Mowarson Portfolio Lead", email: "mowarsondeveloper@gmail.com" },
+          to: [{ email: notifyEmail, name: "Mowarson" }],
+          replyTo: { email, name },
+          subject: isPreview ? "[TEST PREVIEW] New website inquiry" : "New website inquiry",
+          htmlContent: `
+            <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b;max-width:600px;margin:0 auto;padding:24px;">
+              <h2>New Website Inquiry</h2>
+              <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+              <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+              <p><strong>Phone / WhatsApp:</strong> ${escapeHtml(phone || "Not provided")}</p>
+              <p><strong>Service:</strong> ${escapeHtml(selectedServiceLabel)}</p>
+              <p><strong>Marketing opt-in:</strong> ${consent ? "Yes" : "No"}</p>
+              <h3>Project details</h3>
+              <p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
+            </div>`,
+        }),
+      }).catch((error) => console.error("Brevo lead notification failed:", error)),
+      fetch(`${BREVO_API_URL}/smtp/email`, {
+        method: "POST",
+        headers: { "api-key": brevoApiKey, "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          sender: { name: "Mowarson Developer", email: "mowarsondeveloper@gmail.com" },
+          to: [{ email, name }],
+          replyTo: { email: notifyEmail, name: "Mowarson" },
+          subject: isPreview
+            ? "[TEST PREVIEW] We received your inquiry – Mowarson Developer"
+            : "Thanks for reaching out – Mowarson Developer",
+          htmlContent: `
+            <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1e293b;max-width:600px;margin:0 auto;padding:24px;">
+              <h2 style="color:#0f172a;margin-top:0;">Hi ${escapeHtml(name)}, thanks for reaching out!</h2>
+              <p>I have received your inquiry for <strong>${escapeHtml(selectedServiceLabel)}</strong> and will review your details shortly.</p>
+              <p>Everything in our all-inclusive <strong>₹8,000</strong> package is built to boost your online visibility and turn prospective customers into clients—including your SEO-Optimized Website, Monthly SEO Packages, Local Business SEO, Technical SEO, and SEO Blog.</p>
+              <p style="margin:24px 0;">
+                <a href="${whatsappQuickLink}" style="display:inline-block;background:#25d366;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:8px;margin-right:10px;">Chat Instantly on WhatsApp →</a>
+                <a href="https://mowarsondeveloper.netlify.app/pay.html?service=seo" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:8px;">Get Started (₹8,000)</a>
+              </p>
+              <p style="font-size:14px;color:#475569;">Talk soon,<br/><strong>Mowarson</strong><br/>Mowarson Developer</p>
+            </div>`,
+        }),
+      }).catch((error) => console.error("Brevo automated lead confirmation failed:", error)),
+    ]);
 
     const eventId = crypto.randomUUID();
     const expiresAt = Date.now() + 10 * 60 * 1000;
