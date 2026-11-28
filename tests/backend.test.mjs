@@ -32,22 +32,19 @@ const TEST_SECRET = process.env.RAZORPAY_KEY_SECRET || "test_secret_for_regressi
 test("Backend: Quote Validation", async (t) => {
   await t.test("Generates valid plan quotes for supported plans and INR currency", async () => {
     const quotes = await createPlanQuotes("INR", TEST_SECRET);
-    assert.ok(quotes.website, "Website plan quote should exist");
-    assert.ok(quotes.marketing, "Marketing plan quote should exist");
+    assert.ok(quotes.seo, "SEO plan quote should exist");
+    assert.equal(quotes.website, undefined, "Obsolete website plan should be removed");
+    assert.equal(quotes.marketing, undefined, "Obsolete marketing plan should be removed");
 
-    assert.equal(quotes.website.currency, "INR");
-    assert.equal(quotes.website.amount, 500000); // 5000.00 INR in paise
-    assert.ok(quotes.website.token, "Quote should have a signed token");
-
-    assert.equal(quotes.marketing.currency, "INR");
-    assert.equal(quotes.marketing.amount, 700000); // 7000.00 INR in paise
-    assert.ok(quotes.marketing.token, "Quote should have a signed token");
+    assert.equal(quotes.seo.currency, "INR");
+    assert.equal(quotes.seo.amount, 800000); // 8000.00 INR in paise
+    assert.ok(quotes.seo.token, "Quote should have a signed token");
 
     // Verify token unpacks correctly
-    const verifiedWebsite = verifyQuoteToken(quotes.website.token, TEST_SECRET);
-    assert.equal(verifiedWebsite.plan, "website");
-    assert.equal(verifiedWebsite.amount, 500000);
-    assert.equal(verifiedWebsite.currency, "INR");
+    const verifiedSeo = verifyQuoteToken(quotes.seo.token, TEST_SECRET);
+    assert.equal(verifiedSeo.plan, "seo");
+    assert.equal(verifiedSeo.amount, 800000);
+    assert.equal(verifiedSeo.currency, "INR");
   });
 
   await t.test("Generates valid custom quotes with exact amount", () => {
@@ -74,9 +71,9 @@ test("Backend: Quote-Token Expiration & Tampering", async (t) => {
     // Manually create an expired token (> 30 mins ago)
     const expiredIssuedAt = Date.now() - (35 * 60 * 1000);
     const quotePayload = {
-      plan: "website",
+      plan: "seo",
       currency: "INR",
-      amount: 500000,
+      amount: 800000,
       issuedAt: expiredIssuedAt,
       expiresAt: expiredIssuedAt + (30 * 60 * 1000)
     };
@@ -125,9 +122,8 @@ test("Backend: Currency Verification", async (t) => {
   await t.test("Accepts supported international currencies (USD, EUR, GBP, CAD, AUD)", async () => {
     const usdQuote = await createPlanQuotes("USD", TEST_SECRET);
     assert.equal(usdQuote.currency, "USD");
-    assert.equal(usdQuote.website.amount, 5000); // $50.00 in cents
-    assert.equal(usdQuote.marketing.amount, 7000); // $70.00 in cents
-    assert.ok(usdQuote.website.token);
+    assert.equal(usdQuote.seo.amount, 8000); // $80.00 in cents
+    assert.ok(usdQuote.seo.token);
 
     const customUsd = createCustomQuote("USD", 150, TEST_SECRET);
     assert.equal(customUsd.currency, "USD");
@@ -149,9 +145,9 @@ test("Backend: Order Amount & Currency Verification", async (t) => {
     const { key_secret } = getRazorpayCredentials();
     const expiredIssuedAt = Date.now() - (40 * 60 * 1000);
     const quotePayload = {
-      plan: "website",
+      plan: "seo",
       currency: "INR",
-      amount: 500000,
+      amount: 800000,
       issuedAt: expiredIssuedAt,
       expiresAt: expiredIssuedAt + (30 * 60 * 1000)
     };
@@ -228,8 +224,8 @@ test("Backend: Duplicate Payment Verification & Webhook Handling (Idempotency)",
       const r1 = await recordPayment({
         razorpayOrderId: testOrderId,
         razorpayPaymentId: testPaymentId,
-        plan: "website",
-        amountMinor: 500000,
+        plan: "seo",
+        amountMinor: 800000,
         currency: "INR",
         status: "captured",
         paymentMethod: "card",
@@ -242,8 +238,8 @@ test("Backend: Duplicate Payment Verification & Webhook Handling (Idempotency)",
       const r2 = await recordPayment({
         razorpayOrderId: testOrderId,
         razorpayPaymentId: testPaymentId,
-        plan: "website",
-        amountMinor: 500000,
+        plan: "seo",
+        amountMinor: 800000,
         currency: "INR",
         status: "captured",
         paymentMethod: "card",
@@ -421,9 +417,9 @@ test("Backend: GA4 Measurement Protocol", async (t) => {
       firebase_screen: "pay",
       google_ad: "test",
       transaction_id: "pay_123",
-      value: 4999,
+      value: 8000,
       items: [
-        { item_id: "website", item_name: "Conversion Website Design", quantity: 1, price: 4999 }
+        { item_id: "seo", item_name: "SEO-Optimized Website & Monthly SEO Packages", quantity: 1, price: 8000 }
       ]
     });
 
@@ -433,11 +429,11 @@ test("Backend: GA4 Measurement Protocol", async (t) => {
     assert.equal(cleaned.firebase_screen, undefined);
     assert.equal(cleaned.google_ad, undefined);
     assert.equal(cleaned.transaction_id, "pay_123");
-    assert.equal(cleaned.value, 4999);
+    assert.equal(cleaned.value, 8000);
     assert.equal(cleaned.currency, "INR");
     assert.equal(cleaned.engagement_time_msec, 100);
     assert.equal(cleaned.items.length, 1);
-    assert.equal(cleaned.items[0].item_id, "website");
+    assert.equal(cleaned.items[0].item_id, "seo");
   });
 
   await t.test("sendGa4MeasurementProtocolEvent skips cleanly when env vars are absent", async () => {
@@ -484,9 +480,9 @@ test("Backend: GA4 Measurement Protocol", async (t) => {
               ga_client_id: "111.222",
               $current_url: "https://mowarsondeveloper.netlify.app/pay.html",
               transaction_id: "pay_abc",
-              value: 4999,
+              value: 8000,
               currency: "INR",
-              items: [{ item_id: "website", item_name: "Website", quantity: 1, price: 4999 }]
+              items: [{ item_id: "seo", item_name: "SEO-Optimized Website & Monthly SEO Packages", quantity: 1, price: 8000 }]
             }
           }
         })

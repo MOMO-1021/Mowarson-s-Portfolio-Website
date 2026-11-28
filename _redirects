@@ -10,6 +10,15 @@
 /pay                                          /pay.html                                        200
 /pricing                                      /services.html                                   301
 
+# Legacy & current service redirects
+/brand-positioning                            /services.html                                   301
+/brand-positioning.html                       /services.html                                   301
+/brand-positioning-service                    /services.html                                   301
+/services/brand-positioning                   /services.html                                   301
+/services/conversion-website-design           /services.html                                   301
+/seo-website                                  /services.html                                   301
+/monthly-seo                                  /services.html                                   301
+
 # Removed service pages
 /services/*                                   /404.html                                        404
 /coaching-institute-marketing                 /404.html                                        404

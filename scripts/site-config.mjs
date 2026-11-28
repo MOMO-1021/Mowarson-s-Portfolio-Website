@@ -42,22 +42,13 @@ export const siteConfig = {
   // Service offerings (used on services.html and index.html)
   services: [
     {
-      id: "service-marketing",
-      name: "Brand Positioning & Strategic Marketing Bundle",
-      description: "A complete strategic marketing system designed to clarify your market edge, communicate irresistible value, and drive qualified inquiries.",
-      price: "7000",
+      id: "service-seo-website",
+      name: "SEO-Optimized Website & Monthly SEO Packages",
+      description: "Complete SEO-optimized website design paired with monthly SEO packages, local Business SEO, Technical SEO, and SEO blog management to maximize online visibility and convert prospective customers.",
+      price: "8000",
       priceCurrency: "INR",
-      url: "https://mowarsondeveloper.netlify.app/pay.html?service=marketing",
-      category: "Marketing"
-    },
-    {
-      id: "service-website",
-      name: "Conversion Website Design",
-      description: "Custom, mobile-first websites designed with sharp positioning and high-conversion architecture.",
-      price: "5000",
-      priceCurrency: "INR",
-      url: "https://mowarsondeveloper.netlify.app/pay.html?service=website",
-      category: "Web Design"
+      url: "https://mowarsondeveloper.netlify.app/pay.html?service=seo",
+      category: "SEO & Web Design"
     }
   ],
 
@@ -166,8 +157,8 @@ export const siteConfig = {
       dateModified: "2026-11-22",
       image: "https://mowarsondeveloper.netlify.app/My-Image.jpg",
       canonical: "https://mowarsondeveloper.netlify.app/blog/web-design-consultant-tips.html",
-      articleSection: "Web Consulting & Brand Positioning",
-      keywords: ["web design consultant", "hiring a web designer", "brand positioning consultant", "website strategy", "small business web design"],
+      articleSection: "SEO & Web Consulting",
+      keywords: ["web design consultant", "hiring a web designer", "SEO website consultant", "website strategy", "small business web design"],
       breadcrumbName: "How to Choose a Web Design Consultant",
       priority: "0.7",
       changefreq: "monthly"

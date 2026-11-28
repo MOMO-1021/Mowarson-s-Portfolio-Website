@@ -31,9 +31,9 @@ test("Browser: Contact Form Structure & Interaction Flow", async (t) => {
 });
 
 test("Browser: Payment Form & Plan Selection", async (t) => {
-  await t.test("Payment form contains plan options (website, marketing, custom)", () => {
-    assert.ok(payHtml.includes('value="website"'), "Website plan radio exists");
-    assert.ok(payHtml.includes('value="marketing"'), "Marketing plan radio exists");
+  await t.test("Payment form contains plan options (seo, custom)", () => {
+    assert.ok(payHtml.includes('value="seo"'), "SEO plan radio exists");
+    assert.ok(!payHtml.includes('value="marketing"'), "Obsolete marketing plan radio removed");
     assert.ok(payHtml.includes('value="custom"'), "Custom plan radio exists");
     assert.ok(payHtml.includes('id="custom-amount-box"'), "Custom amount box container exists");
     assert.ok(payHtml.includes('id="custom-amount-input"'), "Custom amount input field exists");

@@ -49,8 +49,8 @@ const existingPosts = [
     featured_image: "https://mowarsondeveloper.netlify.app/My-Image.jpg",
     author: "Mowarson",
     status: "published",
-    articleSection: "Web Consulting & Brand Positioning",
-    keywords: ["web design consultant", "hiring a web designer", "brand positioning consultant", "website strategy", "small business web design"],
+    articleSection: "SEO & Web Consulting",
+    keywords: ["web design consultant", "hiring a web designer", "SEO website consultant", "website strategy", "small business web design"],
     breadcrumbName: "How to Choose a Web Design Consultant"
   }
 ];

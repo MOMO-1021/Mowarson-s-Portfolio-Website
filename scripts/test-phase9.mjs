@@ -7,10 +7,10 @@ import { handler } from "../netlify/functions/publish-post.js";
 import { Pool } from "@neondatabase/serverless";
 
 const root = process.cwd();
-const testSlug = "brand-strategy-audit-framework";
-const testTitle = "Brand Strategy Audit Framework: Scale Your Online Business";
-const testDesc = "A step-by-step audit framework to evaluate brand messaging, customer perception, and website conversion flow.";
-const testContent = "<h1>Brand Strategy Audit Framework</h1><p>Learn how to evaluate your brand positioning and messaging architecture to increase conversion rates and build market authority.</p><h2>1. Positioning Audit</h2><p>Identify whether your target clients instantly understand your distinct value proposition.</p>";
+const testSlug = "technical-seo-audit-framework";
+const testTitle = "Technical SEO Audit Framework: Scale Your Online Visibility";
+const testDesc = "A step-by-step audit framework to evaluate technical SEO, local business SEO, and website conversion flow.";
+const testContent = "<h1>Technical SEO Audit Framework</h1><p>Learn how to evaluate your technical SEO and local search structure to increase online visibility and convert prospective customers.</p><h2>1. Crawlability Audit</h2><p>Identify whether search engines can index your core pages cleanly.</p>";
 
 function fail(msg) {
   console.error(`❌ PHASE 9 TEST FAILED: ${msg}`);
@@ -67,9 +67,9 @@ async function runTest() {
       updated_at: new Date().toISOString(),
       canonical_url: `https://mowarsondeveloper.netlify.app/blog/${testSlug}.html`,
       created_at: new Date().toISOString(),
-      articleSection: "Brand Strategy & Positioning",
-      keywords: ["brand audit", "positioning", "conversion"],
-      breadcrumbName: "Brand Strategy Audit Framework"
+      articleSection: "Technical SEO & Web Visibility",
+      keywords: ["technical SEO", "local SEO", "conversion"],
+      breadcrumbName: "Technical SEO Audit Framework"
     });
     fs.writeFileSync(postsJsonPath, JSON.stringify(posts, null, 2), "utf8");
   }
@@ -85,7 +85,7 @@ async function runTest() {
     fail(`New HTML page was not created: ${newPagePath}`);
   }
   const newPageHtml = fs.readFileSync(newPagePath, "utf8");
-  if (!newPageHtml.includes("Brand Strategy Audit Framework")) {
+  if (!newPageHtml.includes("Technical SEO Audit Framework")) {
     fail("New HTML page does not contain expected title/content");
   }
   pass("The new page appears in HTML with full server-rendered content");

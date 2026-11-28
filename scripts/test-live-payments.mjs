@@ -23,7 +23,7 @@ async function runPaymentTests() {
 
   try {
     // -------------------------------------------------------------------------
-    // TEST 1: Domestic Payment (INR) - Website Plan (₹5,000)
+    // TEST 1: Domestic Payment (INR) - SEO Plan (₹8,000)
     // -------------------------------------------------------------------------
     console.log("\n1. Testing Domestic Payment (INR)...");
     const inrQuoteRes = await quoteHandler({
@@ -33,18 +33,18 @@ async function runPaymentTests() {
     });
     assert.equal(inrQuoteRes.statusCode, 200, "INR quote request failed");
     const inrQuotes = JSON.parse(inrQuoteRes.body);
-    console.log(`   - Received INR quotes. Website amount: ₹${inrQuotes.website.amount / 100}`);
+    console.log(`   - Received INR quotes. SEO package amount: ₹${inrQuotes.seo.amount / 100}`);
     assert.equal(inrQuotes.currency, "INR");
-    assert.equal(inrQuotes.website.amount, 500000);
+    assert.equal(inrQuotes.seo.amount, 800000);
 
     const inrOrderRes = await createOrderHandler({
       httpMethod: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        quote_token: inrQuotes.website.token,
+        quote_token: inrQuotes.seo.token,
         notes: {
-          service: "Conversion Website Design",
-          plan: "website",
+          service: "SEO-Optimized Website & Monthly SEO Packages",
+          plan: "seo",
           client_email: "test.domestic@example.com",
           client_phone: "+919876543210"
         }
@@ -55,7 +55,7 @@ async function runPaymentTests() {
     console.log(`   ✅ Razorpay Domestic Order Created: ${inrOrder.order_id}`);
     console.log(`      Amount: ₹${inrOrder.amount / 100} ${inrOrder.currency}`);
     assert.equal(inrOrder.currency, "INR");
-    assert.equal(inrOrder.amount, 500000);
+    assert.equal(inrOrder.amount, 800000);
     assert.ok(inrOrder.order_id.startsWith("order_"));
     createdOrderIds.push(inrOrder.order_id);
 
@@ -65,7 +65,7 @@ async function runPaymentTests() {
     console.log(`   ✅ Order stored in Neon database with status: ${inrDbCheck.rows[0].status}`);
 
     // -------------------------------------------------------------------------
-    // TEST 2: International Payment (USD via PayPal) - Marketing Plan ($70.00)
+    // TEST 2: International Payment (USD via PayPal) - SEO Plan ($80.00)
     // -------------------------------------------------------------------------
     console.log("\n2. Testing International Payment (USD via PayPal)...");
     const usdQuoteRes = await quoteHandler({
@@ -75,18 +75,18 @@ async function runPaymentTests() {
     });
     assert.equal(usdQuoteRes.statusCode, 200, "USD quote request failed");
     const usdQuotes = JSON.parse(usdQuoteRes.body);
-    console.log(`   - Received USD quotes. Marketing amount: $${usdQuotes.marketing.amount / 100}`);
+    console.log(`   - Received USD quotes. SEO package amount: ${usdQuotes.seo.amount / 100}`);
     assert.equal(usdQuotes.currency, "USD");
-    assert.equal(usdQuotes.marketing.amount, 7000); // $70.00 in cents
+    assert.equal(usdQuotes.seo.amount, 8000); // $80.00 in cents
 
     const usdOrderRes = await createOrderHandler({
       httpMethod: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        quote_token: usdQuotes.marketing.token,
+        quote_token: usdQuotes.seo.token,
         notes: {
-          service: "Brand Positioning & Marketing",
-          plan: "marketing",
+          service: "SEO-Optimized Website & Monthly SEO Packages",
+          plan: "seo",
           client_email: "test.international@example.com",
           client_phone: "+12025550199"
         }
@@ -95,9 +95,9 @@ async function runPaymentTests() {
     assert.equal(usdOrderRes.statusCode, 200, `USD order creation failed: ${usdOrderRes.body}`);
     const usdOrder = JSON.parse(usdOrderRes.body);
     console.log(`   ✅ Razorpay International Order Created: ${usdOrder.order_id}`);
-    console.log(`      Amount: $${usdOrder.amount / 100} ${usdOrder.currency}`);
+    console.log(`      Amount: ${usdOrder.amount / 100} ${usdOrder.currency}`);
     assert.equal(usdOrder.currency, "USD");
-    assert.equal(usdOrder.amount, 7000);
+    assert.equal(usdOrder.amount, 8000);
     assert.ok(usdOrder.order_id.startsWith("order_"));
     createdOrderIds.push(usdOrder.order_id);
 
@@ -155,8 +155,8 @@ async function runPaymentTests() {
     await recordPayment({
       razorpayOrderId: usdOrder.order_id,
       razorpayPaymentId: testPaymentId,
-      plan: "marketing",
-      amountMinor: 7000,
+      plan: "seo",
+      amountMinor: 8000,
       currency: "USD",
       status: "captured",
       paymentMethod: "paypal",
@@ -169,7 +169,7 @@ async function runPaymentTests() {
     const paymentRecord = await query("SELECT * FROM payments WHERE razorpay_payment_id = $1", [testPaymentId]);
     assert.equal(paymentRecord.rows.length, 1);
     assert.equal(paymentRecord.rows[0].currency, "USD");
-    assert.equal(paymentRecord.rows[0].amount_minor, 7000);
+    assert.equal(paymentRecord.rows[0].amount_minor, 8000);
     assert.equal(paymentRecord.rows[0].payment_method, "paypal");
     assert.equal(paymentRecord.rows[0].signature_verified, true);
     console.log(`   ✅ Payment recorded in Neon database (method: paypal, status: captured, currency: USD)`);

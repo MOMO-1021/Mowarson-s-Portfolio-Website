@@ -49,8 +49,8 @@ function getBlogPostsMap() {
             dateModified: p.updated_at ? p.updated_at.slice(0, 10) : (map[key]?.dateModified || "2026-11-22"),
             image: p.featured_image || map[key]?.image || siteConfig.defaultImage,
             canonical: p.canonical_url || `${siteConfig.productionUrl}/blog/${p.slug}.html`,
-            articleSection: p.articleSection || map[key]?.articleSection || "Brand Positioning & Marketing",
-            keywords: p.keywords || map[key]?.keywords || ["Brand Positioning", "Web Design"],
+            articleSection: p.articleSection || map[key]?.articleSection || "SEO & Web Design",
+            keywords: p.keywords || map[key]?.keywords || ["SEO Website Design", "Monthly SEO Packages"],
             breadcrumbName: p.breadcrumbName || map[key]?.breadcrumbName || p.title.split("–")[0].trim(),
             priority: "0.7",
             changefreq: "monthly"
@@ -140,8 +140,8 @@ function extractBlogData(relativePath, html, filePath, existingSitemapDates) {
   const datePublished = config.datePublished || "2026-03-25";
   const dateModified = getRealLastModifiedDate(filePath, relativePath, existingSitemapDates) || config.dateModified || datePublished;
   const image = config.image || siteConfig.defaultImage;
-  const articleSection = config.articleSection || "Brand Positioning & Marketing";
-  const keywords = config.keywords || ["Brand Positioning", "Web Design", "Marketing Strategy"];
+  const articleSection = config.articleSection || "SEO & Web Design";
+  const keywords = config.keywords || ["SEO Website Design", "Monthly SEO Packages", "Local Business SEO", "Technical SEO"];
   const breadcrumbName = config.breadcrumbName || readMatch(html, /aria-current=["']page["'][^>]*>([\s\S]*?)<\/span>/i, title);
 
   return {
@@ -207,8 +207,14 @@ function buildPageSchema(relativePath, html, filePath, existingSitemapDates) {
       "url": siteConfig.productionUrl,
       "provider": { "@id": `${siteConfig.productionUrl}/#organization` },
       "areaServed": { "@type": "Country", "name": siteConfig.contactDetails.areaServed },
-      "priceRange": "₹5000 - ₹7000",
-      "serviceType": ["Brand Positioning", "Brand Messaging", "SEO-Optimized Website Design"]
+      "priceRange": "₹8000",
+      "serviceType": [
+        "SEO-Optimized Website Design",
+        "Monthly SEO Packages",
+        "Local Business SEO",
+        "Technical SEO",
+        "SEO Blog Management"
+      ]
     });
     graph.push({
       "@type": "WebPage",
@@ -276,8 +282,14 @@ function buildPageSchema(relativePath, html, filePath, existingSitemapDates) {
       "name": "Mowarson",
       "url": canonicalUrl,
       "image": siteConfig.defaultImage,
-      "jobTitle": "Brand Marketing Specialist",
-      "knowsAbout": ["Brand Positioning", "Brand Messaging", "SEO-Optimized Website Design"],
+      "jobTitle": "SEO Website & Search Visibility Specialist",
+      "knowsAbout": [
+        "SEO-Optimized Website Design",
+        "Monthly SEO Packages",
+        "Local Business SEO",
+        "Technical SEO",
+        "SEO Blog Management"
+      ],
       "worksFor": { "@id": `${siteConfig.productionUrl}/#organization` }
     });
   }

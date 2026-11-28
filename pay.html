@@ -40,7 +40,7 @@
 <meta name="robots" content="noindex, follow" />
     <meta
       name="keywords"
-      content="Pay Mowarson Developer for brand positioning, web design, or marketing services."
+      content="Pay Mowarson Developer for SEO-optimized website, monthly SEO packages, Local Business SEO, Technical SEO, and blog services."
     />
     <link rel="stylesheet" href="style.css" />
 
@@ -261,65 +261,34 @@
 
               <!-- Service Selection -->
               <div class="service-options">
-                <!-- Option 1: Website Only -->
-                <label class="service-option-label" for="plan-website">
+                <!-- Option 1: SEO-Optimized Website & Monthly SEO Packages -->
+                <label class="service-option-label" for="plan-seo">
                   <input
                     type="radio"
                     name="service_plan"
-                    id="plan-website"
-                    value="website"
+                    id="plan-seo"
+                    value="seo"
                     checked
                     onchange="updateSelectedPlan()"
                   />
                   <div class="service-card-choice">
+                    <span class="choice-tag">All-Inclusive</span>
                     <div class="service-card-header">
                       <div>
                         <div class="service-card-name">
-                          Conversion Website Design
+                          SEO-Optimized Website &amp; Monthly SEO Packages
                         </div>
                         <div class="service-card-desc">
-                          Complete mobile-friendly, SEO-optimized custom website
-                          engineered for high conversion and brand credibility.
+                          Complete SEO-optimized website plus monthly SEO
+                          packages, Local Business SEO, Technical SEO, and SEO
+                          blog for high online visibility and conversions.
                         </div>
                       </div>
                       <div
                         class="service-card-price"
-                        id="price-display-website"
+                        id="price-display-seo"
                       >
-                        ₹5,000
-                      </div>
-                    </div>
-                  </div>
-                </label>
-
-                <!-- Option 2: Marketing + Free Website (Featured) -->
-                <label class="service-option-label" for="plan-marketing">
-                  <input
-                    type="radio"
-                    name="service_plan"
-                    id="plan-marketing"
-                    value="marketing"
-                    onchange="updateSelectedPlan()"
-                  />
-                  <div class="service-card-choice">
-                    <span class="choice-tag">Bundle</span>
-                    <div class="service-card-header">
-                      <div>
-                        <div class="service-card-name">
-                          Brand Positioning &amp; Marketing Bundle + FREE
-                          Website
-                        </div>
-                        <div class="service-card-desc">
-                          Strategic brand positioning, messaging architecture
-                          &amp; search optimization, with the custom website
-                          included at no extra charge!
-                        </div>
-                      </div>
-                      <div
-                        class="service-card-price"
-                        id="price-display-marketing"
-                      >
-                        ₹7,000
+                        ₹8,000
                       </div>
                     </div>
                   </div>
@@ -443,7 +412,7 @@
                     id="client-notes"
                     class="pay-input"
                     rows="2"
-                    placeholder="e.g. 50% advance for Brand Positioning &amp; Website project"
+                    placeholder="e.g. SEO-Optimized Website &amp; Monthly SEO project details"
                   ></textarea>
                 </div>
 
@@ -457,7 +426,7 @@
                   id="submit-pay-btn"
                 >
                   <span class="submit-pay-label">Continue to payment</span>
-                  <span id="btn-amount-preview">₹5,000</span>
+                  <span id="btn-amount-preview">₹8,000</span>
                 </button>
 
                 <p
@@ -499,14 +468,14 @@
               <div class="summary-table">
                 <div class="summary-row">
                   <span id="summary-service-name"
-                    >Conversion Website Design</span
+                    >SEO-Optimized Website &amp; Monthly SEO Packages</span
                   >
-                  <span id="summary-service-price">₹5,000</span>
+                  <span id="summary-service-price">₹8,000</span>
                 </div>
                 <div class="summary-row total">
                   <span>Total</span>
                   <span class="total-amount" id="summary-total-amount"
-                    >₹5,000</span
+                    >₹8,000</span
                   >
                 </div>
               </div>
@@ -546,12 +515,12 @@
           <div>
             <span>Service</span>
             <strong id="confirmed-service-name"
-              >Conversion Website Design</strong
+              >SEO-Optimized Website &amp; Monthly SEO Packages</strong
             >
           </div>
           <div>
             <span>Amount</span>
-            <strong id="confirmed-amount">₹5,000</strong>
+            <strong id="confirmed-amount">₹8,000</strong>
           </div>
         </div>
 
@@ -665,16 +634,13 @@
         currencySelect.disabled = true;
         document.getElementById("custom-currency-symbol").innerText = currency;
         activeQuotes = {};
-        document.getElementById("price-display-website").innerText = "Loading…";
-        document.getElementById("price-display-marketing").innerText =
-          "Loading…";
+        document.getElementById("price-display-seo").innerText = "Loading…";
         note.textContent = "Loading current exchange rates and prices…";
 
         try {
           const quotes = await requestQuote({ currency });
           activeQuotes = {
-            website: quotes.website,
-            marketing: quotes.marketing,
+            seo: quotes.seo,
           };
           if (quotes.usdRate > 0) {
             currencyRates[currency] = quotes.usdRate;
@@ -705,10 +671,8 @@
 
           document.getElementById("custom-currency-symbol").innerText =
             currency;
-          document.getElementById("price-display-website").innerText =
-            formatAmount(quotes.website.amount, currency);
-          document.getElementById("price-display-marketing").innerText =
-            formatAmount(quotes.marketing.amount, currency);
+          document.getElementById("price-display-seo").innerText =
+            formatAmount(quotes.seo.amount, currency);
           const methodTip = document.getElementById("checkout-method-tip");
           if (currency === "INR") {
             note.textContent = "INR payments are processed by Razorpay (UPI, Netbanking, Cards).";
@@ -735,9 +699,7 @@
           }
           updateSummary();
         } catch (error) {
-          document.getElementById("price-display-website").innerText =
-            "Unavailable";
-          document.getElementById("price-display-marketing").innerText =
+          document.getElementById("price-display-seo").innerText =
             "Unavailable";
           note.textContent = `Unable to load prices: ${error.message}`;
           updateSummary();
@@ -770,19 +732,11 @@
         let amountLabel = "Loading price…";
         let serviceTitle = "";
 
-        if (selectedPlan === "website") {
-          serviceTitle = "Conversion Website Design";
-          if (activeQuotes.website) {
+        if (selectedPlan === "seo") {
+          serviceTitle = "SEO-Optimized Website & Monthly SEO Packages";
+          if (activeQuotes.seo) {
             amountLabel = formatAmount(
-              activeQuotes.website.amount,
-              currentCurrency,
-            );
-          }
-        } else if (selectedPlan === "marketing") {
-          serviceTitle = "Brand Positioning & Marketing + Free Website";
-          if (activeQuotes.marketing) {
-            amountLabel = formatAmount(
-              activeQuotes.marketing.amount,
+              activeQuotes.seo.amount,
               currentCurrency,
             );
           }
@@ -820,10 +774,8 @@
         ).value;
         let serviceTitle = "";
 
-        if (selectedPlan === "website") {
-          serviceTitle = "Conversion Website Design";
-        } else if (selectedPlan === "marketing") {
-          serviceTitle = "Brand Positioning & Marketing Bundle + Free Website";
+        if (selectedPlan === "seo") {
+          serviceTitle = "SEO-Optimized Website & Monthly SEO Packages";
         } else {
           serviceTitle = "Custom Project Advance";
         }
@@ -1158,13 +1110,18 @@
         document.getElementById("success-modal").classList.add("active");
       }
 
-      // Auto-detect URL query parameters (?service=marketing or ?service=website or ?amount=...)
+      // Auto-detect URL query parameters (?service=seo or ?amount=...)
       document.addEventListener("DOMContentLoaded", function () {
         const urlParams = new URLSearchParams(window.location.search);
         const serviceParam = urlParams.get("service");
         const amountParam = urlParams.get("amount");
         const currencyParam = urlParams.get("currency");
         const currencySelect = document.getElementById("currency-select");
+
+        if (serviceParam === "marketing") {
+          window.location.replace("services.html");
+          return;
+        }
 
         if (
           currencyParam &&
@@ -1177,12 +1134,9 @@
           setCurrency("INR");
         }
 
-        if (serviceParam === "marketing") {
-          const mRadio = document.getElementById("plan-marketing");
-          if (mRadio) mRadio.checked = true;
-        } else if (serviceParam === "website") {
-          const wRadio = document.getElementById("plan-website");
-          if (wRadio) wRadio.checked = true;
+        if (serviceParam === "seo" || serviceParam === "website") {
+          const sRadio = document.getElementById("plan-seo");
+          if (sRadio) sRadio.checked = true;
         } else if (serviceParam === "custom" || amountParam) {
           const cRadio = document.getElementById("plan-custom");
           if (cRadio) {

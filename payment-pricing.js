@@ -4,8 +4,7 @@ const crypto = require("crypto");
 const CURRENCIES = ["INR", "USD", "EUR", "GBP", "CAD", "AUD"];
 
 const PLAN_PRICES_USD = {
-  website: 5000,
-  marketing: 7000,
+  seo: 8000,
 };
 
 const FALLBACK_RATES = {
@@ -87,7 +86,7 @@ function createPlanQuote(plan, currency, usdRate, secret) {
 
   let amount;
   if (code === "INR") {
-    amount = plan === "website" ? 500000 : 700000;
+    amount = 800000;
   } else {
     if (!Number.isFinite(usdRate) || usdRate <= 0) {
       throw new Error(`A valid ${code} exchange rate is unavailable.`);
@@ -124,8 +123,7 @@ async function createPlanQuotes(currency, secret) {
     currency: code,
     usdRate,
     inrRate: code === "INR" ? null : rates.INR,
-    website: createPlanQuote("website", code, usdRate, secret),
-    marketing: createPlanQuote("marketing", code, usdRate, secret),
+    seo: createPlanQuote("seo", code, usdRate, secret),
   };
 }
 
@@ -189,7 +187,7 @@ function verifyQuoteToken(token, secret) {
   }
 
   if (
-    !["website", "marketing", "custom"].includes(quote.plan) ||
+    !["seo", "custom"].includes(quote.plan) ||
     !CURRENCIES.includes(quote.currency) ||
     !Number.isSafeInteger(quote.amount) ||
     quote.amount < 100 ||

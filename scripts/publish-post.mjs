@@ -20,8 +20,8 @@ export async function publishPost(postData, options = { triggerLocalBuild: true 
     author = "Mowarson",
     featured_image = "https://mowarsondeveloper.netlify.app/My-Image.jpg",
     status = "published",
-    articleSection = "Brand Positioning & Marketing",
-    keywords = ["Brand Positioning", "Web Design"],
+    articleSection = "SEO & Web Design",
+    keywords = ["SEO Website Design", "Monthly SEO Packages"],
     breadcrumbName
   } = postData;
 
